@@ -6,5 +6,23 @@ from django.contrib import messages
 from datetime import datetime
 
 
-def Home(request):
-    return render(request,'Base.html')
+def home(request):
+    return render(request,'home.html')
+
+
+def contact(request):
+    return render(request,'contact.html')
+
+
+def register(request):
+    return render(request,'register.html')
+
+
+def Login(request):
+    return render(request,'login.html')
+
+
+def exam(request):
+    if User.is_anonymous:
+        return redirect('/login')
+    return render(request,'exam.html')
