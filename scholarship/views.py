@@ -7,7 +7,7 @@ from django.contrib import messages
 from datetime import datetime
 from .models import *
 from django.core.mail import send_mail
-
+from .userid import ID
 
 def home(request):
     return render(request,'home.html')
@@ -21,7 +21,8 @@ def register(request):
     
 
     if request.method=='POST':
-        name=request.POST.get('name')
+        fname=request.POST.get('fname')
+        lname=request.POST.get('lname')
         gurdian=request.POST.get('gurdian')
         year=request.POST.get('year')
         month=request.POST.get('month')
@@ -37,10 +38,11 @@ def register(request):
     
         date_of_birth1=str(date)+'/'+str(month)+'/'+str(year)
         date_of_birth2=str(date)+str(month)+str(year)
-        smodel=Student(name=name,date_of_birth=date_of_birth1,gurdian_name=gurdian,contact=phone,whatsapp=whatsapp,email=email,address=address,school_college_name=instu,appearing_passed_12=status,board_name=board,appeared_wbjee_jeeMain=entrance,created_at=datetime.now())
+        smodel=Student(first_name=fname,last_name=lname,date_of_birth=date_of_birth1,gurdian_name=gurdian,contact=phone,whatsapp=whatsapp,email=email,address=address,school_college_name=instu,appearing_passed_12=status,board_name=board,appeared_wbjee_jeeMain=entrance,created_at=datetime.now())
         smodel.save()
+        userid=ID(fname)
         subject='Thank You for registration'
-        body=f'your user id is {email} and your password is {date_of_birth2}'
+        body=f'your user id is {userid} and your password is {date_of_birth2}'
         send_mail(
     subject,
     body,
