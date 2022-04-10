@@ -1,107 +1,91 @@
 {% extends 'Base.html' %} {% block title %} Registration {% endblock title %} {% block body %} 
 
-<div class="container py-4 px-5">
-    <form action='/' method='POST'>
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="name" class="form-label">Full Name</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Full name">
-        </div>
-        <div class="mb-3">
-            <label for="name" class="form-label">Gurdian's Name</label>
-            <input type="text" class="form-control" id="name" name="gurdian" placeholder="Gurdian's Name">
-        </div>
-        <div class="mb-3">
-            <label for="name" class="form-label">Date of Birth</label>
-            <div class="row">
-                <div class="col">
-                    <input type="text" class="form-control" placeholder="Year" aria-label="First name" name="year">
-                </div>
-                <div class="col">
-                    <input type="text" class="form-control" placeholder="Month" aria-label="Last name" name="month">
-                </div>
-                <div class="col">
-                    <input type="text" class="form-control" placeholder="Date" aria-label="Last name" name="date">
-                </div>
-            </div>
-        </div>
-        <div class="mb-3">
-            <label for="name" class="form-label">Phone Number</label>
-            <div class="row">
-                <div class="col">
-                    <input type="text" id="UserMobile" maxlength="10" data-fv-numeric="true"
-                        data-fv-numeric-message="Please enter valid phone numbers" data-fv-phone-country11="IN"
-                        required="required" data-fv-notempty-message="This field cannot be left blank."
-                        placeholder="Contact Number" class="form-control" name="phone"
-                        >
-                </div>
-                <div class="col">
-                    <input type="text" id="UserMobile" maxlength="10" data-fv-numeric="true"
-                        data-fv-numeric-message="Please enter valid phone numbers" data-fv-phone-country11="IN"
-                        required="required" data-fv-notempty-message="This field cannot be left blank."
-                        placeholder="Whatsapp Number" class="form-control" name="whatsapp"
-                        >
-                </div>
-            </div>
-        </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Email Address">
-            <small class="form-text text-muted">We'll never share your email with anyone else.</small>
-        </div>
-        <div class="mb-3">
-            <label for="name" class="form-label">Residential Address</label>
-            <input type="text" class="form-control" id="name" name="address"
-                placeholder="Enter Your Permanent Address">
-        </div>
-        <div class="mb-3">
-            <label for="name" class="form-label">Name of the Institution</label>
-            <input type="text" class="form-control" id="name" name="inst" placeholder="School / College Name">
-        </div>
-        <div class="mb-3">
-            <label for="name" class="form-label">Status of Higher Secondery Education</label>
-            <div class="dropdown">
-                <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton2"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    Status
-                </button>
-                <ul class="dropdown-menu dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                    <li><a class="dropdown-item active" href="#">Appearing</a></li>
-                    <li><a class="dropdown-item" href="#">Passed</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="mb-3">
-            <label for="name" class="form-label">Select Your Examination board</label>
-            <div class="dropdown">
-                <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton2"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    Select Board
-                </button>
-                <ul class="dropdown-menu dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                    <li><a class="dropdown-item active" href="#">WBCHSE</a></li>
-                    <li><a class="dropdown-item" href="#">CBSE</a></li>
-                    <li><a class="dropdown-item" href="#">ISC</a></li>
-                    <li><a class="dropdown-item" href="#">Others</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="mb-3">
-            <label for="name" class="form-label">Are you appearing/appeared in WBJEE/JEE MAINS</label>
-            <div class="dropdown">
-                <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton2"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    Yes or No
-                </button>
-                <ul class="dropdown-menu dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                    <li><a class="dropdown-item active" href="#">YES</a></li>
-                    <li><a class="dropdown-item" href="#">NO</a></li>
-                </ul>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-</div>
 
-
+    <div class="container py-4 px-5">
+        <form method="POST" action="/register">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Full name">
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">Gurdian's Name</label>
+                <input type="text" class="form-control" id="gurdian" name="gurdian" placeholder="Gurdian's Name">
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">Date of Birth</label>
+                <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Year" aria-label="First name" id="year" name="year">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Month" aria-label="Last name" id="month" name="month">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Date" aria-label="Last name" id="date" name="date">
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">Phone Number</label>
+                <div class="row">
+                    <div class="col">
+                        <input type="text" id="phone"  data-fv-numeric-message="Please enter valid phone numbers" data-fv-phone-country11="IN" required="required" data-fv-notempty-message="This field cannot be left blank." placeholder="Contact Number"
+                            class="form-control" name="phone">
+                    </div>
+                    <div class="col">
+                        <input type="text" id="whatsapp"  data-fv-numeric-message="Please enter valid phone numbers" data-fv-phone-country11="IN" required="required" data-fv-notempty-message="This field cannot be left blank." placeholder="Whatsapp Number"
+                            class="form-control" name="whatsapp">
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email Address">
+                <small class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">Residential Address</label>
+                <input type="text" class="form-control" id="address" name="address" placeholder="Enter Your Permanent Address">
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">Name of the Institution</label>
+                <input type="text" class="form-control" id="inst" name="inst" placeholder="School / College Name">
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">Status of Higher Secondery Education</label>
+                <select name="status" id="status" required="required">
+                    <option value="None">Choose</option>
+    
+            <option value="Appearing">Appearing</option>
+            <option value="Passed">Passed</option>
+            
+            </select>
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">Select Your Examination board</label>
+                <select name="board" id="board" required="required">
+                    <option value="None">Choose</option>
+    
+                   <option value="ISC">ISC</option>
+                   <option value="WBCHSE">WBCHSE</option>
+                   <option value="CBSE">CBSE</option>
+                   <option value="others">others</option>
+               </select>
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">Are you appearing/appeared in WBJEE/JEE MAINS</label>
+                <select name="entrance" id="entrance" required="required">
+                    <option value="None">Choose</option>
+    
+    <option value="yes">Yes</option>
+    <option value="no">No</option>
+    
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" value="register">Submit</button>
+        </form>
+    </div>
+    
+    
 {% endblock body %}
