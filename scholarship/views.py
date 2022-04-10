@@ -7,12 +7,18 @@ from django.contrib import messages
 from datetime import datetime
 from .models import *
 from django.core.mail import send_mail
-from .userid import ID
+from .Need_Function import ID,PASSWORD,is_exam
 from django.contrib.auth.decorators import login_required
 import random
 
 
+
+
+
+
+
 def home(request):
+ 
     return render(request,'home.html')
 
 
@@ -40,15 +46,16 @@ def register(request):
         instu=request.POST.get('inst')
     
         date_of_birth1=str(date)+'/'+str(month)+'/'+str(year)
-        date_of_birth2=str(date)+str(month)+str(year)
+        
         smodel=Student(first_name=fname,last_name=lname,date_of_birth=date_of_birth1,gurdian_name=gurdian,contact=phone,whatsapp=whatsapp,email=email,address=address,school_college_name=instu,appearing_passed_12=status,board_name=board,appeared_wbjee_jeeMain=entrance,created_at=datetime.now())
         smodel.save()
 
-        a=random.randint(199,12999)
-        userid=fname+str(a)
+        
+        userid=ID(fname)
+        password=PASSWORD(date,month,year)
         
         subject='Thank You for registration'
-        body=f'your user name is {userid} and your password is {date_of_birth2}'
+        body=f'your user name is {userid} and your password is {password}'
         send_mail(
     subject,
     body,
@@ -57,7 +64,9 @@ def register(request):
     fail_silently=False,
 )
     
-        user = User.objects.create_user(userid, email, date_of_birth2)
+        user = User.objects.create_user(userid, email, password)
+        user.first_name=fname
+        user.last_name=lname
         user.save()
     
     return render(request,'register.html')
@@ -70,8 +79,32 @@ def Login(request):
         print(username,password)
         user=authenticate(request,username=username,password=password)
         if user is not None:
+
             login(request,user)
-            return render(request,'exam.html')
+
+            field_name = 'date'
+            obj = DetailsExam.objects.first()
+            field_object = DetailsExam._meta.get_field(field_name)
+            date = str(field_object.value_from_object(obj))
+
+            field_name = 'month'
+            obj = DetailsExam.objects.first()
+            field_object = DetailsExam._meta.get_field(field_name)
+            month= str(field_object.value_from_object(obj))
+
+            field_name = 'start_time'
+            obj = DetailsExam.objects.first()
+            field_object = DetailsExam._meta.get_field(field_name)
+            start_time = str(field_object.value_from_object(obj))
+
+            field_name = 'exam_duration'
+            obj = DetailsExam.objects.first()
+            field_object = DetailsExam._meta.get_field(field_name)
+            exam_duration = str(field_object.value_from_object(obj))
+            if is_exam(date,month,start_time):
+                return render(request,'exam.html')
+            else:
+                return render(request,'notexam.html')
         else:
             return render(request,'login.html')
 
@@ -79,4 +112,10 @@ def Login(request):
 def exam(request):
     if User.is_anonymous:
         return render(request,'login.html')
+    else:
+        return render(request,'exam.html')
     return render(request,'exam.html')
+
+
+def notexam(request):
+    return render(request,'notexam.html')

@@ -21,3 +21,10 @@ class Student(models.Model):
 
     def __str__(self):
         return str(self.first_name)+''+str(self.last_name)
+
+
+class DetailsExam(models.Model):
+    date=models.CharField(null=True,blank=True,max_length=5)
+    month=models.CharField(null=True,blank=True,max_length=5)
+    start_time=models.CharField(null=True,blank=True,max_length=5)
+    exam_duration=models.CharField(null=True,blank=True,max_length=5)
