@@ -45,12 +45,12 @@ def is_exam(date,month,time):
 
     c_hour=datetime.now().strftime("%H")
     c_minute=datetime.now().strftime("%M")
-    if(c_date==date and c_month==month and c_hour==time and c_minute<='15'):
+    if(str(c_date)==str(date) and str(c_month)==str(month) and str(c_hour)==str(time) ):
         return True
     else:
         return False
     
-a='10'
+a='11'
 b='04'
-c='21'
+c='12'
 print(is_exam(a,b,c))

@@ -11,7 +11,7 @@ from .Need_Function import ID,PASSWORD,is_exam
 from django.contrib.auth.decorators import login_required
 import random
 
-
+dictt={}
 
 
 
@@ -46,13 +46,13 @@ def register(request):
         instu=request.POST.get('inst')
     
         date_of_birth1=str(date)+'/'+str(month)+'/'+str(year)
-        
-        smodel=Student(first_name=fname,last_name=lname,date_of_birth=date_of_birth1,gurdian_name=gurdian,contact=phone,whatsapp=whatsapp,email=email,address=address,school_college_name=instu,appearing_passed_12=status,board_name=board,appeared_wbjee_jeeMain=entrance,created_at=datetime.now())
+        userid=ID(fname)
+        password=PASSWORD(date,month,year)
+        smodel=Student(first_name=fname,last_name=lname,user_id=userid,date_of_birth=date_of_birth1,gurdian_name=gurdian,contact=phone,whatsapp=whatsapp,email=email,address=address,school_college_name=instu,appearing_passed_12=status,board_name=board,appeared_wbjee_jeeMain=entrance,created_at=datetime.now())
         smodel.save()
 
         
-        userid=ID(fname)
-        password=PASSWORD(date,month,year)
+        
         
         subject='Thank You for registration'
         body=f'your user name is {userid} and your password is {password}'
@@ -73,7 +73,8 @@ def register(request):
 
 
 def Login(request):
-   if request.method=="POST":
+    global dictt
+    if request.method=="POST":
         username=request.POST.get('username')
         password=request.POST.get('password')
         print(username,password)
@@ -101,21 +102,34 @@ def Login(request):
             obj = DetailsExam.objects.first()
             field_object = DetailsExam._meta.get_field(field_name)
             exam_duration = str(field_object.value_from_object(obj))
+
+            field_name = 'total_questions'
+            obj = DetailsExam.objects.first()
+            field_object = DetailsExam._meta.get_field(field_name)
+            total_questions = str(field_object.value_from_object(obj))
+            r_days=int(date)-int(datetime.today().strftime("%d"))
+            dictt={
+                'date':date,
+                'month':month,
+                'start':start_time,
+                'r_days':r_days
+            }
+
             if is_exam(date,month,start_time):
                 return render(request,'exam.html')
             else:
-                return render(request,'notexam.html')
+                return render(request,'notexam.html',{'dictt':dictt})
         else:
             return render(request,'login.html')
 
-@login_required(login_url='login')
+
 def exam(request):
-    if User.is_anonymous:
-        return render(request,'login.html')
-    else:
-        return render(request,'exam.html')
-    return render(request,'exam.html')
+       if User.is_anonymous:
+            return render(request,'login.html')
+       return render(request,'exam.html')
+    
 
 
 def notexam(request):
-    return render(request,'notexam.html')
+            
+            return render(request,'notexam.html')
