@@ -42,6 +42,7 @@
             margin-bottom: -1px;
             border-bottom-right-radius: 0;
             border-bottom-left-radius: 0;
+            padding: 10px;
         }
         
         .form-signin input[type="password"] {
@@ -72,10 +73,21 @@
 
 <body class="text-center">
 
+
+
+
+
+
+
     <main class="form-signin">
         <form method="POST" action="/login">
-            {% csrf_token %}
-            
+            {% csrf_token %} {% for message in messages %}
+
+            <div class="alert alert-danger alert-{{ message.tags }}" role="alert">
+                <strong>Message-</strong> {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
             <h1 class="h3 mb-3 fw-normal">Login to give the Exam</h1>
 
             <div class="form-floating">
@@ -88,11 +100,11 @@
             </div>
 
             <div class="checkbox mb-3">
-                
-                    
+
+
             </div>
             <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
-          
+
         </form>
         <a href="\"><button class="btn btn-outline-success py-2 my-3" type="submit"><- Back</button></a>
     </main>

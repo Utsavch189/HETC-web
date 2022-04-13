@@ -24,7 +24,7 @@ class Student(models.Model):
     created_at=models.DateField()
 
     def __str__(self):
-        return str(self.first_name)+''+str(self.last_name)
+        return str(self.first_name)+' '+str(self.last_name)
 
 
 class DetailsExam(models.Model):

@@ -7,13 +7,13 @@ from django.contrib import messages
 from datetime import datetime
 from .models import *
 from django.core.mail import send_mail
-from .Need_Function import ID,PASSWORD,is_exam
+from .Need_Function import ID,PASSWORD,is_exam,eliminate
 from django.contrib.auth.decorators import login_required
 import random
+from django.http import HttpResponseRedirect
+
 
 dictt={}
-
-
 
 
 
@@ -51,7 +51,7 @@ def register(request):
         smodel=Student(first_name=fname,last_name=lname,user_id=userid,date_of_birth=date_of_birth1,gurdian_name=gurdian,contact=phone,whatsapp=whatsapp,email=email,address=address,school_college_name=instu,appearing_passed_12=status,board_name=board,appeared_wbjee_jeeMain=entrance,created_at=datetime.now())
         smodel.save()
 
-        
+        messages.success(request,'Your Registration is completed. Check Your Email To get User ID and Password')
         
         
         subject='Thank You for registration'
@@ -68,13 +68,36 @@ def register(request):
         user.first_name=fname
         user.last_name=lname
         user.save()
+
     
     return render(request,'register.html')
 
 
-def Login(request):
+def exam(request):
+    if User.is_anonymous:
+        return HttpResponseRedirect('login')
+      
+    return render(request,'exam.html')
+    
+
+
+def notexam(request):
+    if User.is_anonymous:
+        return HttpResponseRedirect('login')
+            
+    return render(request,'notexam.html',{'dictt':dictt})
+
+
+
+
+
+
+def loginn(request):
     global dictt
-    if request.method=="POST":
+    if request.method=="GET":
+        return render(request,'login.html')
+   
+    elif request.method=="POST":
         username=request.POST.get('username')
         password=request.POST.get('password')
         print(username,password)
@@ -109,27 +132,17 @@ def Login(request):
             total_questions = str(field_object.value_from_object(obj))
             r_days=int(date)-int(datetime.today().strftime("%d"))
             dictt={
-                'date':date,
-                'month':month,
+                'date':eliminate( date),
+                'month':eliminate( month),
                 'start':start_time,
-                'r_days':r_days
+                'r_days':eliminate( r_days)
             }
 
             if is_exam(date,month,start_time):
-                return render(request,'exam.html')
+                return HttpResponseRedirect('exam')
             else:
-                return render(request,'notexam.html',{'dictt':dictt})
-        else:
-            return render(request,'login.html')
-
-
-def exam(request):
-       if User.is_anonymous:
-            return render(request,'login.html')
-       return render(request,'exam.html')
+                return HttpResponseRedirect('notexam')
     
+    messages.warning(request,'Wrong Username or Password')   
+    return render(request,'login.html')   
 
-
-def notexam(request):
-            
-            return render(request,'notexam.html')

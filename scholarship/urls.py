@@ -5,7 +5,8 @@ urlpatterns = [
    path('',home,name='home'),
    path('contact',contact,name='contact'),
    path('register',register,name='register'),
-   path('login',Login,name='login'),
    path('exam',exam,name='exam'),
-   path('notexam',notexam,name='notexam')
+   path('notexam',notexam,name='notexam'),
+    path('login',loginn,name='login'),
+   
 ]

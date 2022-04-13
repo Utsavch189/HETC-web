@@ -39,18 +39,25 @@ def PASSWORD(date,month,year):
 
 
 def is_exam(date,month,time):
-    c_date=datetime.today().strftime("%d")
-    c_month=datetime.today().strftime("%m")
+    c_date=eliminate( datetime.today().strftime("%d"))
+    c_month=eliminate( datetime.today().strftime("%m"))
     
 
     c_hour=datetime.now().strftime("%H")
     c_minute=datetime.now().strftime("%M")
-    if(str(c_date)==str(date) and str(c_month)==str(month) and str(c_hour)==str(time) ):
+    if(str(c_date)==str(eliminate(date)) and str(c_month)==str(eliminate(month)) and str(c_hour)==str(time) ):
         return True
     else:
         return False
-    
-a='11'
-b='04'
-c='12'
-print(is_exam(a,b,c))
+
+
+
+def eliminate(a):
+    a=str(a)
+    if(a=='01' or a=='02' or a=='03' or a=='04' or a=='05' or a=='06' or a=='07' or a=='08' or a=='09'):
+        n=a.replace('0','')
+        return int(n)
+    return int(a)
+
+
+
