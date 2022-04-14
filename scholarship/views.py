@@ -11,7 +11,7 @@ from .Need_Function import ID,PASSWORD,is_exam,eliminate
 from django.contrib.auth.decorators import login_required
 import random
 from django.http import HttpResponseRedirect
-
+from django.views.decorators.csrf import csrf_exempt
 
 dictt={}
 
@@ -27,9 +27,11 @@ def contact(request):
 
 
 def register(request):
+    if request.method=="GET":
+        return render(request,'register.html')
     
 
-    if request.method=='POST':
+    elif request.method=='POST':
         fname=request.POST.get('fname')
         lname=request.POST.get('lname')
         gurdian=request.POST.get('gurdian')
@@ -72,20 +74,30 @@ def register(request):
     
     return render(request,'register.html')
 
-
+@csrf_exempt
+@login_required(login_url='login')
 def exam(request):
-    if User.is_anonymous:
-        return HttpResponseRedirect('login')
+       if request.method=="GET":
+            
+            return render(request,'exam.html',{'aa':3})
+       elif request.method=="POST":
+            print(request.body)
+
+            return render(request,'exam.html')
       
-    return render(request,'exam.html')
+    
     
 
 
 def notexam(request):
-    if User.is_anonymous:
-        return HttpResponseRedirect('login')
+   if request.method=="GET":
             
-    return render(request,'notexam.html',{'dictt':dictt})
+        return render(request,'notexam.html',{'aa':3})
+   elif request.method=="POST":
+       print(request.body)
+
+       return render(request,'notexam.html')
+
 
 
 
@@ -106,43 +118,12 @@ def loginn(request):
 
             login(request,user)
 
-            field_name = 'date'
-            obj = DetailsExam.objects.first()
-            field_object = DetailsExam._meta.get_field(field_name)
-            date = str(field_object.value_from_object(obj))
-
-            field_name = 'month'
-            obj = DetailsExam.objects.first()
-            field_object = DetailsExam._meta.get_field(field_name)
-            month= str(field_object.value_from_object(obj))
-
-            field_name = 'start_time'
-            obj = DetailsExam.objects.first()
-            field_object = DetailsExam._meta.get_field(field_name)
-            start_time = str(field_object.value_from_object(obj))
-
-            field_name = 'exam_duration'
-            obj = DetailsExam.objects.first()
-            field_object = DetailsExam._meta.get_field(field_name)
-            exam_duration = str(field_object.value_from_object(obj))
-
-            field_name = 'total_questions'
-            obj = DetailsExam.objects.first()
-            field_object = DetailsExam._meta.get_field(field_name)
-            total_questions = str(field_object.value_from_object(obj))
-            r_days=int(date)-int(datetime.today().strftime("%d"))
-            dictt={
-                'date':eliminate( date),
-                'month':eliminate( month),
-                'start':start_time,
-                'r_days':eliminate( r_days)
-            }
-
-            if is_exam(date,month,start_time):
-                return HttpResponseRedirect('exam')
-            else:
-                return HttpResponseRedirect('notexam')
-    
+            return redirect('home')
+        
+        
     messages.warning(request,'Wrong Username or Password')   
     return render(request,'login.html')   
 
+def logoutt(request):
+    logout(request)
+    return redirect('home')

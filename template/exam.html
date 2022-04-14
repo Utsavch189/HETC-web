@@ -5,84 +5,327 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exam</title>
+    <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
     <style>
-        .sidebar {
-            height: 100vh;
-            background-color: rgb(38, 107, 38);
-            width: 45vw;
-            position: absolute;
-            overflow: hidden;
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .head {
+            background-color: rgb(42, 42, 206);
+            height: 25vh;
             display: flex;
-            justify-content: center;
-        }
-        
-        .username {
-            font-family: sans-serif;
-            font-weight: 50;
-            font-size: 1rem;
-            color: white;
-        }
-        
-        .user {
-            height: 20vh;
-            width: auto;
-            margin-top: 25px;
+            justify-content: space-evenly;
+            overflow: hidden;
         }
         
         .timer {
-            height: 20vh;
-            width: auto;
-            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: white;
+            width: 40vw;
         }
         
-        .time {
-            color: white;
+        .buttonss {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 25vh;
+            width: 30vw;
+            justify-content: center;
+        }
+        
+        .bttn {
+            margin-left: 5px;
+            margin-top: 5px;
+            height: 25px;
+            width: 25px;
+            align-items: center;
+        }
+        
+        @media only screen and (min-width: 881px) {
+            .buttonss {
+                justify-content: center;
+            }
+        }
+        
+        @media only screen and (max-width: 880px) {
+            .head {
+                height: 34vh;
+            }
+            .bttn {
+                margin-left: 2px;
+                margin-top: 1px;
+                height: 23px;
+                width: 23px;
+            }
+            .timer {
+                width: 35vw;
+                overflow: hidden;
+            }
+            .buttonss {
+                height: 33vh;
+                width: 55vw;
+                justify-content: center;
+                overflow-y: scroll;
+                margin-top: 10px;
+            }
+            .username {
+                font-size: 12px;
+            }
+        }
+        
+      
+        
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 8vh;
+            position: absolute;
+            bottom: 0;
+        }
+        
+        .submit {
+            position: absolute;
+            right: 0;
+            margin-right: 10px;
+            margin-bottom: 5px;
         }
     </style>
-
-
 
 </head>
 
 <body>
+    <div class="container-fluid head">
+        <div class="container timer" id="tota">
+            <h6 class="username text-center">{{request.user.first_name}} {{request.user.last_name}}</h6>
+                        <h6 class="time text-center" id="total"></h6>
 
-
-
-    <div class="container sidebar">
-        <div class="container user">
-            <span class="username">{{request.user.first_name}} {{request.user.last_name}}</span>
-            <div class="container timer">
-                <progress value="0" max="60" id="progressBar"></progress>
-                <span class="time">Time Left</span>
-                <span id="timer" class="time"></span>
-            </div>
+            <h6 class="time text-center">Time Left</h6>
+            <h6 id="timer" class="time text-center"></h6>
         </div>
+
+        <div class="container buttonss">
+            <div class="container buttons" id="buttons"></div>
+
+        </div>
+    </div>
+
+
+    <div class="container-fluid body my-2">
+        <form action="" method="POST" id="mainform" name="mainform">
+            {% csrf_token %}
+            <button class="btn btn-success submit" type="submit">Submit</button>
+
+
+
+
+            <div class="container questions my-4">
+
+                <h3>1.<span>Capital of India is-</span></h3>
+
+                <h4> <input type="radio" name="aa" id="input" value="a"> Delhi</h4>
+                <h4> <input type="radio" name="aa" id="input" value="b" > Kolkata</h4>
+                <h4> <input type="radio" name="aa" id="input" value="c" > Mumbai</h4>
+                <h4> <input type="radio" name="aa" id="input" value="d" > Chennai</h4>
+
+            </div>
+
+
+
+
+
+
+        </form>
+    </div>
+
+
+    <div class="container-fluid footer">
+        <button class="btn btn-primary" onclick="prev()"><-Prev</button>
+        <button class="btn btn-danger" onclick="mark()">Mark</button>
+        <button class="btn btn-primary" onclick="next()">Next-></button>
 
 
 
     </div>
 
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
+
+    <script>
+        let i = 50;
+        let j = 1;
+        let v = 0;
+let t=0;
+
+
+document.mainform.onclick= function (){
+let as=document.mainform.aa.value;
+fetch('http://127.0.0.1:8000/exam/', {
+    method: 'POST', 
+    headers: {
+        'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({'index':`${v}`,'option':`${as}`}),
+  })
+if(as==='a' || as==='b' || as==='c' || as==='d'){
+    let x = document.getElementById(`${v}`)
+         x.style.backgroundColor='blue'
+         x.style.color='white'
+        
+}
+}
+
+        button();
+        clock();
+        function button() {
+            var a = document.createDocumentFragment();
+
+            for (let k = 1; k <= i; k++) {
+                let btn = document.createElement("input");
+                btn.innerHTML = k;
+                btn.type = "submit";
+                btn.name = "formBtn";
+                btn.value = k;
+                btn.id = `${k}`;
+                btn.className = 'bttn'
+
+                btn.onclick = function() {
+                    v = parseInt(btn.value)
+                   
+                        
+                    fetch('http://127.0.0.1:8000/exam/', {
+                        method: 'POST', 
+                        headers: {
+                            'Accept': 'application/json',
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({'index':`${v}`}),
+                      })
+                 
+                   // if (v > 0) {
+                       // document.getElementById(`${v}`).classList.add("color");
+                   // }
+                   colo();
+                   
+
+                }
+                a.appendChild(btn);
+
+
+            }
+            document.getElementById("buttons").appendChild(a);
+
+        }
+
+            function colo(){
+        if(v>0){
+  
+         let x = document.getElementById(`${v}`)
+         if(x.style.backgroundColor!='blue' ){
+         x.style.backgroundColor='green'
+         x.style.color='white'
+         }
+
+    }
+  }
+
+
+
+        document.addEventListener(mark(), 'click');
+        document.addEventListener(next(), 'click');
+        document.addEventListener(prev(), 'click');
+
+        function next() {
+            if (v === 0 || v>0) {
+
+                v += 1;
+
+                if (v > i) {
+                    alert('No questions left, You can submit')
+                    v = i;
+                }
+            }
+           
+                   colo();
+                   fetch('http://127.0.0.1:8000/exam/', {
+                    method: 'POST', 
+                    headers: {
+                        'Accept': 'application/json',
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({'index':`${v}`}),
+                  })
+           
+        }
+
+        function prev() {
+            if (v > 0 && v <= i) {
+                if (v === 0) {
+                    v = 1;
+                }
+                v -= 1;
+
+            }
+            fetch('http://127.0.0.1:8000/exam/', {
+                method: 'POST', 
+                headers: {
+                    'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({'index':`${v}`}),
+              })
+           
+        }
+
+
+
+        function mark() {
+            if (v != 0) {
+                let x=document.getElementById(`${v}`)
+                x.style.backgroundColor='red';
+                x.style.color='white'
+            }
+        }
+
+
+
+
+
+
+
+        function clock() {
+            let myTimer = setInterval(myClock, 1000);
+            var c = 3600;
+
+            function myClock() {
+                --c
+                var seconds = c % 60;
+                var secondsInMinutes = (c - seconds) / 60;
+                var minutes = secondsInMinutes % 60;
+                var hours = (secondsInMinutes - minutes) / 60;
+
+                timer.innerHTML = (hours + ":" + minutes + ":" + seconds)
+
+
+                if (c == 0) {
+                    clearInterval(myTimer);
+                }
+            }
+        }
+    </script>
 
 
 
 
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-<script>
-    var timeleft = 3600;
-    let timer = document.getElementById('timer')
-    var downloadTimer = setInterval(function() {
-        if (timeleft <= 0) {
-            clearInterval(downloadTimer);
-        }
-        document.getElementById("progressBar").value = timeleft - 0;
-        timer.innerHTML = timeleft - 0;
-        timeleft -= 1;
-    }, 1000);
-</script>
+
 
 </html>

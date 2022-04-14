@@ -1,6 +1,4 @@
-{% extends 'Base.html' %} {% block title %} Home {% endblock title %} {% block body %} 
+{% extends 'Base.html' %} {% block title %} Home {% endblock title %} {% block body %} {% if request.user %}
 
-<h5>home</h5>
-
-
-{% endblock body %}
+<h4 class="text-center my-2">Welcome {{request.user.first_name}} {{request.user.last_name}}</h4>
+{% endif %} {% endblock body %}
