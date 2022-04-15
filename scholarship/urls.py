@@ -9,5 +9,5 @@ urlpatterns = [
    path('notexam/',notexam,name='notexam'),
     path('login',loginn,name='login'),
        path('logout/',logoutt,name='logout'),
-
+path('credentials/',Credentials,name='credentials'),
 ]

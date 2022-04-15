@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 import random
 from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
+import json
 
 dictt={}
 
@@ -78,10 +79,28 @@ def register(request):
 @login_required(login_url='login')
 def exam(request):
        if request.method=="GET":
+           return render(request,'exam.html')
             
-            return render(request,'exam.html',{'aa':3})
+            
        elif request.method=="POST":
-            print(request.body)
+            if (request.headers['Content-Length']=='13'):
+
+               
+                body_unicode = request.body.decode('utf-8')
+                body = json.loads(body_unicode)
+                index = (body['index'])
+                print('only index',index)
+
+                
+                
+            elif (request.headers['Content-Length']=='26'):
+                body_unicode = request.body.decode('utf-8')
+                body = json.loads(body_unicode)
+                index1 = (body['index'])
+                option=(body['option'])
+                print(' index and option',index1, option)
+
+
 
             return render(request,'exam.html')
       
@@ -90,13 +109,8 @@ def exam(request):
 
 
 def notexam(request):
-   if request.method=="GET":
-            
-        return render(request,'notexam.html',{'aa':3})
-   elif request.method=="POST":
-       print(request.body)
 
-       return render(request,'notexam.html')
+    return render(request,'notexam.html')
 
 
 
@@ -127,3 +141,22 @@ def loginn(request):
 def logoutt(request):
     logout(request)
     return redirect('home')
+
+def Credentials(request):
+    if request.method=='GET':
+        return render(request,'exam_cred.html')
+
+    elif request.method=='POST':
+        username=request.POST.get('username')
+        password=request.POST.get('password')
+        
+        user=authenticate(request,username=username,password=password)
+        if username == request.user.username and user is not None:
+            return redirect('exam')
+        else:
+            messages.warning(request,'Wrong Username or Password')  
+            return render(request,'exam_cred.html')   
+        
+
+
+    
