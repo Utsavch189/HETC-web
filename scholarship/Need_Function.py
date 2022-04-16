@@ -45,7 +45,7 @@ def is_exam(date,month,time):
 
     c_hour=datetime.now().strftime("%H")
     c_minute=datetime.now().strftime("%M")
-    if(str(c_date)==str(eliminate(date)) and str(c_month)==str(eliminate(month)) and str(c_hour)==str(time) ):
+    if(str(eliminate( c_date))==str(eliminate(date)) and str(eliminate( c_month))==str(eliminate(month)) and str(eliminate( c_hour))==str(eliminate( time)) ):
         return True
     else:
         return False

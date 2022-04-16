@@ -96,6 +96,9 @@
             margin-right: 10px;
             margin-bottom: 5px;
         }
+        .ques{
+            font-weight: bold
+        }
     </style>
 
 </head>
@@ -127,7 +130,8 @@
 
             <div class="container questions my-4">
 
-                <h3>1.<span>Capital of India is-</span></h3>
+                <span id="index"  class="ques"></span>
+                    <span class="ques">Capital of India is-</span>
 
                 <h4> <input type="radio" name="aa" id="input" value="a"> Delhi</h4>
                 <h4> <input type="radio" name="aa" id="input" value="b" > Kolkata</h4>
@@ -159,11 +163,11 @@
 
 
     <script>
-        let i = 50;
+        let i = {{dictt.number_of_questions}}
         let j = 1;
         let v = 0;
 let t=0;
-
+console.log(i)
 
 document.mainform.onclick= function (){
 let as=document.mainform.aa.value;
@@ -209,7 +213,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                         },
                         body: JSON.stringify({'index':`${v}`}),
                       })
-                 
+                 document.getElementById('index').innerText=v+'. '
                    // if (v > 0) {
                        // document.getElementById(`${v}`).classList.add("color");
                    // }
@@ -263,7 +267,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                     },
                     body: JSON.stringify({'index':`${v}`}),
                   })
-           
+                  document.getElementById('index').innerText=v+'. '
         }
 
         function prev() {
@@ -282,7 +286,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                 },
                 body: JSON.stringify({'index':`${v}`}),
               })
-           
+              document.getElementById('index').innerText=v+'. '
         }
 
 
@@ -303,7 +307,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
 
         function clock() {
             let myTimer = setInterval(myClock, 1000);
-            var c = 3600;
+            var c = 3600*{{dictt.exam_duration}};
 
             function myClock() {
                 --c

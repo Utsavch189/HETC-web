@@ -1,3 +1,4 @@
+from calendar import month
 from venv import create
 from django.shortcuts import render,redirect
 from django.http import request
@@ -14,13 +15,56 @@ from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-dictt={}
+
+
+
+
+
+
 
 
 
 def home(request):
+    
+    field_name = 'date'
+    obj = DetailsExam.objects.first()
+    field_object = DetailsExam._meta.get_field(field_name)
+    date = getattr(obj, field_object.attname)
+
+    field_name = 'month'
+    obj = DetailsExam.objects.first()
+    field_object = DetailsExam._meta.get_field(field_name)
+    month = getattr(obj, field_object.attname)
+
+
+    field_name = 'start_time'
+    obj = DetailsExam.objects.first()
+    field_object = DetailsExam._meta.get_field(field_name)
+    time = getattr(obj, field_object.attname)
+
+    field_name = 'exam_duration'
+    obj = DetailsExam.objects.first()
+    field_object = DetailsExam._meta.get_field(field_name)
+    exam_duration = getattr(obj, field_object.attname)
+
+
+    field_name = 'total_questions'
+    obj = DetailsExam.objects.first()
+    field_object = DetailsExam._meta.get_field(field_name)
+    total_questions = getattr(obj, field_object.attname)
+
+
+    dictt={
+    'exam_date':eliminate( date),
+    'exam_month':eliminate( month),
+    'exam_start_time':eliminate (time),
+    'exam_duration':eliminate(exam_duration),
+    'number_of_questions':eliminate(total_questions)
+
+}
+
  
-    return render(request,'home.html')
+    return render(request,'home.html',{'dictt':dictt})
 
 
 def contact(request):
@@ -79,7 +123,43 @@ def register(request):
 @login_required(login_url='login')
 def exam(request):
        if request.method=="GET":
-           return render(request,'exam.html')
+            field_name = 'date'
+            obj = DetailsExam.objects.first()
+            field_object = DetailsExam._meta.get_field(field_name)
+            date = getattr(obj, field_object.attname)
+
+            field_name = 'month'
+            obj = DetailsExam.objects.first()
+            field_object = DetailsExam._meta.get_field(field_name)
+            month = getattr(obj, field_object.attname)
+
+
+            field_name = 'start_time'
+            obj = DetailsExam.objects.first()
+            field_object = DetailsExam._meta.get_field(field_name)
+            time = getattr(obj, field_object.attname)
+
+            field_name = 'exam_duration'
+            obj = DetailsExam.objects.first()
+            field_object = DetailsExam._meta.get_field(field_name)
+            exam_duration = getattr(obj, field_object.attname)
+
+
+            field_name = 'total_questions'
+            obj = DetailsExam.objects.first()
+            field_object = DetailsExam._meta.get_field(field_name)
+            total_questions = getattr(obj, field_object.attname)
+
+
+            dictt={
+    'exam_date':eliminate( date),
+    'exam_month':eliminate( month),
+    'exam_start_time':eliminate (time),
+    'exam_duration':eliminate(exam_duration),
+    'number_of_questions':eliminate(total_questions)
+
+}
+            return render(request,'exam.html',{'dictt':dictt})
             
             
        elif request.method=="POST":
@@ -109,8 +189,44 @@ def exam(request):
 
 
 def notexam(request):
+    field_name = 'date'
+    obj = DetailsExam.objects.first()
+    field_object = DetailsExam._meta.get_field(field_name)
+    date = getattr(obj, field_object.attname)
 
-    return render(request,'notexam.html')
+    field_name = 'month'
+    obj = DetailsExam.objects.first()
+    field_object = DetailsExam._meta.get_field(field_name)
+    month = getattr(obj, field_object.attname)
+
+
+    field_name = 'start_time'
+    obj = DetailsExam.objects.first()
+    field_object = DetailsExam._meta.get_field(field_name)
+    time = getattr(obj, field_object.attname)
+
+    field_name = 'exam_duration'
+    obj = DetailsExam.objects.first()
+    field_object = DetailsExam._meta.get_field(field_name)
+    exam_duration = getattr(obj, field_object.attname)
+
+
+    field_name = 'total_questions'
+    obj = DetailsExam.objects.first()
+    field_object = DetailsExam._meta.get_field(field_name)
+    total_questions = getattr(obj, field_object.attname)
+
+
+    dictt={
+    'exam_date':eliminate( date),
+    'exam_month':eliminate( month),
+    'exam_start_time':eliminate (time),
+    'exam_duration':eliminate(exam_duration),
+    'number_of_questions':eliminate(total_questions)
+
+}
+
+    return render(request,'notexam.html',{'dictt':dictt})
 
 
 
@@ -119,7 +235,7 @@ def notexam(request):
 
 
 def loginn(request):
-    global dictt
+   
     if request.method=="GET":
         return render(request,'login.html')
    
@@ -144,7 +260,31 @@ def logoutt(request):
 
 def Credentials(request):
     if request.method=='GET':
-        return render(request,'exam_cred.html')
+        field_name = 'date'
+        obj = DetailsExam.objects.first()
+        field_object = DetailsExam._meta.get_field(field_name)
+        date = getattr(obj, field_object.attname)
+
+        field_name = 'month'
+        obj = DetailsExam.objects.first()
+        field_object = DetailsExam._meta.get_field(field_name)
+        month = getattr(obj, field_object.attname)
+
+
+        field_name = 'start_time'
+        obj = DetailsExam.objects.first()
+        field_object = DetailsExam._meta.get_field(field_name)
+        time = getattr(obj, field_object.attname)
+
+       
+
+
+
+        if is_exam(date,month,time):
+            return render(request,'exam_cred.html')
+        else:
+            
+            return redirect('notexam')
 
     elif request.method=='POST':
         username=request.POST.get('username')

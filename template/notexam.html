@@ -17,6 +17,7 @@
             <h1 class="display-4">Remaining Time Is: <span id="time"></span></h1>
             <p class="lead">We are Here to show the time Remaining for your Exam So be ready and prepare.</p>
             <hr class="my-4">
+            <h5  id="rtime"></h5>
             <p>Take preparation for your Exam and Best Of Luck for your Exam.</p>
             
           </div>
@@ -45,10 +46,13 @@
         let a;
         let date;
         let month;
-        const rdate= 22;
-        const rmonth= 5;
+        let rdate= {{dictt.exam_date}}
+        let rmonth= {{dictt.exam_month}}
+        let rtime={{dictt.exam_start_time}}
         let x = document.getElementById('time');
-        console.log(x);
+        let y = document.getElementById('rtime');
+        y.innerText='Your Exam will start at'+' '+ rtime
+        console.log(rdate, rmonth,rtime);
     
         a = new Date();
         date = a.getDate();
