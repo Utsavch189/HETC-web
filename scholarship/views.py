@@ -163,17 +163,24 @@ def exam(request):
             
             
        elif request.method=="POST":
-            if (request.headers['Content-Length']=='13'):
+            if (request.headers['Content-Length']=='13' or request.headers['Content-Length']=='14'):
 
                
                 body_unicode = request.body.decode('utf-8')
                 body = json.loads(body_unicode)
                 index = (body['index'])
                 print('only index',index)
+                ques=[
+                    {
+                        "body":"done"
+                    }
+                ]
+               
 
                 
                 
-            elif (request.headers['Content-Length']=='26'):
+            else:
+                
                 body_unicode = request.body.decode('utf-8')
                 body = json.loads(body_unicode)
                 index1 = (body['index'])
@@ -299,4 +306,4 @@ def Credentials(request):
         
 
 
-    
+ 
