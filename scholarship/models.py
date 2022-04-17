@@ -1,11 +1,11 @@
-import email
+from django.contrib.auth.models import User
 from email.policy import default
 from pyexpat import model
 from turtle import up
 from django.db import models
 from datetime import datetime
 
-from numpy import mod
+
 # Create your models here.
 class Student(models.Model):
     first_name=models.CharField(max_length=100,blank=True,null=True)
@@ -38,3 +38,29 @@ class DetailsExam(models.Model):
 
 class Rule(models.Model):
     pdf=models.FileField()
+
+
+class Question(models.Model):
+    ques_no = models.IntegerField(primary_key=True)
+    ques = models.CharField(max_length=500)
+    opt1 = models.CharField(max_length=10)
+    opt2 = models.CharField(max_length=10)
+    opt3 = models.CharField(max_length=10)
+    opt4 = models.CharField(max_length=10)
+    opt_ans = models.CharField(max_length=10)
+    marks = models.PositiveIntegerField(default=0)
+    neg_marks = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.ques
+
+
+class Result(models.Model):
+    author = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
+    name = models.CharField(max_length=200)
+    result = models.IntegerField(default=0)
+    userid = models.CharField(max_length=100)
+    exam_status = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.userid

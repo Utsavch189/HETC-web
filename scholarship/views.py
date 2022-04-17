@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from datetime import datetime
+
+from numpy import r_
 from .models import *
 from django.core.mail import send_mail
 from .Need_Function import ID,PASSWORD,is_exam,eliminate
@@ -14,8 +16,8 @@ import random
 from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 import json
-
-
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 
 
@@ -122,6 +124,9 @@ def register(request):
 @csrf_exempt
 @login_required(login_url='login')
 def exam(request):
+    
+       r_obj=Question.objects.get(pk=1)
+
        if request.method=="GET":
             field_name = 'date'
             obj = DetailsExam.objects.first()
@@ -156,13 +161,15 @@ def exam(request):
     'exam_month':eliminate( month),
     'exam_start_time':eliminate (time),
     'exam_duration':eliminate(exam_duration),
-    'number_of_questions':eliminate(total_questions)
+    'number_of_questions':eliminate(total_questions),
+    'obj':r_obj
 
 }
             return render(request,'exam.html',{'dictt':dictt})
             
             
        elif request.method=="POST":
+           
             if (request.headers['Content-Length']=='13' or request.headers['Content-Length']=='14'):
 
                
@@ -170,11 +177,10 @@ def exam(request):
                 body = json.loads(body_unicode)
                 index = (body['index'])
                 print('only index',index)
-                ques=[
-                    {
-                        "body":"done"
-                    }
-                ]
+               
+              
+                
+               
                
 
                 
@@ -188,8 +194,8 @@ def exam(request):
                 print(' index and option',index1, option)
 
 
-
-            return render(request,'exam.html')
+            
+            return render(request,'exam.html',{'a':'utsav'})
       
     
     
@@ -306,4 +312,14 @@ def Credentials(request):
         
 
 
- 
+@api_view(['POST'])
+def api(request):
+    print(request.data['index'])
+    index=(request.data['index'])
+    
+    r_obj=Question.objects.get(pk=index)
+    a={"id":index,"question":r_obj.ques,"opt1":r_obj.opt1,"opt2":r_obj.opt2,"opt3":r_obj.opt3,"opt4":r_obj.opt4}
+    data=json.dumps(a)
+
+    
+    return Response(data)

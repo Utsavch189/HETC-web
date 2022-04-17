@@ -131,7 +131,7 @@
             <div class="container questions my-4">
 
                 <span id="index"  class="ques"></span>
-                    <span class="ques">Capital of India is-</span>
+                    <span class="ques">{{dictt.obj}}</span>
 
                 <h4> <input type="radio" name="aa" id="input" value="a"> Delhi</h4>
                 <h4> <input type="radio" name="aa" id="input" value="b" > Kolkata</h4>
@@ -167,7 +167,7 @@
         let j = 1;
         let v = 0;
 let t=0;
-console.log(i)
+console.log({{dictt.r_obj}})
 
 document.mainform.onclick= function (){
 let as=document.mainform.aa.value;
@@ -205,14 +205,24 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                     v = parseInt(btn.value)
                    
                         
-                    fetch('http://127.0.0.1:8000/exam/', {
+                    fetch('http://127.0.0.1:8000/api/', {
                         method: 'POST', 
                         headers: {
+                            "X-CSRFToken": '{{csrf_token}}',
                             'Accept': 'application/json',
                           'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({'index':`${v}`}),
                       })
+                      .then(r => r.json())
+                      .then(r => {
+                      console.log(r)
+                       
+            
+                    }).catch((error) => {
+                        console.error('Error:', error);
+                       
+                      });
                     
                  document.getElementById('index').innerText=v+'. '
                    // if (v > 0) {
@@ -260,9 +270,10 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
             }
            
                    colo();
-                   fetch('http://127.0.0.1:8000/exam/', {
+                   fetch('http://127.0.0.1:8000/api/', {
                     method: 'POST', 
                     headers: {
+                        "X-CSRFToken": '{{csrf_token}}',
                         'Accept': 'application/json',
                       'Content-Type': 'application/json',
                     },
@@ -279,9 +290,10 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                 v -= 1;
 
             }
-            fetch('http://127.0.0.1:8000/exam/', {
+            fetch('http://127.0.0.1:8000/api/', {
                 method: 'POST', 
                 headers: {
+                    "X-CSRFToken": '{{csrf_token}}',
                     'Accept': 'application/json',
                   'Content-Type': 'application/json',
                 },
