@@ -125,7 +125,7 @@ def register(request):
 @login_required(login_url='login')
 def exam(request):
     
-       r_obj=Question.objects.get(pk=1)
+       
 
        if request.method=="GET":
             field_name = 'date'
@@ -162,7 +162,7 @@ def exam(request):
     'exam_start_time':eliminate (time),
     'exam_duration':eliminate(exam_duration),
     'number_of_questions':eliminate(total_questions),
-    'obj':r_obj
+    
 
 }
             return render(request,'exam.html',{'dictt':dictt})
@@ -192,6 +192,14 @@ def exam(request):
                 index1 = (body['index'])
                 option=(body['option'])
                 print(' index and option',index1, option)
+                total=0
+                objj=Question.objects.get(pk=index1)
+                right_ans=objj.opt_ans
+                if(option==right_ans):
+                    total=total+objj.marks
+                else:
+                    total=total+objj.neg_marks
+                print('total',total)
 
 
             

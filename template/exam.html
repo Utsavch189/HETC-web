@@ -99,6 +99,9 @@
         .ques{
             font-weight: bold
         }
+        span{
+            font-weight: bold
+        }
     </style>
 
 </head>
@@ -131,12 +134,12 @@
             <div class="container questions my-4">
 
                 <span id="index"  class="ques"></span>
-                    <span class="ques">{{dictt.obj}}</span>
-
-                <h4> <input type="radio" name="aa" id="input" value="a"> Delhi</h4>
-                <h4> <input type="radio" name="aa" id="input" value="b" > Kolkata</h4>
-                <h4> <input type="radio" name="aa" id="input" value="c" > Mumbai</h4>
-                <h4> <input type="radio" name="aa" id="input" value="d" > Chennai</h4>
+                    <span class="ques" id="ques"></span>
+<br>
+                    <input type="radio" name="aa" id="input" value="a"><span id="input1">  </span><br>
+                <input type="radio" name="aa" id="input" value="b" ><span id="input2">  </span><br>
+                <input type="radio" name="aa" id="input" value="c" ><span id="input3">  </span><br>
+                <input type="radio" name="aa" id="input" value="d" > <span id="input4">  </span>
 
             </div>
 
@@ -167,7 +170,8 @@
         let j = 1;
         let v = 0;
 let t=0;
-console.log({{dictt.r_obj}})
+
+let ques=''
 
 document.mainform.onclick= function (){
 let as=document.mainform.aa.value;
@@ -216,8 +220,14 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                       })
                       .then(r => r.json())
                       .then(r => {
-                      console.log(r)
-                       
+                      let o=JSON.parse(r)
+                      console.log(o)
+                      
+                       document.getElementById('ques').innerText=o.question
+                       document.getElementById('input1').innerText=o.opt1
+                       document.getElementById('input2').innerText=o.opt2
+                       document.getElementById('input3').innerText=o.opt3
+                       document.getElementById('input4').innerText=o.opt4
             
                     }).catch((error) => {
                         console.error('Error:', error);
@@ -229,7 +239,6 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                        // document.getElementById(`${v}`).classList.add("color");
                    // }
                    colo();
-                   
 
                 }
                 a.appendChild(btn);
@@ -279,6 +288,21 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                     },
                     body: JSON.stringify({'index':`${v}`}),
                   })
+                  .then(r => r.json())
+                  .then(r => {
+                    let o=JSON.parse(r)
+                    console.log(o)
+                    
+                     document.getElementById('ques').innerText=o.question
+                   
+                     document.getElementById('input1').innerText=o.opt1
+                     document.getElementById('input2').innerText=o.opt2
+                     document.getElementById('input3').innerText=o.opt3
+                     document.getElementById('input4').innerText=o.opt4
+                }).catch((error) => {
+                    console.error('Error:', error);
+                   
+                  });
                   document.getElementById('index').innerText=v+'. '
         }
 
@@ -299,6 +323,21 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                 },
                 body: JSON.stringify({'index':`${v}`}),
               })
+              .then(r => r.json())
+              .then(r => {
+                let o=JSON.parse(r)
+                console.log(o)
+                
+                 document.getElementById('ques').innerText=o.question
+                 document.getElementById('input1').innerText=o.opt1
+                 document.getElementById('input2').innerText=o.opt2
+                 document.getElementById('input3').innerText=o.opt3
+                 document.getElementById('input4').innerText=o.opt4
+    
+            }).catch((error) => {
+                console.error('Error:', error);
+               
+              });
               document.getElementById('index').innerText=v+'. '
         }
 
