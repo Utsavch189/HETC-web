@@ -124,14 +124,14 @@
 
 
     <div class="container-fluid body my-2">
-        <form action="" method="POST" id="mainform" name="mainform">
-            {% csrf_token %}
-            <button class="btn btn-success submit" type="submit">Submit</button>
+      
+            
+            <button class="btn btn-success submit"  onclick="submit()">Submit</button>
+            <form  id="mainform" name="mainform">
 
 
 
-
-            <div class="container questions my-4">
+            <div class="container questions my-4" id="main">
 
                 <span id="index"  class="ques"></span>
                     <span class="ques" id="ques"></span>
@@ -191,6 +191,26 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
 }
 }
 
+
+//window.onload=function(){//
+    //fetch('http://127.0.0.1:8000/api/')
+  //.then(response => response.json())
+  //.then(data => {
+     //let o= JSON.parse(data)
+     
+     //document.getElementById('ques').innerText=o.question
+     //document.getElementById('input1').innerText=o.opt1
+     //document.getElementById('input2').innerText=o.opt2
+     //document.getElementById('input3').innerText=o.opt3
+     //document.getElementById('input4').innerText=o.opt4
+     //document.getElementById('index').innerText=o.id+'. '
+  //}
+  
+  //);
+//}
+
+
+
         button();
         clock();
         function button() {
@@ -228,7 +248,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                        document.getElementById('input2').innerText=o.opt2
                        document.getElementById('input3').innerText=o.opt3
                        document.getElementById('input4').innerText=o.opt4
-            
+            document.querySelector('input[type=radio][name=aa]:checked').checked=false;
                     }).catch((error) => {
                         console.error('Error:', error);
                        
@@ -259,6 +279,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
          }
 
     }
+    
   }
 
 
@@ -266,6 +287,19 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
         document.addEventListener(mark(), 'click');
         document.addEventListener(next(), 'click');
         document.addEventListener(prev(), 'click');
+        document.addEventListener(submit(), 'click');
+
+
+        function submit(){
+            fetch('http://127.0.0.1:8000/exam/', {
+                method: 'POST', 
+                headers: {
+                    'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({'msg':'done'}),
+              })
+        }
 
         function next() {
             if (v === 0 || v>0) {
@@ -299,7 +333,8 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                      document.getElementById('input2').innerText=o.opt2
                      document.getElementById('input3').innerText=o.opt3
                      document.getElementById('input4').innerText=o.opt4
-                }).catch((error) => {
+                     document.querySelector('input[type=radio][name=aa]:checked').checked=false;
+                    }).catch((error) => {
                     console.error('Error:', error);
                    
                   });
@@ -373,6 +408,14 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
 
                 if (c == 0) {
                     clearInterval(myTimer);
+                    fetch('http://127.0.0.1:8000/exam/', {
+                        method: 'POST', 
+                        headers: {
+                            'Accept': 'application/json',
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({'msg':'done'}),
+                      })
                 }
             }
         }

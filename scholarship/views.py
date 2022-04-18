@@ -124,7 +124,7 @@ def register(request):
 @csrf_exempt
 @login_required(login_url='login')
 def exam(request):
-    
+       m=''
        
 
        if request.method=="GET":
@@ -169,14 +169,18 @@ def exam(request):
             
             
        elif request.method=="POST":
-           
-            if (request.headers['Content-Length']=='13' or request.headers['Content-Length']=='14'):
-
+            
+            
+            if ( request.headers['Content-Length']=='14' ):
+                
                
                 body_unicode = request.body.decode('utf-8')
                 body = json.loads(body_unicode)
-                index = (body['index'])
-                print('only index',index)
+                m = (body['msg'])
+                
+                print('message',m)
+
+                
                
               
                 
@@ -192,18 +196,11 @@ def exam(request):
                 index1 = (body['index'])
                 option=(body['option'])
                 print(' index and option',index1, option)
-                total=0
-                objj=Question.objects.get(pk=index1)
-                right_ans=objj.opt_ans
-                if(option==right_ans):
-                    total=total+objj.marks
-                else:
-                    total=total+objj.neg_marks
-                print('total',total)
+               
 
 
             
-            return render(request,'exam.html',{'a':'utsav'})
+            return render(request,'exam.html')
       
     
     
@@ -320,14 +317,22 @@ def Credentials(request):
         
 
 
-@api_view(['POST'])
+@api_view(['POST','GET'])
 def api(request):
-    print(request.data['index'])
-    index=(request.data['index'])
+    if request.method=='POST':
+   
+        index=(request.data['index'])
     
-    r_obj=Question.objects.get(pk=index)
-    a={"id":index,"question":r_obj.ques,"opt1":r_obj.opt1,"opt2":r_obj.opt2,"opt3":r_obj.opt3,"opt4":r_obj.opt4}
-    data=json.dumps(a)
+        r_obj=Question.objects.get(pk=index)
+        a={"id":index,"question":r_obj.ques,"opt1":r_obj.opt1,"opt2":r_obj.opt2,"opt3":r_obj.opt3,"opt4":r_obj.opt4}
+        data=json.dumps(a)
 
     
-    return Response(data)
+        return Response(data)
+    elif request.method=='GET':
+        r_obj=Question.objects.get(pk=1)
+        a={"id":1,"question":r_obj.ques,"opt1":r_obj.opt1,"opt2":r_obj.opt2,"opt3":r_obj.opt3,"opt4":r_obj.opt4}
+        data=json.dumps(a)
+
+    
+        return Response(data)
