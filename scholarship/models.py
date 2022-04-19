@@ -34,8 +34,8 @@ class DetailsExam(models.Model):
     start_time=models.CharField(null=True,blank=True,max_length=5)
     exam_duration=models.CharField(null=True,blank=True,max_length=5)
     total_questions=models.CharField(null=True,blank=True,max_length=5)
-
-
+    registration_last_date=models.CharField(null=True,blank=True,max_length=5)
+    registration_last_month=models.CharField(null=True,blank=True,max_length=5)
 
 class Rule(models.Model):
     pdf=models.FileField()

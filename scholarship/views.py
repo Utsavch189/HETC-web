@@ -55,12 +55,26 @@ def home(request):
     total_questions = getattr(obj, field_object.attname)
 
 
+    field_name = 'registration_last_date'
+    obj = DetailsExam.objects.first()
+    field_object = DetailsExam._meta.get_field(field_name)
+    registration_last_date = getattr(obj, field_object.attname)
+
+
+    field_name = 'registration_last_month'
+    obj = DetailsExam.objects.first()
+    field_object = DetailsExam._meta.get_field(field_name)
+    registration_last_month = getattr(obj, field_object.attname)
+
+
     dictt={
     'exam_date':eliminate( date),
     'exam_month':eliminate( month),
     'exam_start_time':eliminate (time),
     'exam_duration':eliminate(exam_duration),
-    'number_of_questions':eliminate(total_questions)
+    'number_of_questions':eliminate(total_questions),
+    'registration_last_date':eliminate(registration_last_date),
+    'registration_last_month':eliminate(registration_last_month)
 
 }
 
