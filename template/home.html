@@ -1,19 +1,21 @@
 {% extends 'Base.html' %} {% block title %} Home {% endblock title %} {% block body %} {% if request.user.is_anonymous %}
 
-
 <div class="main">
 
     <div class="submain">
 
         <h1 class="text-center">Welcome To <span id="change" class="change"></span></h1>
-        <h3 class="text-center">HETC Scholarship Test</h3>
-        <h5 class="text-center">Registration still remains </h5>
-        <div class="logo"></div>
+        <div class="logo my-3"></div>
+        <h2 class="text-center my-2">Hooghly Engineering and Technology College</h2>
+        <h3 class="text-center my-1">HETC Scholarship Test</h3>
+        <h5 class="text-center my-1">Registration still remains </h5>
+
     </div>
 
 
 
 </div>
+
 
 {% else %}
 <div class="main">
@@ -21,38 +23,44 @@
     <div class="submain">
 
         <h1 class="text-center">Welcome To <span id="change" class="change"></span></h1>
-        <h3 class="text-center">HETC Scholarship Test</h3>
-        <h5 class="text-center">Welcome {{request.user.first_name}} {{request.user.last_name}} </h5>
-        <div class="logo"></div>
+        <div class="logo my-3"></div>
+        <h2 class="text-center my-2">Hooghly Engineering and Technology College</h2>
+        <h3 class="text-center my-1">HETC Scholarship Test</h3>
+        <h5 class="text-center my-1">Welcome {{request.user.first_name}} {{request.user.last_name}}</h5>
+
     </div>
 
 
 
+</div>
 
 
 
-    {% endif %}
 
-    <script>
-        let a = ["HETC"];
-        let count = 0;
-        let index = 0;
-        let ct = "";
-        let letter = "";
-        let c = document.getElementById('change');
 
-        (function type() {
-            if (count === a.length) {
-                count = 0;
-            }
-            ct = a[count];
-            letter = ct.slice(0, ++index);
-            document.querySelector(".change").textContent = letter;
-            if (letter.length === ct.length) {
-                count++;
-                index = 0;
-            }
-            setTimeout(type, 800);
 
-        })();
-    </script> {% endblock body %}
+{% endif %}
+
+<script>
+    let a = ["HETC"];
+    let count = 0;
+    let index = 0;
+    let ct = "";
+    let letter = "";
+    let c = document.getElementById('change');
+
+    (function type() {
+        if (count === a.length) {
+            count = 0;
+        }
+        ct = a[count];
+        letter = ct.slice(0, ++index);
+        document.querySelector(".change").textContent = letter;
+        if (letter.length === ct.length) {
+            count++;
+            index = 0;
+        }
+        setTimeout(type, 800);
+
+    })();
+</script> {% endblock body %}
