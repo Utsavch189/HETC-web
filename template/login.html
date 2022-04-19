@@ -64,6 +64,7 @@
                 font-size: 3.5rem;
             }
         }
+   
     </style>
 
 
@@ -80,6 +81,7 @@
 
 
     <main class="form-signin">
+        
         <form method="POST" action="">
             {% csrf_token %} {% for message in messages %}
 
@@ -88,13 +90,13 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {% endfor %}
-            <h1 class="h3 mb-3 fw-normal">Login to give the Exam</h1>
-
+           
+   
             <div class="form-floating">
                 <input type="text" class="form-control" id="floatingInput" placeholder="Username" name="username">
                 <label for="floatingInput">UserName</label>
             </div>
-            <div class="form-floating">
+            <div class="form-floating my-2">
                 <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password">
                 <label for="floatingPassword">Password</label>
             </div>
