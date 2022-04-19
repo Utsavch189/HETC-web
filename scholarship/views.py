@@ -6,8 +6,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from datetime import datetime
-
-from numpy import r_
 from .models import *
 from django.core.mail import send_mail
 from .Need_Function import ID,PASSWORD,is_exam,eliminate

@@ -1,0 +1,50 @@
+.main {
+    width: 100vw;
+    height: 100vh;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.75)), url('./HETC3.JPG');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  
+}
+
+.submain {
+    position: absolute;
+    width: 94vw;
+    height: 50vh;
+    margin-left: 50px;
+    margin-top: 250px;
+    color: white;
+}
+
+h1 {
+    font-size: 60px;
+}
+
+@media only screen and (max-width: 500px) {
+    .submain {
+        margin-top: 230px;
+        width: 80vw;
+    }
+    h1 {
+        font-size: 36px;
+    }
+    h3,
+    h5 {
+        font-size: 18px;
+    }
+}
+
+.logo {
+    height: 90px;
+    width: 90px;
+    background-image: url('./imgg.jpeg');
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
