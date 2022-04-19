@@ -1,3 +1,4 @@
+from re import M
 from django.contrib.auth.models import User
 from email.policy import default
 from pyexpat import model
@@ -61,6 +62,19 @@ class Result(models.Model):
     result = models.IntegerField(default=0)
     userid = models.CharField(max_length=100)
     exam_status = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.userid
+
+
+
+
+class ChoosedOptions(models.Model):
+    author = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
+    userid = models.CharField(max_length=100,default=None)
+    questionNumber=models.IntegerField(primary_key=True)
+    selectedOption=models.CharField(max_length=5)
+    
 
     def __str__(self):
         return self.userid

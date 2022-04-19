@@ -1,4 +1,5 @@
 from calendar import month
+from html.entities import codepoint2name
 from venv import create
 from django.shortcuts import render,redirect
 from django.http import request
@@ -194,6 +195,18 @@ def exam(request):
                 index1 = (body['index'])
                 option=(body['option'])
                 print(' index and option',index1, option)
+                obje=ChoosedOptions.objects.filter(questionNumber=index1)
+                if(obje.exists()):
+                    obje.delete()
+                    choosedOption=ChoosedOptions(author=request.user,userid=request.user.username,questionNumber=index1,selectedOption=option)
+                    choosedOption.save()
+                else:
+                    choosedOption=ChoosedOptions(author=request.user,userid=request.user.username,questionNumber=index1,selectedOption=option)
+                    choosedOption.save()
+
+                   
+                
+
                
 
 
@@ -322,7 +335,8 @@ def api(request):
         index=(request.data['index'])
     
         r_obj=Question.objects.get(pk=index)
-        a={"id":index,"question":r_obj.ques,"opt1":r_obj.opt1,"opt2":r_obj.opt2,"opt3":r_obj.opt3,"opt4":r_obj.opt4}
+        r_obj1=ChoosedOptions.objects.get(pk=index)
+        a={"id":index,"question":r_obj.ques,"opt1":r_obj.opt1,"opt2":r_obj.opt2,"opt3":r_obj.opt3,"opt4":r_obj.opt4,"selectedOption":r_obj1.selectedOption}
         data=json.dumps(a)
 
     

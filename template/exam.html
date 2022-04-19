@@ -136,10 +136,10 @@
                 <span id="index"  class="ques"></span>
                     <span class="ques" id="ques"></span>
 <br>
-                    <input type="radio" name="aa" id="input" value="a"><span id="input1">  </span><br>
-                <input type="radio" name="aa" id="input" value="b" ><span id="input2">  </span><br>
-                <input type="radio" name="aa" id="input" value="c" ><span id="input3">  </span><br>
-                <input type="radio" name="aa" id="input" value="d" > <span id="input4">  </span>
+                    <input type="radio" name="aa" id="a" value="a"><span id="input1">  </span><br>
+                <input type="radio" name="aa" id="b" value="b" ><span id="input2">  </span><br>
+                <input type="radio" name="aa" id="c" value="c" ><span id="input3">  </span><br>
+                <input type="radio" name="aa" id="d" value="d" > <span id="input4">  </span>
 
             </div>
 
@@ -250,7 +250,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                        document.getElementById('input2').innerText=o.opt2
                        document.getElementById('input3').innerText=o.opt3
                        document.getElementById('input4').innerText=o.opt4
-                       document.querySelector('input[type=radio][name=aa]:checked').checked=false;
+                       document.getElementById(`${o.selectedOption}`).checked=true;
                       
         }).catch((error) => {
                         console.error('Error:', error);
@@ -347,10 +347,8 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
         }
 
         function prev() {
-            if (v > 0 && v <= i) {
-                if (v === 0) {
-                    v = 1;
-                }
+            if (v > 1 && v <= i) {
+               
                 v -= 1;
 
             }
