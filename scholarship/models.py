@@ -72,7 +72,7 @@ class Result(models.Model):
 class ChoosedOptions(models.Model):
     author = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
     userid = models.CharField(max_length=100,default=None)
-    questionNumber=models.IntegerField(primary_key=True)
+    questionNumber=models.CharField(max_length=5)
     selectedOption=models.CharField(max_length=5)
     
 

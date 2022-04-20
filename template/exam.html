@@ -242,7 +242,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                     v = parseInt(btn.value)
                    
                     already_visited.push(v)
-                    fetch('http://127.0.0.1:8000/api/', {
+                    fetch(`http://127.0.0.1:8000/api/`, {
                         method: 'POST', 
                         headers: {
                             "X-CSRFToken": '{{csrf_token}}',
@@ -291,7 +291,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
          if(x.style.backgroundColor!='blue' ){
          x.style.backgroundColor='green'
          x.style.color='white'
-         document.querySelector('input[type=radio][name=aa]:checked').checked=false;
+     
          }
 
     }
@@ -329,7 +329,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
             }
            
                    colo();
-                   fetch('http://127.0.0.1:8000/api/', {
+                   fetch(`http://127.0.0.1:8000/api/`, {
                     method: 'POST', 
                     headers: {
                         "X-CSRFToken": '{{csrf_token}}',
@@ -363,7 +363,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                 v -= 1;
 
             }
-            fetch('http://127.0.0.1:8000/api/', {
+            fetch(`http://127.0.0.1:8000/api/`, {
                 method: 'POST', 
                 headers: {
                     "X-CSRFToken": '{{csrf_token}}',
@@ -382,7 +382,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                  document.getElementById('input2').innerText=o.opt2
                  document.getElementById('input3').innerText=o.opt3
                  document.getElementById('input4').innerText=o.opt4
-    
+                 document.getElementById(`${o.selectedOption}`).checked=true;
             }).catch((error) => {
                 console.error('Error:', error);
                

@@ -206,20 +206,25 @@ def exam(request):
                 
                 body_unicode = request.body.decode('utf-8')
                 body = json.loads(body_unicode)
-                index1 = (body['index'])
+                index1 =str( (body['index']))
                 option=(body['option'])
                 print(' index and option',index1, option)
-                obje=ChoosedOptions.objects.filter(questionNumber=index1)
-                if(obje.exists()):
-                    obje.delete()
-                    choosedOption=ChoosedOptions(author=request.user,userid=request.user.username,questionNumber=index1,selectedOption=option)
-                    choosedOption.save()
-                else:
-                    choosedOption=ChoosedOptions(author=request.user,userid=request.user.username,questionNumber=index1,selectedOption=option)
-                    choosedOption.save()
-
-                   
                 
+                r_object=(ChoosedOptions.objects.filter(userid=request.user.username))
+                if(r_object.exists()):
+                    obb=(r_object.filter(questionNumber=index1))
+                    if(obb.exists()):
+                        obb.delete()
+                        x=ChoosedOptions(author=request.user,userid=request.user.username,questionNumber=index1,selectedOption=option)
+                        x.save()
+                    else:
+                         x=ChoosedOptions(author=request.user,userid=request.user.username,questionNumber=index1,selectedOption=option)
+                         x.save()
+
+                else:
+                    
+                   ChoosedOptions.objects.create(author=request.user,userid=request.user.username,questionNumber=index1,selectedOption=option)
+                    
 
                
 
@@ -345,12 +350,17 @@ def Credentials(request):
 @api_view(['POST','GET'])
 def api(request):
     if request.method=='POST':
-   
-        index=(request.data['index'])
+        index=str(request.data['index'])
+        obb=ChoosedOptions.objects.filter(userid=request.user.username)
+       
+        selected=obb.filter(questionNumber=index).values('selectedOption')
+
+        print(selected[0]['selectedOption'])
+        
     
         r_obj=Question.objects.get(pk=index)
-        r_obj1=ChoosedOptions.objects.get(pk=index)
-        a={"id":index,"question":r_obj.ques,"opt1":r_obj.opt1,"opt2":r_obj.opt2,"opt3":r_obj.opt3,"opt4":r_obj.opt4,"selectedOption":r_obj1.selectedOption}
+        #r_obj1=ChoosedOptions.objects.get(pk=index)
+        a={"id":index,"question":r_obj.ques,"opt1":r_obj.opt1,"opt2":r_obj.opt2,"opt3":r_obj.opt3,"opt4":r_obj.opt4,"selectedOption":selected[0]['selectedOption']}
         data=json.dumps(a)
 
     
