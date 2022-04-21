@@ -1,0 +1,1 @@
+web: gunicorn hetc.wsgi --log-file -
