@@ -9,7 +9,7 @@ from django.contrib import messages
 from datetime import datetime
 from .models import *
 from django.core.mail import send_mail
-from .Need_Function import ID,PASSWORD,is_exam,eliminate
+from .Need_Function import ID,PASSWORD,is_exam,eliminate,hashed
 from django.contrib.auth.decorators import login_required
 import random
 from django.http import HttpResponseRedirect
@@ -136,9 +136,9 @@ def register(request):
 
 @csrf_exempt
 @login_required(login_url='login')
-def exam(request):
+def exam(request,pp):
        m=''
-       
+       dd=Student.objects.filter(user_id=pp)
 
        if request.method=="GET":
             field_name = 'date'
@@ -175,7 +175,7 @@ def exam(request):
     'exam_start_time':eliminate (time),
     'exam_duration':eliminate(exam_duration),
     'number_of_questions':eliminate(total_questions),
-    
+    'is_exam':is_exam(date,month,time)
 
 }
             return render(request,'exam.html',{'dictt':dictt})
@@ -203,7 +203,7 @@ def exam(request):
                 
                 
             else:
-                
+                print(pp)
                 body_unicode = request.body.decode('utf-8')
                 body = json.loads(body_unicode)
                 index1 =str( (body['index']))
@@ -236,48 +236,6 @@ def exam(request):
     
 
 
-def notexam(request):
-    field_name = 'date'
-    obj = DetailsExam.objects.first()
-    field_object = DetailsExam._meta.get_field(field_name)
-    date = getattr(obj, field_object.attname)
-
-    field_name = 'month'
-    obj = DetailsExam.objects.first()
-    field_object = DetailsExam._meta.get_field(field_name)
-    month = getattr(obj, field_object.attname)
-
-
-    field_name = 'start_time'
-    obj = DetailsExam.objects.first()
-    field_object = DetailsExam._meta.get_field(field_name)
-    time = getattr(obj, field_object.attname)
-
-    field_name = 'exam_duration'
-    obj = DetailsExam.objects.first()
-    field_object = DetailsExam._meta.get_field(field_name)
-    exam_duration = getattr(obj, field_object.attname)
-
-
-    field_name = 'total_questions'
-    obj = DetailsExam.objects.first()
-    field_object = DetailsExam._meta.get_field(field_name)
-    total_questions = getattr(obj, field_object.attname)
-
-
-    dictt={
-    'exam_date':eliminate( date),
-    'exam_month':eliminate( month),
-    'exam_start_time':eliminate (time),
-    'exam_duration':eliminate(exam_duration),
-    'number_of_questions':eliminate(total_questions)
-
-}
-
-    return render(request,'notexam.html',{'dictt':dictt})
-
-
-
 
 
 
@@ -308,31 +266,14 @@ def logoutt(request):
 
 def Credentials(request):
     if request.method=='GET':
-        field_name = 'date'
-        obj = DetailsExam.objects.first()
-        field_object = DetailsExam._meta.get_field(field_name)
-        date = getattr(obj, field_object.attname)
-
-        field_name = 'month'
-        obj = DetailsExam.objects.first()
-        field_object = DetailsExam._meta.get_field(field_name)
-        month = getattr(obj, field_object.attname)
-
-
-        field_name = 'start_time'
-        obj = DetailsExam.objects.first()
-        field_object = DetailsExam._meta.get_field(field_name)
-        time = getattr(obj, field_object.attname)
+        return render(request,'exam_cred.html')
+      
 
        
 
 
 
-        if is_exam(date,month,time):
-            return render(request,'exam_cred.html')
-        else:
-            
-            return redirect('notexam')
+        
 
     elif request.method=='POST':
         username=request.POST.get('username')
@@ -340,7 +281,7 @@ def Credentials(request):
         
         user=authenticate(request,username=username,password=password)
         if username == request.user.username and user is not None:
-            return redirect('exam')
+            return redirect(f'exam/{hashed(username)}/')
         else:
             messages.warning(request,'Wrong Username or Password')  
             return render(request,'exam_cred.html')   
@@ -348,23 +289,44 @@ def Credentials(request):
 
 
 @api_view(['POST','GET'])
-def api(request):
+def api(request,ps):
+    dd=Student.objects.filter(user_id=ps)
     if request.method=='POST':
         index=str(request.data['index'])
+        print(index)
         obb=ChoosedOptions.objects.filter(userid=request.user.username)
+        
        
-        selected=obb.filter(questionNumber=index).values('selectedOption')
+        if(obb.exists()):
+            selected=obb.filter(questionNumber=index).values('selectedOption')
+            r_obj=Question.objects.get(pk=int(index))
+            if(selected.exists()):
+                print('ok')
 
-        print(selected[0]['selectedOption'])
+        
         
     
-        r_obj=Question.objects.get(pk=index)
-        #r_obj1=ChoosedOptions.objects.get(pk=index)
-        a={"id":index,"question":r_obj.ques,"opt1":r_obj.opt1,"opt2":r_obj.opt2,"opt3":r_obj.opt3,"opt4":r_obj.opt4,"selectedOption":selected[0]['selectedOption']}
-        data=json.dumps(a)
+        
+        
+                a={"id":index,"question":r_obj.ques,"opt1":r_obj.opt1,"opt2":r_obj.opt2,"opt3":r_obj.opt3,"opt4":r_obj.opt4,"selectedOption":selected[0]['selectedOption']}
+                data=json.dumps(a)
 
     
-        return Response(data)
+                return Response(data)
+            else:
+                r_obj=Question.objects.get(pk=int(index))
+                a={"id":index,"question":r_obj.ques,"opt1":r_obj.opt1,"opt2":r_obj.opt2,"opt3":r_obj.opt3,"opt4":r_obj.opt4,"selectedOption":'None'}
+                data=json.dumps(a)
+                return Response(data)
+
+        else:
+            r_obj=Question.objects.get(pk=int(index))
+            a={"id":index,"question":r_obj.ques,"opt1":r_obj.opt1,"opt2":r_obj.opt2,"opt3":r_obj.opt3,"opt4":r_obj.opt4,"selectedOption":'None'}
+            data=json.dumps(a)
+
+    
+            return Response(data)
+
     elif request.method=='GET':
         r_obj=Question.objects.get(pk=1)
         a={"id":1,"question":r_obj.ques,"opt1":r_obj.opt1,"opt2":r_obj.opt2,"opt3":r_obj.opt3,"opt4":r_obj.opt4}

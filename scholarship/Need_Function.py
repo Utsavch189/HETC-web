@@ -1,7 +1,10 @@
 from calendar import c
 import random
 from datetime import datetime
+import hashlib
+from secrets import token_bytes
 
+key = token_bytes(16)
 
 def ID(username):
     a=random.randint(101,999)
@@ -58,6 +61,12 @@ def eliminate(a):
         n=a.replace('0','')
         return int(n)
     return int(a)
+
+
+def hashed(a):
+    hashed_string = hashlib.sha256(a.encode('utf-8')).hexdigest()
+    return hashed_string
+
 
 
 
