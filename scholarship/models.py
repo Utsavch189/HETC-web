@@ -23,6 +23,8 @@ class Student(models.Model):
     board_name=models.CharField(max_length=10,blank=True,null=True)
     appeared_wbjee_jeeMain=models.CharField(null=True,blank=True,max_length=10)
     created_at=models.DateField()
+    last_seen=models.CharField(max_length=11,blank=True,null=True)
+    exam_status=models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.first_name)+' '+str(self.last_name)
@@ -74,6 +76,7 @@ class ChoosedOptions(models.Model):
     userid = models.CharField(max_length=100,default=None)
     questionNumber=models.CharField(max_length=5)
     selectedOption=models.CharField(max_length=5)
+    checkedStatus=models.BooleanField(default=False)
     
 
     def __str__(self):

@@ -320,7 +320,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                     'Accept': 'application/json',
                   'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({'msg':'done'}),
+                body: JSON.stringify({'msg':'True'}),
               })
               history.pushState({}, null, 'http://127.0.0.1:8000/credentials/');
               location.reload();
@@ -427,7 +427,16 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                 var hours = (secondsInMinutes - minutes) / 60;
 
                 timer.innerHTML = (hours + ":" + minutes + ":" + seconds)
-
+                if(seconds===55){
+                    fetch(`http://127.0.0.1:8000/credentials/exam/{{request.user}}/`, {
+                        method: 'POST', 
+                        headers: {
+                            'Accept': 'application/json',
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({'msg':'True','type':'time','status':'online','user':'student'}),
+                      })
+                }
 
                 if (c == 0) {
                     clearInterval(myTimer);
@@ -437,7 +446,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                             'Accept': 'application/json',
                           'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({'msg':'done'}),
+                        body: JSON.stringify({'msg':'True'}),
                       })
                       history.pushState({}, null, 'http://127.0.0.1:8000/credentials/');
                       location.reload();

@@ -9,7 +9,7 @@ from django.contrib import messages
 from datetime import datetime
 from .models import *
 from django.core.mail import send_mail
-from .Need_Function import ID,PASSWORD,is_exam,eliminate,hashed
+from .Need_Function import ID,PASSWORD,is_exam,eliminate,hashed,hashed2,verified,last_seen,is_exam_running
 from django.contrib.auth.decorators import login_required
 import random
 from django.http import HttpResponseRedirect
@@ -137,50 +137,60 @@ def register(request):
 @csrf_exempt
 @login_required(login_url='login')
 def exam(request,pp):
-       m=''
-       dd=Student.objects.filter(user_id=pp)
+ 
+       
 
        if request.method=="GET":
-            field_name = 'date'
-            obj = DetailsExam.objects.first()
-            field_object = DetailsExam._meta.get_field(field_name)
-            date = getattr(obj, field_object.attname)
+           
+            if(is_exam_running(request.user.username)):
+                user = request.user
+                userid = bytes(pp, 'UTF-8')
+                if(verified(user.username,userid)):
+                
+                    field_name = 'date'
+                    obj = DetailsExam.objects.first()
+                    field_object = DetailsExam._meta.get_field(field_name)
+                    date = getattr(obj, field_object.attname)
 
-            field_name = 'month'
-            obj = DetailsExam.objects.first()
-            field_object = DetailsExam._meta.get_field(field_name)
-            month = getattr(obj, field_object.attname)
-
-
-            field_name = 'start_time'
-            obj = DetailsExam.objects.first()
-            field_object = DetailsExam._meta.get_field(field_name)
-            time = getattr(obj, field_object.attname)
-
-            field_name = 'exam_duration'
-            obj = DetailsExam.objects.first()
-            field_object = DetailsExam._meta.get_field(field_name)
-            exam_duration = getattr(obj, field_object.attname)
+                    field_name = 'month'
+                    obj = DetailsExam.objects.first()
+                    field_object = DetailsExam._meta.get_field(field_name)
+                    month = getattr(obj, field_object.attname)
 
 
-            field_name = 'total_questions'
-            obj = DetailsExam.objects.first()
-            field_object = DetailsExam._meta.get_field(field_name)
-            total_questions = getattr(obj, field_object.attname)
+                    field_name = 'start_time'
+                    obj = DetailsExam.objects.first()
+                    field_object = DetailsExam._meta.get_field(field_name)
+                    time = getattr(obj, field_object.attname)
+
+                    field_name = 'exam_duration'
+                    obj = DetailsExam.objects.first()
+                    field_object = DetailsExam._meta.get_field(field_name)
+                    exam_duration = getattr(obj, field_object.attname)
 
 
-            dictt={
-    'exam_date':eliminate( date),
-    'exam_month':eliminate( month),
-    'exam_start_time':eliminate (time),
-    'exam_duration':eliminate(exam_duration),
-    'number_of_questions':eliminate(total_questions),
-    'is_exam':is_exam(date,month,time)
+                    field_name = 'total_questions'
+                    obj = DetailsExam.objects.first()
+                    field_object = DetailsExam._meta.get_field(field_name)
+                    total_questions = getattr(obj, field_object.attname)
 
-}
-            return render(request,'exam.html',{'dictt':dictt})
-            
-            
+
+                    dictt={
+                        'exam_date':eliminate( date),
+                        'exam_month':eliminate( month),
+                        'exam_start_time':eliminate (time),
+                        'exam_duration':eliminate(exam_duration),
+                        'number_of_questions':eliminate(total_questions),
+                        'is_exam':is_exam(date,month,time)
+                        }
+                    return render(request,'exam.html',{'dictt':dictt})
+                else:
+                
+                    return render(request,'exam_cred.html')
+            else:
+                messages.warning(request,'Your Exam is over')
+                return render(request,'exam_cred.html')
+
        elif request.method=="POST":
             
             
@@ -190,8 +200,19 @@ def exam(request,pp):
                 body_unicode = request.body.decode('utf-8')
                 body = json.loads(body_unicode)
                 m = (body['msg'])
+                print(m)
+                Student.objects.filter(user_id=pp).update(exam_status=m)
+
+
+            elif ( request.headers['Content-Length']=='63' ):
                 
-                print('message',m)
+                body_unicode = request.body.decode('utf-8')
+                body = json.loads(body_unicode)
+                times = (body['msg'])
+                
+                
+                Student.objects.filter(user_id=pp).update(last_seen=last_seen(times))
+                
 
                 
                
@@ -203,7 +224,7 @@ def exam(request,pp):
                 
                 
             else:
-                print(pp)
+                
                 body_unicode = request.body.decode('utf-8')
                 body = json.loads(body_unicode)
                 index1 =str( (body['index']))
@@ -268,12 +289,7 @@ def Credentials(request):
     if request.method=='GET':
         return render(request,'exam_cred.html')
       
-
        
-
-
-
-        
 
     elif request.method=='POST':
         username=request.POST.get('username')
@@ -281,7 +297,8 @@ def Credentials(request):
         
         user=authenticate(request,username=username,password=password)
         if username == request.user.username and user is not None:
-            return redirect(f'exam/{hashed(username)}/')
+            encoded_username = hashed2(username).decode('UTF-8')
+            return redirect(f'exam/{encoded_username}/')
         else:
             messages.warning(request,'Wrong Username or Password')  
             return render(request,'exam_cred.html')   
