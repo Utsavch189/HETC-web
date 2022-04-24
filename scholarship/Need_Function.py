@@ -12,7 +12,7 @@ key = token_bytes(16)
 
 def ID(username):
     a=random.randint(101,999)
-    idd=username+str(a)
+    idd=username.upper()+str(a)
     return idd
 
 def PASSWORD(date,month,year):

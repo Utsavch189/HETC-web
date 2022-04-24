@@ -15,15 +15,16 @@
     font-family: 'Roboto Condensed', sans-serif;
     font-family: 'Source Serif Pro', serif;
     font-family: 'Zen Antique Soft', serif;
+    overflow: hidden;
 }
 
 .submain {
     position: absolute;
     width: 94vw;
     height: 50vh;
-    margin-left: 50px;
+    margin-left: 45px;
     margin-top: 200px;
-    color: white;
+    color: cornsilk;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -36,7 +37,7 @@ h1 {
 
 @media only screen and (max-width: 500px) {
     .submain {
-        margin-top: 190px;
+        margin-top: 170px;
         width: 80vw;
     }
     h1 {
