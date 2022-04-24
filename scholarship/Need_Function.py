@@ -93,13 +93,14 @@ def is_exam_running(userid):
      c_hour=eliminate( datetime.now().strftime("%H"))
      c_minute=eliminate( datetime.now().strftime("%M"))
      lSeen=Student.objects.filter(user_id=userid).values('last_seen')[0]['last_seen']
-     last_hour=eliminate(lSeen[:2])
-     last_min=eliminate(lSeen[3:])
+     if lSeen:
+        last_hour=eliminate(lSeen[:2])
+        last_min=eliminate(lSeen[3:])
      
-     if((c_hour!=last_hour or c_hour==last_hour) and c_minute-last_min>15):
-         Student.objects.filter(user_id=userid).update(exam_status=True)
+        if(c_hour==last_hour and c_minute-last_min>15):
+            Student.objects.filter(user_id=userid).update(exam_status=True)
 
-     if(Student.objects.filter(user_id=userid).values('exam_status')[0]['exam_status']==True):
-        return False
+        if(Student.objects.filter(user_id=userid).values('exam_status')[0]['exam_status']==True):
+            return False
      
      return True

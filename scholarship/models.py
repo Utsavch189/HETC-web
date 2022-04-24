@@ -76,7 +76,7 @@ class ChoosedOptions(models.Model):
     userid = models.CharField(max_length=100,default=None)
     questionNumber=models.CharField(max_length=5)
     selectedOption=models.CharField(max_length=5)
-    checkedStatus=models.BooleanField(default=False)
+   
     
 
     def __str__(self):

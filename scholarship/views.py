@@ -26,7 +26,7 @@ from rest_framework.decorators import api_view
 
 
 def home(request):
-    
+   
     field_name = 'date'
     obj = DetailsExam.objects.first()
     field_object = DetailsExam._meta.get_field(field_name)
@@ -231,20 +231,19 @@ def exam(request,pp):
                 option=(body['option'])
                 print(' index and option',index1, option)
                 
-                r_object=(ChoosedOptions.objects.filter(userid=request.user.username))
+                r_object=(ChoosedOptions.objects.filter(userid=pp))
                 if(r_object.exists()):
                     obb=(r_object.filter(questionNumber=index1))
                     if(obb.exists()):
-                        obb.delete()
-                        x=ChoosedOptions(author=request.user,userid=request.user.username,questionNumber=index1,selectedOption=option)
-                        x.save()
+                        obb.update(selectedOption=option)
+                        
                     else:
-                         x=ChoosedOptions(author=request.user,userid=request.user.username,questionNumber=index1,selectedOption=option)
-                         x.save()
+                        ChoosedOptions.objects.create(author=request.user,userid=pp,questionNumber=index1,selectedOption=option)
+
 
                 else:
                     
-                   ChoosedOptions.objects.create(author=request.user,userid=request.user.username,questionNumber=index1,selectedOption=option)
+                   ChoosedOptions.objects.create(author=request.user,userid=pp,questionNumber=index1,selectedOption=option)
                     
 
                
@@ -287,6 +286,8 @@ def logoutt(request):
 
 def Credentials(request):
     if request.method=='GET':
+        is_exam_running(request.user.username)
+        print(is_exam_running(request.user.username))
         return render(request,'exam_cred.html')
       
        
@@ -311,14 +312,14 @@ def api(request,ps):
     if request.method=='POST':
         index=str(request.data['index'])
         print(index)
-        obb=ChoosedOptions.objects.filter(userid=request.user.username)
+        obb=ChoosedOptions.objects.filter(userid=ps)
         
        
         if(obb.exists()):
             selected=obb.filter(questionNumber=index).values('selectedOption')
             r_obj=Question.objects.get(pk=int(index))
             if(selected.exists()):
-                print('ok')
+               
 
         
         
@@ -344,10 +345,4 @@ def api(request,ps):
     
             return Response(data)
 
-    elif request.method=='GET':
-        r_obj=Question.objects.get(pk=1)
-        a={"id":1,"question":r_obj.ques,"opt1":r_obj.opt1,"opt2":r_obj.opt2,"opt3":r_obj.opt3,"opt4":r_obj.opt4}
-        data=json.dumps(a)
-
-    
-        return Response(data)
+    return Response({'status':200})

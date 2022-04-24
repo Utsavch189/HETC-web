@@ -261,15 +261,21 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                       .then(r => r.json())
                       .then(r => {
                       let o=JSON.parse(r)
-                      console.log(o)
+                      console.log(o.selectedOption)
                       
                        document.getElementById('ques').innerText=o.question
                        document.getElementById('input1').innerText=o.opt1
                        document.getElementById('input2').innerText=o.opt2
                        document.getElementById('input3').innerText=o.opt3
                        document.getElementById('input4').innerText=o.opt4
+                       if(o.selectedOption!=='None'){
+                           console.log('u')
                        document.getElementById(`${o.selectedOption}`).checked=true;
-                      
+                       }
+                       else{
+                        console.log('ut')
+                        document. querySelector('input[type=radio][name=aa]:checked').checked=false
+                       }
         }).catch((error) => {
                         console.error('Error:', error);
                        
@@ -358,7 +364,14 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                      document.getElementById('input2').innerText=o.opt2
                      document.getElementById('input3').innerText=o.opt3
                      document.getElementById('input4').innerText=o.opt4
-                     document.querySelector('input[type=radio][name=aa]:checked').checked=false;
+                     if(o.selectedOption!=='None'){
+                        console.log('u')
+                    document.getElementById(`${o.selectedOption}`).checked=true;
+                    }
+                    else{
+                     console.log('ut')
+                     document. querySelector('input[type=radio][name=aa]:checked').checked=false
+                    }
                     }).catch((error) => {
                     console.error('Error:', error);
                    
@@ -391,7 +404,14 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                  document.getElementById('input2').innerText=o.opt2
                  document.getElementById('input3').innerText=o.opt3
                  document.getElementById('input4').innerText=o.opt4
-                 document.getElementById(`${o.selectedOption}`).checked=true;
+                 if(o.selectedOption!=='None'){
+                    console.log('u')
+                document.getElementById(`${o.selectedOption}`).checked=true;
+                }
+                else{
+                 console.log('ut')
+                 document. querySelector('input[type=radio][name=aa]:checked').checked=false
+                }
             }).catch((error) => {
                 console.error('Error:', error);
                
