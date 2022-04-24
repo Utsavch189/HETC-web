@@ -287,7 +287,7 @@ def logoutt(request):
 def Credentials(request):
     if request.method=='GET':
         is_exam_running(request.user.username)
-        print(is_exam_running(request.user.username))
+        
         return render(request,'exam_cred.html')
       
        

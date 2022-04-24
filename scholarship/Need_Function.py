@@ -99,8 +99,9 @@ def is_exam_running(userid):
      
         if(c_hour==last_hour and c_minute-last_min>15):
             Student.objects.filter(user_id=userid).update(exam_status=True)
-
-        if(Student.objects.filter(user_id=userid).values('exam_status')[0]['exam_status']==True):
+        elif(c_hour!=last_hour):
+            Student.objects.filter(user_id=userid).update(exam_status=True)
+     if(Student.objects.filter(user_id=userid).values('exam_status')[0]['exam_status']==True):
             return False
      
      return True
