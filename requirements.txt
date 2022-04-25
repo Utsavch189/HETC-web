@@ -5,6 +5,11 @@ certifi==2021.5.30
 chardet==3.0.4
 charset-normalizer==2.0.6
 Django==3.2.8
+django-cors-headers==3.10.1
+django-rest-framework==0.1.0
+django-templated-mail==1.1.1
+djangorestframework==3.12.4
+djangorestframework-simplejwt==4.8.0
 docutils==0.17.1
 funkify==0.3.0
 geohash2==1.1
