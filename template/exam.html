@@ -184,6 +184,7 @@
 
 
     <script>
+        let base_url=window.location.origin;
         let i = {{dictt.number_of_questions}}
         let j = 1;
         let v = 0;
@@ -195,7 +196,7 @@ let ques=''
 
 document.mainform.onclick= function (){
 let as=document.mainform.aa.value;
-fetch(`http://127.0.0.1:8000/credentials/exam/{{request.user}}/`, {
+fetch(`${base_url}/credentials/exam/{{request.user}}/`, {
     method: 'POST', 
     headers: {
         'Accept': 'application/json',
@@ -249,7 +250,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                     v = parseInt(btn.value)
                    
                    
-                    fetch(`http://127.0.0.1:8000/api/{{request.user}}/`, {
+                    fetch(`${base_url}/api/{{request.user}}/`, {
                         method: 'POST', 
                         headers: {
                             "X-CSRFToken": '{{csrf_token}}',
@@ -320,7 +321,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
 
 
         function submit(){
-            fetch(`http://127.0.0.1:8000/credentials/exam/{{request.user}}/`, {
+            fetch(`${base_url}/credentials/exam/{{request.user}}/`, {
                 method: 'POST', 
                 headers: {
                     'Accept': 'application/json',
@@ -328,7 +329,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                 },
                 body: JSON.stringify({'msg':'True'}),
               })
-              history.pushState({}, null, 'http://127.0.0.1:8000/credentials/');
+              history.pushState({}, null, `${base_url}/credentials/`);
               location.reload();
         }
 
@@ -344,7 +345,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
             }
            
                    colo();
-                   fetch(`http://127.0.0.1:8000/api/{{request.user}}/`, {
+                   fetch(`${base_url}/api/{{request.user}}/`, {
                     method: 'POST', 
                     headers: {
                         "X-CSRFToken": '{{csrf_token}}',
@@ -385,7 +386,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                 v -= 1;
 
             }
-            fetch(`http://127.0.0.1:8000/api/{{request.user}}/`, {
+            fetch(`${base_url}/api/{{request.user}}/`, {
                 method: 'POST', 
                 headers: {
                     "X-CSRFToken": '{{csrf_token}}',
@@ -448,7 +449,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
 
                 timer.innerHTML = (hours + ":" + minutes + ":" + seconds)
                 if(seconds===55){
-                    fetch(`http://127.0.0.1:8000/credentials/exam/{{request.user}}/`, {
+                    fetch(`${base_url}/credentials/exam/{{request.user}}/`, {
                         method: 'POST', 
                         headers: {
                             'Accept': 'application/json',
@@ -460,7 +461,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
 
                 if (c == 0) {
                     clearInterval(myTimer);
-                    fetch(`http://127.0.0.1:8000/credentials/exam/{{request.user}}/`, {
+                    fetch(`${base_url}/credentials/exam/{{request.user}}/`, {
                         method: 'POST', 
                         headers: {
                             'Accept': 'application/json',
@@ -468,7 +469,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                         },
                         body: JSON.stringify({'msg':'True'}),
                       })
-                      history.pushState({}, null, 'http://127.0.0.1:8000/credentials/');
+                      history.pushState({}, null, `${base_url}/credentials/`);
                       location.reload();
                 }
             }
