@@ -1,8 +1,5 @@
-from re import M
 from django.contrib.auth.models import User
 from email.policy import default
-from pyexpat import model
-from turtle import up
 from django.db import models
 from datetime import datetime
 
@@ -14,8 +11,8 @@ class Student(models.Model):
     user_id=models.CharField(max_length=100,blank=True,null=True)
     date_of_birth=models.CharField(max_length=50,blank=True,null=True)
     gurdian_name=models.CharField(max_length=100,blank=True,null=True)
-    contact=models.CharField(max_length=11,blank=True,null=True)
-    whatsapp=models.CharField(max_length=11,blank=True,null=True)
+    contact=models.CharField(max_length=13,blank=True,null=True)
+    whatsapp=models.CharField(max_length=13,blank=True,null=True)
     email=models.CharField(max_length=100,blank=True,null=True)
     address=models.CharField(max_length=100,blank=True,null=True)
     school_college_name=models.CharField(max_length=50,blank=True,null=True)
