@@ -1,6 +1,3 @@
-from calendar import month
-from html.entities import codepoint2name
-from venv import create
 from django.shortcuts import render,redirect
 from django.http import request
 from django.contrib.auth.models import User
@@ -11,13 +8,11 @@ from .models import *
 from django.core.mail import send_mail
 from .Need_Function import ID,PASSWORD,is_exam,eliminate,hashed,hashed2,verified,last_seen,is_exam_running
 from django.contrib.auth.decorators import login_required
-import random
-from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 import json
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-
+import json
 
 
 
@@ -346,3 +341,53 @@ def api(request,ps):
             return Response(data)
 
     return Response({'status':200})
+
+
+
+
+#########################################################
+#Teacher################################################
+
+def students(request):
+    if request.user.is_superuser:
+        return render(request,'students.html')
+    else:
+        messages.warning(request,'You are not admin') 
+        return render(request,'login.html')
+
+
+
+@api_view(['GET'])
+def student(request):
+    st=[]
+    t=[]
+    c=0
+    for i in User.objects.all(): 
+        if(i.username!='hetc'):     
+            st.append(i.username)
+
+    for i in st:
+        c+=1
+        obb=Student.objects.filter(user_id=i)
+        y={
+            "id":c,
+            "userID":i,
+            "first_name":obb.values('first_name'),
+            "last_name":obb.values('last_name'),
+            "date_of_birth":obb.values('date_of_birth'),
+            "gurdian_name":obb.values('gurdian_name'),
+            "contact":obb.values('contact'),
+            "whatsapp":obb.values('whatsapp'),
+            "email":obb.values('email'),
+            "address":obb.values('address'),
+            "institute_name":obb.values('school_college_name'),
+            "appearing_passed_12":obb.values('appearing_passed_12'),
+            "board_name":obb.values('board_name'),
+            "appeared_wbjee_jeeMain":obb.values('appeared_wbjee_jeeMain'),
+
+        }
+    
+        
+        t.append(y)
+        
+    return Response(t[1])

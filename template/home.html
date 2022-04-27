@@ -17,6 +17,33 @@
 </div>
 
 
+{% elif request.user.is_superuser %}
+
+<div class="main">
+
+    <div class="submain">
+
+        <h1 class="text-center">Welcome To <span id="change" class="change"></span></h1>
+        <div class="logo my-3"></div>
+        <h2 class="text-center my-2">Hooghly Engineering and Technology College</h2>
+        <h3 class="text-center my-1">HETC Scholarship Test</h3>
+        <h5 class="text-center my-1">Welcome Admin</h5>
+
+    </div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
 {% else %}
 <div class="main">
 

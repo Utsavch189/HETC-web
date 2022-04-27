@@ -6,7 +6,7 @@ from hashlib import blake2b
 from hmac import compare_digest
 from secrets import token_bytes
 from .models import Student
-
+import json
 
 key = token_bytes(16)
 
@@ -106,3 +106,9 @@ def is_exam_running(userid):
                 return False
      
      return True
+
+
+
+
+
+
