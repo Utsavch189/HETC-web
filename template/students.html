@@ -1,8 +1,9 @@
-{% extends 'Base.html' %} {% block title %} Students {% endblock title %} {% block body %} 
+{% extends 'Base.html' %} {% block title %} Students {% endblock title %} {% block body %}
 
 <section class="bg-light p-5">
     <h3 class="pb-4">STUDENT STATUS</h3>
     <div class="table-responsive table table-bordered">
+
         <table class="table bg-white">
             <thead class="bg-dark text-light">
                 <tr>
@@ -20,72 +21,54 @@
                     <th>WBJEE/JEE MAINS</th>
                     <th>Obtained Marks</th>
                 </tr>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>supratim Majumder</td>
-                    <td>sanjay Majumder</td>
-                    <td>11/5/2002</td>
-                    <td>7596859011</td>
-                    <td>7596859011</td>
-                    <td>abc@gmail.com</td>
-                    <td>123 bonhooghly more</td>
-                    <td>Hetc</td>
-                    <td>yes</td>
-                    <td>WBSCE</td>
-                    <td>WBJEE</td>
-                    <td>98</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>supratim Majumder</td>
-                    <td>sanjay Majumder</td>
-                    <td>11/5/2002</td>
-                    <td>7596859011</td>
-                    <td>7596859011</td>
-                    <td>abc@gmail.com</td>
-                    <td>123 bonhooghly more</td>
-                    <td>Hetc</td>
-                    <td>yes</td>
-                    <td>WBSCE</td>
-                    <td>WBJEE</td>
-                    <td>96</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>supratim Majumder</td>
-                    <td>sanjay Majumder</td>
-                    <td>11/5/2002</td>
-                    <td>7596859011</td>
-                    <td>7596859011</td>
-                    <td>abc@gmail.com</td>
-                    <td>123 bonhooghly more</td>
-                    <td>Hetc</td>
-                    <td>yes</td>
-                    <td>WBSCE</td>
-                    <td>WBJEE</td>
-                    <td>96</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>supratim Majumder</td>
-                    <td>sanjay Majumder</td>
-                    <td>11/5/2002</td>
-                    <td>7596859011</td>
-                    <td>7596859011</td>
-                    <td>abc@gmail.com</td>
-                    <td>123 bonhooghly more</td>
-                    <td>Hetc</td>
-                    <td>yes</td>
-                    <td>WBSCE</td>
-                    <td>WBJEE</td>
-                    <td>96</td>
-                </tr>
-            </tbody>
+
             </thead>
+            <tbody id="dog"></tbody>
         </table>
     </div>
 </section>
 
+
+
+<script>
+    const btnn = document.getElementById("dog");
+
+    function Cat() {
+        fetch('http://127.0.0.1:8000/student/').then(res => res.json())
+            .then(data => btnn.innerHTML = data.map((values, key) =>
+
+                `
+                  
+                
+                   
+                <tr>
+                    <td>${values['userID']}</td>
+                    <td>${values['first_name'][0]['first_name']} ${values['last_name'][0]['last_name']}</td>
+                    <td>${values['gurdian_name'][0]['gurdian_name']}</td>
+                    <td>${values['date_of_birth'][0]['date_of_birth']}</td>
+                    <td >${values['contact'][0]['contact']} </td>
+                    <td>${values['whatsapp'][0]['whatsapp']}</td>
+                    <td>${values['email'][0]['email']}</td>
+                    <td>${values['address'][0]['address']}</td>
+                    <td>${values['institute_name'][0]['school_college_name']}</td>
+                    <td>${values['appearing_passed_12'][0]['appearing_passed_12']}</td>
+                    <td>${values['board_name'][0]['board_name']}</td>
+                    <td>${values['appeared_wbjee_jeeMain'][0]['appeared_wbjee_jeeMain']}</td>
+                    <td>${values['result']}</td>
+                </tr>
+            
+            
+    
+     `
+
+
+
+
+
+            ))
+
+    }
+    Cat()
+</script>
 
 {% endblock body %}

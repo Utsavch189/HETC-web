@@ -369,6 +369,26 @@ def student(request):
     for i in st:
         c+=1
         obb=Student.objects.filter(user_id=i)
+        res=Result.objects.filter(userid=i)
+        if(res.exists()):
+            results=res.values('result')
+            y={
+            "id":c,
+            "userID":i,
+            "first_name":obb.values('first_name'),
+            "last_name":obb.values('last_name'),
+            "date_of_birth":obb.values('date_of_birth'),
+            "gurdian_name":obb.values('gurdian_name'),
+            "contact":obb.values('contact'),
+            "whatsapp":obb.values('whatsapp'),
+            "email":obb.values('email'),
+            "address":obb.values('address'),
+            "institute_name":obb.values('school_college_name'),
+            "appearing_passed_12":obb.values('appearing_passed_12'),
+            "board_name":obb.values('board_name'),
+            "appeared_wbjee_jeeMain":obb.values('appeared_wbjee_jeeMain'),
+            "result":results,
+        }
         y={
             "id":c,
             "userID":i,
@@ -384,10 +404,10 @@ def student(request):
             "appearing_passed_12":obb.values('appearing_passed_12'),
             "board_name":obb.values('board_name'),
             "appeared_wbjee_jeeMain":obb.values('appeared_wbjee_jeeMain'),
-
+            "result": 'None',
         }
     
         
         t.append(y)
         
-    return Response(t[1])
+    return Response(t)
