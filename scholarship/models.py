@@ -56,11 +56,9 @@ class Question(models.Model):
 
 
 class Result(models.Model):
-    author = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
-    name = models.CharField(max_length=200)
     result = models.IntegerField(default=0)
     userid = models.CharField(max_length=100)
-    exam_status = models.BooleanField(default=False)
+   
 
     def __str__(self):
         return self.userid

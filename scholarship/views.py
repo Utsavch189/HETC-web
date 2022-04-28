@@ -197,6 +197,21 @@ def exam(request,pp):
                 m = (body['msg'])
                 print(m)
                 Student.objects.filter(user_id=pp).update(exam_status=m)
+                total=0
+                
+                rr_obj=ChoosedOptions.objects.filter(userid=pp)
+                
+
+                qq_obj=Question.objects.all()
+                for i in rr_obj:
+                    for j in qq_obj:
+                        if(j.ques_no==int(i.questionNumber)):
+                            if(j.opt_ans==i.selectedOption):
+                                total=total+j.marks
+                                
+                            
+                yy=Result(result=total,userid=pp)
+                yy.save()
 
 
             elif ( request.headers['Content-Length']=='63' ):
@@ -389,7 +404,8 @@ def student(request):
             "appeared_wbjee_jeeMain":obb.values('appeared_wbjee_jeeMain'),
             "result":results,
         }
-        y={
+        else:
+            y={
             "id":c,
             "userID":i,
             "first_name":obb.values('first_name'),
@@ -404,7 +420,9 @@ def student(request):
             "appearing_passed_12":obb.values('appearing_passed_12'),
             "board_name":obb.values('board_name'),
             "appeared_wbjee_jeeMain":obb.values('appeared_wbjee_jeeMain'),
-            "result": 'None',
+            "result":[ {
+                'result':'None'
+            }],
         }
     
         
