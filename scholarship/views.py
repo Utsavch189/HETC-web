@@ -360,6 +360,12 @@ def api(request,ps):
 
 
 
+def greet(request):
+    if request.user.is_authenticated:
+        return render(request,'ExamGreet.html')
+
+
+
 
 #########################################################
 #Teacher################################################
