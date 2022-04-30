@@ -13,6 +13,8 @@ urlpatterns = [
 
 
 
-   path('teacher/students',students,name='students'),
+   path('students/',students,name='students'),
    path('student/',student),
+   path('SetExamDetails/',SetExamDetails),
+   path('SetQuestion/',SetQuestion),
 ]

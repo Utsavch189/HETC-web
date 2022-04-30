@@ -437,3 +437,39 @@ def student(request):
 
 
         return Response({'status':200})
+
+
+def SetExamDetails(request):
+    if request.method=='POST':
+        Edate=request.POST.get('ExamDate')
+        Emonth=request.POST.get('ExamMonth')
+        EstartTime=request.POST.get('ExamStartTime')
+        Edur=request.POST.get('ExamDurationTime')
+        TotalQues=request.POST.get('TotalQues')
+        RegLastDate=request.POST.get('RegLastDate')
+        RegLastMonth=request.POST.get('RegLastMonth')
+        DetailsExam.objects.update(date=Edate,month=Emonth,start_time=EstartTime,exam_duration=Edur,total_questions=TotalQues,registration_last_date=RegLastDate,registration_last_month=RegLastMonth)
+        messages.success(request,'Successfully Updated')
+    return render(request,'SetExam.html')
+
+
+def SetQuestion(request):
+    if request.method=='POST':
+        Qnum=request.POST.get('QuesNumber')
+        Qbody=request.POST.get('QuesBody')
+        opa=request.POST.get('opa')
+        opb=request.POST.get('opb')
+        opc=request.POST.get('opc')
+        opd=request.POST.get('opd')
+        currect=request.POST.get('currect')
+        marks=request.POST.get('marks')
+        y=Question(ques_no=eliminate(Qnum),ques=Qbody,opt1=opa,opt2=opb,opt3=opc,opt4=opd,opt_ans=currect.lower(),marks=eliminate(marks),neg_marks=0)
+        y.save()
+        messages.success(request,'Successfully Added')
+    dictt={
+            "total":Question.objects.count()
+        }
+    
+    return render(request,'SetQuestion.html',{'dictt': dictt})
+
+
