@@ -6,14 +6,13 @@ from django.contrib import messages
 from datetime import datetime
 from .models import *
 from django.core.mail import send_mail
-from .Need_Function import ID,PASSWORD,is_exam,eliminate,hashed,hashed2,verified,last_seen,is_exam_running,excell
+from .Need_Function import ID,PASSWORD,is_exam,eliminate,hashed,hashed2,verified,last_seen,is_exam_running
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 import json
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 import json
-import xlsxwriter
 
 
 

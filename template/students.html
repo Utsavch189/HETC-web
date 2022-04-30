@@ -1,12 +1,15 @@
 {% extends 'Base.html' %} {% block title %} Students {% endblock title %} {% block body %}
 
 <section class="bg-light p-5">
-    <button class="btn btn-primary " onclick="download()">Dowload Details</button>
+    <!-- <button class="btn btn-primary " onclick="download()">Dowload Details</button>
+    <h3 class="pb-4 my-2">STUDENT STATUS</h3> -->
+
+    <button id="download" type="button" class=" my-2 btn btn-primary">Dowload Details</button>
     <h3 class="pb-4 my-2">STUDENT STATUS</h3>
 
     <div class="table-responsive table table-bordered">
 
-        <table class="table bg-white">
+        <table class="table bg-white" id="example-table">
             <thead class="bg-dark text-light">
                 <tr>
                     <th>USER ID</th>
@@ -73,19 +76,24 @@
     Cat()
 
 
-    function download() {
-        fetch(`${window.location.origin}/student/`, {
-            method: 'POST',
-            headers: {
-                "X-CSRFToken": '{{csrf_token}}',
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                'msg': 'Go'
-            }),
-        })
-    }
+    document.getElementById('download').addEventListener('click', function() {
+        var tableToExcel = new Table2Excel();
+        tableToExcel.export(document.querySelectorAll("#example-table"))
+    });
+
+    // function download() {
+    //     fetch(`${window.location.origin}/student/`, {
+    //         method: 'POST',
+    //         headers: {
+    //             "X-CSRFToken": '{{csrf_token}}',
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({
+    //             'msg': 'Go'
+    //         }),
+    //     })
+    // }
 </script>
 
 {% endblock body %}
