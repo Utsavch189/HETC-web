@@ -1,7 +1,9 @@
 {% extends 'Base.html' %} {% block title %} Students {% endblock title %} {% block body %}
 
 <section class="bg-light p-5">
-    <h3 class="pb-4">STUDENT STATUS</h3>
+    <button class="btn btn-primary " onclick="download()">Dowload Details</button>
+    <h3 class="pb-4 my-2">STUDENT STATUS</h3>
+
     <div class="table-responsive table table-bordered">
 
         <table class="table bg-white">
@@ -34,7 +36,7 @@
     const btnn = document.getElementById("dog");
 
     function Cat() {
-        fetch('http://127.0.0.1:8000/student/').then(res => res.json())
+        fetch(`${window.location.origin}/student/`).then(res => res.json())
             .then(data => btnn.innerHTML = data.map((values, key) =>
 
                 `
@@ -69,6 +71,21 @@
 
     }
     Cat()
+
+
+    function download() {
+        fetch(`${window.location.origin}/student/`, {
+            method: 'POST',
+            headers: {
+                "X-CSRFToken": '{{csrf_token}}',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                'msg': 'Go'
+            }),
+        })
+    }
 </script>
 
 {% endblock body %}

@@ -6,14 +6,14 @@ from django.contrib import messages
 from datetime import datetime
 from .models import *
 from django.core.mail import send_mail
-from .Need_Function import ID,PASSWORD,is_exam,eliminate,hashed,hashed2,verified,last_seen,is_exam_running
+from .Need_Function import ID,PASSWORD,is_exam,eliminate,hashed,hashed2,verified,last_seen,is_exam_running,excell
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 import json
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 import json
-
+import xlsxwriter
 
 
 
@@ -241,19 +241,21 @@ def exam(request,pp):
                 option=(body['option'])
                 print(' index and option',index1, option)
                 
-                r_object=(ChoosedOptions.objects.filter(userid=pp))
-                if(r_object.exists()):
-                    obb=(r_object.filter(questionNumber=index1))
-                    if(obb.exists()):
-                        obb.update(selectedOption=option)
+                if(index1!='0'):
+
+                    r_object=(ChoosedOptions.objects.filter(userid=pp))
+                    if(r_object.exists()):
+                        obb=(r_object.filter(questionNumber=index1))
+                        if(obb.exists()):
+                            obb.update(selectedOption=option)
                         
+                        else:
+                            ChoosedOptions.objects.create(author=request.user,userid=pp,questionNumber=index1,selectedOption=option)
+
+
                     else:
-                        ChoosedOptions.objects.create(author=request.user,userid=pp,questionNumber=index1,selectedOption=option)
-
-
-                else:
                     
-                   ChoosedOptions.objects.create(author=request.user,userid=pp,questionNumber=index1,selectedOption=option)
+                        ChoosedOptions.objects.create(author=request.user,userid=pp,questionNumber=index1,selectedOption=option)
                     
 
                
@@ -372,60 +374,67 @@ def students(request):
 
 
 
-@api_view(['GET'])
+@api_view(['GET','POST'])
 def student(request):
-    st=[]
-    t=[]
-    c=0
-    for i in User.objects.all(): 
-        if(i.username!='hetc'):     
-            st.append(i.username)
+    if request.method=='GET':
+        st=[]
+        t=[]
+        c=0
+        for i in User.objects.all(): 
+            if(i.username!='hetc' ):     
+                st.append(i.username)
 
-    for i in st:
-        c+=1
-        obb=Student.objects.filter(user_id=i)
-        res=Result.objects.filter(userid=i)
-        if(res.exists()):
-            results=res.values('result')
-            y={
-            "id":c,
-            "userID":i,
-            "first_name":obb.values('first_name'),
-            "last_name":obb.values('last_name'),
-            "date_of_birth":obb.values('date_of_birth'),
-            "gurdian_name":obb.values('gurdian_name'),
-            "contact":obb.values('contact'),
-            "whatsapp":obb.values('whatsapp'),
-            "email":obb.values('email'),
-            "address":obb.values('address'),
-            "institute_name":obb.values('school_college_name'),
-            "appearing_passed_12":obb.values('appearing_passed_12'),
-            "board_name":obb.values('board_name'),
-            "appeared_wbjee_jeeMain":obb.values('appeared_wbjee_jeeMain'),
-            "result":results,
-        }
-        else:
-            y={
-            "id":c,
-            "userID":i,
-            "first_name":obb.values('first_name'),
-            "last_name":obb.values('last_name'),
-            "date_of_birth":obb.values('date_of_birth'),
-            "gurdian_name":obb.values('gurdian_name'),
-            "contact":obb.values('contact'),
-            "whatsapp":obb.values('whatsapp'),
-            "email":obb.values('email'),
-            "address":obb.values('address'),
-            "institute_name":obb.values('school_college_name'),
-            "appearing_passed_12":obb.values('appearing_passed_12'),
-            "board_name":obb.values('board_name'),
-            "appeared_wbjee_jeeMain":obb.values('appeared_wbjee_jeeMain'),
-            "result":[ {
+        for i in st:
+            c+=1
+            obb=Student.objects.filter(user_id=i)
+            res=Result.objects.filter(userid=i)
+            if(res.exists()):
+                results=res.values('result')
+                y={
+                "id":c,
+                "userID":i,
+                "first_name":obb.values('first_name'),
+                "last_name":obb.values('last_name'),
+                "date_of_birth":obb.values('date_of_birth'),
+                "gurdian_name":obb.values('gurdian_name'),
+                "contact":obb.values('contact'),
+                "whatsapp":obb.values('whatsapp'),
+                "email":obb.values('email'),
+                "address":obb.values('address'),
+                "institute_name":obb.values('school_college_name'),
+                "appearing_passed_12":obb.values('appearing_passed_12'),
+                "board_name":obb.values('board_name'),
+                "appeared_wbjee_jeeMain":obb.values('appeared_wbjee_jeeMain'),
+                "result":results,
+            }
+            else:
+                y={
+                "id":c,
+                "userID":i,
+                "first_name":obb.values('first_name'),
+                "last_name":obb.values('last_name'),
+                "date_of_birth":obb.values('date_of_birth'),
+                "gurdian_name":obb.values('gurdian_name'),
+                "contact":obb.values('contact'),
+                "whatsapp":obb.values('whatsapp'),
+                "email":obb.values('email'),
+                "address":obb.values('address'),
+                "institute_name":obb.values('school_college_name'),
+                "appearing_passed_12":obb.values('appearing_passed_12'),
+                "board_name":obb.values('board_name'),
+                "appeared_wbjee_jeeMain":obb.values('appeared_wbjee_jeeMain'),
+                "result":[ {
                 'result':'None'
-            }],
-        }
+                }],
+            }
     
         
-        t.append(y)
+            t.append(y)
         
-    return Response(t)
+        return Response(t)
+    elif request.method=='POST':
+
+    
+
+
+        return Response({'status':200})

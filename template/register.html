@@ -13,7 +13,7 @@
 
 
     <div class="container py-4 px-5">
-        <form method="POST" action="/register/">
+        <form method="POST" action="/register/" name="form1">
             {% csrf_token %}
             <div class="mb-3">
                 <label for="name" class="form-label">First Name</label>
@@ -31,13 +31,13 @@
                 <label for="name" class="form-label">Date of Birth</label>
                 <div class="row">
                     <div class="col">
-                        <input type="text" class="form-control" placeholder="Year" aria-label="First name" id="year" name="year" required="required">
+                        <input type="number" class="form-control" placeholder="Year" aria-label="First name" id="year" name="year" required="required">
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" placeholder="Month" aria-label="Last name" id="month" name="month" required="required">
+                        <input type="number" class="form-control" placeholder="Month" aria-label="Last name" id="month" name="month" required="required">
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" placeholder="Date" aria-label="Last name" id="date" name="date" required="required">
+                        <input type="number" class="form-control" placeholder="Date" aria-label="Last name" id="date" name="date" required="required">
                     </div>
                 </div>
             </div>
@@ -45,11 +45,11 @@
                 <label for="name" class="form-label">Phone Number</label>
                 <div class="row">
                     <div class="col">
-                        <input type="text" id="phone"  data-fv-numeric-message="Please enter valid phone numbers" data-fv-phone-country11="IN" required="required" data-fv-notempty-message="This field cannot be left blank." placeholder="Contact Number"
+                        <input type="number" id="phone"  data-fv-numeric-message="Please enter valid phone numbers" data-fv-phone-country11="IN" required="required" data-fv-notempty-message="This field cannot be left blank." placeholder="Contact Number"
                             class="form-control" name="phone">
                     </div>
                     <div class="col">
-                        <input type="text" id="whatsapp"  data-fv-numeric-message="Please enter valid phone numbers" data-fv-phone-country11="IN" required="required" data-fv-notempty-message="This field cannot be left blank." placeholder="Whatsapp Number"
+                        <input type="number" id="whatsapp"  data-fv-numeric-message="Please enter valid phone numbers" data-fv-phone-country11="IN" required="required" data-fv-notempty-message="This field cannot be left blank." placeholder="Whatsapp Number"
                             class="form-control" name="whatsapp">
                     </div>
                 </div>
@@ -98,9 +98,36 @@
     
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary" value="register">Submit</button>
+            <button type="submit" class="btn btn-primary" value="register" onclick="ValidateEmail(document.form1.email)">Submit</button>
         </form>
     </div>
-    
+    <script>
+
+
+        function ValidateEmail(inputText)
+{
+var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+if(inputText.value.match(mailformat))
+{
+alert("Valid email address!");
+document.form1.email.focus();
+return true;
+}
+else
+{
+alert("You have entered an invalid email address!");
+document.form1.email.focus();
+return false;
+}
+
+
+
+
+
+
+}
+
+
+    </script>
     
 {% endblock body %}

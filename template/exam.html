@@ -138,7 +138,7 @@
     <div class="container-fluid body my-2">
       
             
-            <button class="btn btn-success submit"  onclick="submit()">Submit</button>
+            <button class="btn btn-success submit"  onclick="submit()" id="submitButton">Submit</button>
             <form  id="mainform" name="mainform" >
 
 
@@ -189,10 +189,10 @@
         let j = 1;
         let v = 0;
 let t=0;
-
+let bt=document.getElementById('submitButton')
+                    bt.style.display='None'
 let ques=''
-
-
+console.log(v)
 
 document.mainform.onclick= function (){
 let as=document.mainform.aa.value;
@@ -231,7 +231,6 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
 //}
 
 
-
         button();
         clock();
         function button() {
@@ -247,9 +246,16 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                 btn.className = 'bttn'
 
                 btn.onclick = function() {
+            
                     v = parseInt(btn.value)
-                   
-                   
+                if(v===i){
+                    let bt=document.getElementById('submitButton')
+                bt.style.display='block'
+                }
+                else{
+                    let bt=document.getElementById('submitButton')
+                    bt.style.display='None' 
+                }
                     fetch(`${base_url}/api/{{request.user}}/`, {
                         method: 'POST', 
                         headers: {
@@ -321,6 +327,10 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
 
 
         function submit(){
+            let rtr=confirm("Are you sure to submit your whole exam paper?");
+            if(rtr===false){
+                e.preventDefault()
+            }
             fetch(`${base_url}/credentials/exam/{{request.user}}/`, {
                 method: 'POST', 
                 headers: {
@@ -334,10 +344,18 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
         }
 
         function next() {
+           
             if (v === 0 || v>0) {
 
                 v += 1;
-
+                if(v===i){
+                    let bt=document.getElementById('submitButton')
+                bt.style.display='block'
+                }
+                else{
+                    let bt=document.getElementById('submitButton')
+                    bt.style.display='None' 
+                }
                 if (v > i) {
                     alert('No questions left, You can submit')
                     v = i;
@@ -381,10 +399,18 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
         }
 
         function prev() {
+         
             if (v > 1 && v <= i) {
                
                 v -= 1;
-
+                if(v===i){
+                    let bt=document.getElementById('submitButton')
+                bt.style.display='block'
+                }
+                else{
+                    let bt=document.getElementById('submitButton')
+                    bt.style.display='None' 
+                }
             }
             fetch(`${base_url}/api/{{request.user}}/`, {
                 method: 'POST', 
