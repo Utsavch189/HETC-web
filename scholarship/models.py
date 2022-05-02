@@ -56,7 +56,7 @@ class Question(models.Model):
         return self.ques
 
 
-class Result(models.Model):
+class Result2(models.Model):
     result = models.IntegerField(default=0)
     userid = models.CharField(max_length=100)
    

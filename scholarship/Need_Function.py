@@ -110,7 +110,7 @@ def is_exam_running(userid):
 
     end_time=eliminate(DetailsExam.objects.values('exam_duration')[0]['exam_duration'])+s_time
 
-    if(end_time-c_hour==0 and c_minute>s_min):
+    if((end_time-c_hour==0 and c_minute>s_min) or c_hour>end_time):
         Student.objects.filter(user_id=userid).update(exam_status=True)
 
 
@@ -136,7 +136,7 @@ def updateTime():
 
    
 
-    if(end_time-c_hour==0 and c_minute<=s_min):
+    if((end_time-c_hour==0 and c_minute<=s_min) or (end_time>c_hour)):
         return (end_time-c_hour)*3600+(s_min-c_minute)*60
     else:
         return 0

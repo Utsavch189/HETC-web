@@ -210,7 +210,7 @@ def exam(request,pp):
                                 total=total+j.marks
                                 
                             
-                yy=Result(result=total,userid=pp)
+                yy=Result2(result=total,userid=pp)
                 yy.save()
 
 
@@ -393,7 +393,7 @@ def student(request):
         for i in st:
             c+=1
             obb=Student.objects.filter(user_id=i)
-            res=Result.objects.filter(userid=i)
+            res=Result2.objects.filter(userid=i)
             if(res.exists()):
                 results=res.values('result')
                 y={
