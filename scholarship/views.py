@@ -6,7 +6,7 @@ from django.contrib import messages
 from datetime import datetime
 from .models import *
 from django.core.mail import send_mail
-from .Need_Function import ID,PASSWORD,is_exam,eliminate,hashed,hashed2,verified,last_seen,is_exam_running
+from .Need_Function import ID,PASSWORD,is_exam,eliminate,hashed2,verified,last_seen,is_exam_running,updateTime
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -136,7 +136,7 @@ def exam(request,pp):
 
        if request.method=="GET":
            
-            if(is_exam_running(request.user.username)):
+            if(Student.objects.filter(user_id=request.user.username).values('exam_status')[0]['exam_status']==False):
                 user = request.user
                 userid = bytes(pp, 'UTF-8')
                 if(verified(user.username,userid)):
@@ -175,7 +175,8 @@ def exam(request,pp):
                         'exam_start_time':eliminate (time),
                         'exam_duration':eliminate(exam_duration),
                         'number_of_questions':eliminate(total_questions),
-                        'is_exam':is_exam(date,month,time)
+                        'is_exam':is_exam(date,month,time),
+                        'timer':updateTime()
                         }
                     return render(request,'exam.html',{'dictt':dictt})
                 else:
@@ -450,11 +451,12 @@ def SetExamDetails(request):
         Edate=request.POST.get('ExamDate')
         Emonth=request.POST.get('ExamMonth')
         EstartTime=request.POST.get('ExamStartTime')
+        EstartMin=request.POST.get('ExamStartMin')
         Edur=request.POST.get('ExamDurationTime')
         TotalQues=request.POST.get('TotalQues')
         RegLastDate=request.POST.get('RegLastDate')
         RegLastMonth=request.POST.get('RegLastMonth')
-        DetailsExam.objects.update(date=Edate,month=Emonth,start_time=EstartTime,exam_duration=Edur,total_questions=TotalQues,registration_last_date=RegLastDate,registration_last_month=RegLastMonth)
+        DetailsExam.objects.update(date=Edate,month=Emonth,start_time=EstartTime,start_min=EstartMin,exam_duration=Edur,total_questions=TotalQues,registration_last_date=RegLastDate,registration_last_month=RegLastMonth)
         messages.success(request,'Successfully Updated')
     return render(request,'SetExam.html')
 

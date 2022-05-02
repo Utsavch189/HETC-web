@@ -5,9 +5,13 @@ import hashlib
 from hashlib import blake2b
 from hmac import compare_digest
 from secrets import token_bytes
+
+from numpy import s_
 from .models import *
 from django.contrib.auth.models import User
 import json
+from .models import *
+
 
 key = token_bytes(16)
 
@@ -61,10 +65,13 @@ def is_exam(date,month,time):
 
 
 def eliminate(a):
+    
     a=str(a)
     if(a=='01' or a=='02' or a=='03' or a=='04' or a=='05' or a=='06' or a=='07' or a=='08' or a=='09'):
         n=a.replace('0','')
         return int(n)
+    elif(a=='0.5'):
+        return float(a)
     return int(a)
 
 
@@ -91,19 +98,49 @@ def last_seen(string):
     return str(c_hour) + ':' +str(c_minute)
 
 def is_exam_running(userid):
-     c_hour=eliminate( datetime.now().strftime("%H"))
-     c_minute=eliminate( datetime.now().strftime("%M"))
-     if(Student.objects.filter(user_id=userid).exists()):
-        lSeen=Student.objects.filter(user_id=userid).values('last_seen')[0]['last_seen']
-        if lSeen:
-            last_hour=eliminate(lSeen[:2])
-            last_min=eliminate(lSeen[3:])
-     
-            if(c_hour==last_hour and c_minute-last_min>15):
-                Student.objects.filter(user_id=userid).update(exam_status=True)
-            elif(c_hour!=last_hour):
-                Student.objects.filter(user_id=userid).update(exam_status=True)
-            if(Student.objects.filter(user_id=userid).values('exam_status')[0]['exam_status']==True):
-                return True
-     
-     return True
+    c_hour=eliminate( datetime.now().strftime("%H"))
+    c_minute=eliminate( datetime.now().strftime("%M"))
+    s_min=0
+
+    s_time=eliminate(DetailsExam.objects.values('start_time')[0]['start_time'])
+    if(DetailsExam.objects.values('start_min')[0]['start_min']):
+        s_min=eliminate(DetailsExam.objects.values('start_min')[0]['start_min'])
+    else:
+        s_min=0
+
+    end_time=eliminate(DetailsExam.objects.values('exam_duration')[0]['exam_duration'])+s_time
+
+    if(end_time-c_hour==0 and c_minute>s_min):
+        Student.objects.filter(user_id=userid).update(exam_status=True)
+
+
+
+
+
+
+def updateTime():
+    c_hour=eliminate( datetime.now().strftime("%H"))
+    c_minute=eliminate( datetime.now().strftime("%M"))
+    c_second=c_minute*60
+    end_time=0
+    s_min=0
+
+    s_time=eliminate(DetailsExam.objects.values('start_time')[0]['start_time'])
+    ex_duration=eliminate(DetailsExam.objects.values('exam_duration')[0]['exam_duration'])*3600
+    if(DetailsExam.objects.values('start_min')[0]['start_min']):
+        s_min=eliminate(DetailsExam.objects.values('start_min')[0]['start_min'])
+    else:
+        s_min=0
+
+    end_time=eliminate(DetailsExam.objects.values('exam_duration')[0]['exam_duration'])+s_time
+
+   
+
+    if(end_time-c_hour==0 and c_minute<=s_min):
+        return (end_time-c_hour)*3600+(s_min-c_minute)*60
+    else:
+        return 0
+
+
+
+

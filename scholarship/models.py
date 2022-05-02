@@ -31,6 +31,7 @@ class DetailsExam(models.Model):
     date=models.CharField(null=True,blank=True,max_length=5)
     month=models.CharField(null=True,blank=True,max_length=5)
     start_time=models.CharField(null=True,blank=True,max_length=5)
+    start_min=models.CharField(null=True,blank=True,max_length=5)
     exam_duration=models.CharField(null=True,blank=True,max_length=5)
     total_questions=models.CharField(null=True,blank=True,max_length=5)
     registration_last_date=models.CharField(null=True,blank=True,max_length=5)
