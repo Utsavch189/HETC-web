@@ -21,6 +21,7 @@ class Student(models.Model):
     appeared_wbjee_jeeMain=models.CharField(null=True,blank=True,max_length=10)
     created_at=models.DateField()
     last_seen=models.CharField(max_length=11,blank=True,null=True)
+    student_feedback=models.CharField(max_length=50,blank=True,null=True)
     exam_status=models.BooleanField(default=False)
 
     def __str__(self):

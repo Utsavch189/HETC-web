@@ -361,9 +361,19 @@ def api(request,ps):
 
 
 
-def greet(request):
-    if request.user.is_authenticated:
-        return render(request,'ExamGreet.html')
+def greet(request,st):
+    if request.method=='GET':
+        if request.user.is_authenticated:
+
+            return render(request,'ExamGreet.html')
+    elif request.method=='POST':
+        print(st)
+                       
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        m = (body['option'])
+        Student.objects.filter(user_id=st).update(student_feedback=m)
+        return render(request,'home.html')
 
 
 

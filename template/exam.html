@@ -339,8 +339,7 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                 },
                 body: JSON.stringify({'msg':'True'}),
               })
-              history.pushState({}, null, `${base_url}/greet/`);
-              location.reload();
+              location.replace(`${base_url}/greet/{{request.user}}/`);
         }
 
         function next() {
@@ -495,8 +494,8 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                         },
                         body: JSON.stringify({'msg':'True'}),
                       })
-                      history.pushState({}, null, `${base_url}/greet/`);
-                      location.reload();
+              location.replace(`${base_url}/greet/{{request.user}}/`);
+
                 }
             }
         }

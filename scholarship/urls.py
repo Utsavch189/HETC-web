@@ -10,7 +10,7 @@ urlpatterns = [
    path('logout/',logoutt,name='logout'),
    path('credentials/',Credentials,name='credentials'),
    path('api/<ps>/',api,name='api'),
-   path('greet/',greet),
+   path('greet/<st>/',greet),
 
 
 

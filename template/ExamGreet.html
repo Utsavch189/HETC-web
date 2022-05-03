@@ -39,13 +39,61 @@
 
 
 
-        <h3 class="text-center ">{{request.user.first_name}} {{request.user.last_name}} </h3>
+
+<div class="container">
+            <h4 class="text-left ">{{request.user.first_name}} {{request.user.last_name}} </h4>
+
+ <h5 class="text-left">Give your Feedback</h5>
+             <form  id="mainform" name="mainform" >
 
 
+
+                <div class="container inputs">
+                    
+
+                    <input type="radio" name="aa" id="a" value="VeryGood"><span id="input1"> Very Good </span><br>
+                <input type="radio" name="aa" id="b" value="Good" ><span id="input2"> Good </span><br>
+                <input type="radio" name="aa" id="c" value="Moderate" ><span id="input3"> Moderate </span><br>
+                <input type="radio" name="aa" id="d" value="NotGood" > <span id="input4"> Not Good </span>
+
+
+                </div>
+</form>   
+
+
+</div>
 
 
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+
+
+
+<script >
+            let base_url=window.location.origin;
+
+    document.mainform.onclick= function (){
+let as=document.mainform.aa.value;
+fetch(`${base_url}/greet/{{request.user}}/`, {
+    method: 'POST', 
+    headers: {
+        "X-CSRFToken": '{{csrf_token}}',
+        'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({'option':`${as}`}),
+  })
+if(as==='a' || as==='b' || as==='c' || as==='d'){
+    let x = document.getElementById(`${v}`)
+         x.style.backgroundColor='blue'
+         x.style.color='white'
+        
+}
+         location.replace(base_url)
+
+}
+</script>
 
 </html>
