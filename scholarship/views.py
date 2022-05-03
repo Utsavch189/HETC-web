@@ -21,33 +21,6 @@ import json
 
 def home(request):
    
-    field_name = 'date'
-    obj = DetailsExam.objects.first()
-    field_object = DetailsExam._meta.get_field(field_name)
-    date = getattr(obj, field_object.attname)
-
-    field_name = 'month'
-    obj = DetailsExam.objects.first()
-    field_object = DetailsExam._meta.get_field(field_name)
-    month = getattr(obj, field_object.attname)
-
-
-    field_name = 'start_time'
-    obj = DetailsExam.objects.first()
-    field_object = DetailsExam._meta.get_field(field_name)
-    time = getattr(obj, field_object.attname)
-
-    field_name = 'exam_duration'
-    obj = DetailsExam.objects.first()
-    field_object = DetailsExam._meta.get_field(field_name)
-    exam_duration = getattr(obj, field_object.attname)
-
-
-    field_name = 'total_questions'
-    obj = DetailsExam.objects.first()
-    field_object = DetailsExam._meta.get_field(field_name)
-    total_questions = getattr(obj, field_object.attname)
-
 
     field_name = 'registration_last_date'
     obj = DetailsExam.objects.first()
@@ -62,11 +35,6 @@ def home(request):
 
 
     dictt={
-    'exam_date':eliminate( date),
-    'exam_month':eliminate( month),
-    'exam_start_time':eliminate (time),
-    'exam_duration':eliminate(exam_duration),
-    'number_of_questions':eliminate(total_questions),
     'registration_last_date':eliminate(registration_last_date),
     'registration_last_month':eliminate(registration_last_month)
 
