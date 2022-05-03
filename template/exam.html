@@ -463,7 +463,8 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
 
         function clock() {
             let myTimer = setInterval(myClock, 1000);
-            var c = {{dictt.timer}};
+            //var c = {{dictt.timer}};
+            let c=10;
 
             function myClock() {
                 --c
@@ -485,6 +486,8 @@ if(as==='a' || as==='b' || as==='c' || as==='d'){
                 }
 
                 if (c == 0) {
+                    alert("Your Exam is Over!");
+           
                     clearInterval(myTimer);
                     fetch(`${base_url}/credentials/exam/{{request.user}}/`, {
                         method: 'POST', 
