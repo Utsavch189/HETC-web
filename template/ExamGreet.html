@@ -56,7 +56,7 @@
                 <input type="radio" name="aa" id="d" value="NotGood" > <span id="input4"> Not Good </span>
 
                 </div>
-                                <button class="btn btn-success my-3" onclick="Submit()">Submit</button>
+                                <button class="btn btn-success my-3"  type="submit" onclick="Submit()">Submit</button>
 
 
 
@@ -75,6 +75,7 @@
 
                 let msg='';
 
+        document.addEventListener(Submit(), 'click');
 
 function Submit(){
 
@@ -92,8 +93,9 @@ else if(document.getElementById('c').checked){
 else if(document.getElementById('d').checked){
     msg=document.getElementById('d').value
 }
-
-console.log(msg)
+if (msg!=''){
+         location.replace(base_url)
+}
 
 fetch(`${base_url}/greet/{{request.user}}/`, {
     method: 'POST', 
@@ -105,10 +107,8 @@ fetch(`${base_url}/greet/{{request.user}}/`, {
     body: JSON.stringify({'option':`${msg}`}),
   })
 
-         location.replace(base_url)
 
 }
-        document.addEventListener(Submit(), 'click');
 
 </script>
 
