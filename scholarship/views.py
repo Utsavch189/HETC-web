@@ -364,8 +364,9 @@ def student(request):
         st=[]
         t=[]
         c=0
+        superuser=str(User.objects.filter(is_superuser=True)[0])
         for i in User.objects.all(): 
-            if(i.username!='hetc' ):     
+            if(i.username!=superuser ):     
                 st.append(i.username)
 
         for i in st:
