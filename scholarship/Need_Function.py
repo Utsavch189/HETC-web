@@ -60,7 +60,7 @@ def is_exam(date,month,time):
     if(str(eliminate( c_date))==str(eliminate(date)) and str(eliminate( c_month))==str(eliminate(month)) and str(eliminate( c_hour))==str(eliminate( time)) ):
         return True
     else:
-        return True
+        return False
 
 
 
