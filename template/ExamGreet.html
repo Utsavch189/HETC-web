@@ -44,7 +44,6 @@
             <h4 class="text-left ">{{request.user.first_name}} {{request.user.last_name}} </h4>
 
  <h5 class="text-left">Give your Feedback</h5>
-             <form  id="mainform" name="mainform" >
 
 
 
@@ -56,9 +55,9 @@
                 <input type="radio" name="aa" id="c" value="Moderate" ><span id="input3"> Moderate </span><br>
                 <input type="radio" name="aa" id="d" value="NotGood" > <span id="input4"> Not Good </span>
 
-
                 </div>
-</form>   
+                                <button class="btn btn-success my-3" onclick="Submit()">Submit</button>
+
 
 
 </div>
@@ -74,8 +73,28 @@
 <script >
             let base_url=window.location.origin;
 
-    document.mainform.onclick= function (){
-let as=document.mainform.aa.value;
+                let msg='';
+
+
+function Submit(){
+
+if(document.getElementById('a').checked){
+    msg=document.getElementById('a').value
+}
+else if(document.getElementById('b').checked){
+    msg=document.getElementById('b').value
+}
+
+else if(document.getElementById('c').checked){
+    msg=document.getElementById('c').value
+}
+
+else if(document.getElementById('d').checked){
+    msg=document.getElementById('d').value
+}
+
+console.log(msg)
+
 fetch(`${base_url}/greet/{{request.user}}/`, {
     method: 'POST', 
     headers: {
@@ -83,17 +102,14 @@ fetch(`${base_url}/greet/{{request.user}}/`, {
         'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({'option':`${as}`}),
+    body: JSON.stringify({'option':`${msg}`}),
   })
-if(as==='a' || as==='b' || as==='c' || as==='d'){
-    let x = document.getElementById(`${v}`)
-         x.style.backgroundColor='blue'
-         x.style.color='white'
-        
-}
+
          location.replace(base_url)
 
 }
+        document.addEventListener(Submit(), 'click');
+
 </script>
 
 </html>
