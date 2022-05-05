@@ -1,9 +1,9 @@
-from django.contrib import admin
 from .models import *
+from django.contrib import admin
+
 # Register your models here.
+admin.site.register(Choose)
+admin.site.register(Detail)
+admin.site.register(Result)
 admin.site.register(Student)
-admin.site.register(DetailsExam)
-admin.site.register(Rule)
 admin.site.register(Question)
-admin.site.register(Result2)
-admin.site.register(ChoosedOptions)

@@ -1,21 +1,14 @@
-from django.urls import path
 from .views import *
+from django.urls import path
 
 urlpatterns = [
-   path('',home,name='home'),
-   path('contact/',contact,name='contact'),
-   path('register/',register,name='register'),
-   path('credentials/exam/<pp>/',exam,name='exam'),
-   path('login/',loginn,name='login'),
-   path('logout/',logoutt,name='logout'),
-   path('credentials/',Credentials,name='credentials'),
-   path('api/<ps>/',api,name='api'),
-   path('greet/<st>/',greet),
-
-
-
-   path('students/',students,name='students'),
-   path('student/',student),
-   path('SetExamDetails/',SetExamDetails,name='SetExamDetails'),
-   path('SetQuestion/',SetQuestion,name='SetQuestion'),
+    path('', home, name='home'),
+    path('login/', login_user, name='login'),
+    path('contact/', contact, name='contact'),
+    path('api/<str:userid>/', api, name='api'),
+    path('logout/', logout_user, name='logout'),
+    path('register/', register, name='register'),
+    path('exam-status/<str:user>/', exam_end, name='exam_end'),
+    path('exam-credential/', exam_authentication, name='exam_auth'),
+    path('exam-credential/auth-user/exam/<str:userid>/', exam, name='exam')
 ]

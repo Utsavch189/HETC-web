@@ -1,462 +1,284 @@
-from django.shortcuts import render,redirect
-from django.http import request
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
+import json
+import datetime
+
 from django.contrib import messages
-from datetime import datetime
-from .models import *
 from django.core.mail import send_mail
-from .Need_Function import ID,PASSWORD,is_exam,eliminate,hashed2,verified,last_seen,is_exam_running,updateTime
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
-import json
+from django.contrib.auth.models import User
 from rest_framework.response import Response
+from django.shortcuts import render, redirect
 from rest_framework.decorators import api_view
-import json
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, logout, authenticate
 
-
-
-
-
+from .models import *
+from .helper import timer, is_exam, user_id, hashed2, verified, eliminate, last_seen, date_over, time_ahead, user_password, is_exam_running, record_is_duplicate
 
 def home(request):
-   
+    date_ob = Detail.objects.first()
+    last_date = date_ob.registration_last_date.strftime("%d-%B-%Y")
+    start_date = date_ob.registration_start_date.strftime("%d-%B-%Y")
 
-    field_name = 'registration_last_date'
-    obj = DetailsExam.objects.first()
-    field_object = DetailsExam._meta.get_field(field_name)
-    registration_last_date = getattr(obj, field_object.attname)
+    dictt = {
+        'last_date': last_date,
+        'start_date': start_date,
+        'date_over': date_over(Detail),
+        'ahead_of_time': time_ahead(Detail)
+    }
 
-
-    field_name = 'registration_last_month'
-    obj = DetailsExam.objects.first()
-    field_object = DetailsExam._meta.get_field(field_name)
-    registration_last_month = getattr(obj, field_object.attname)
-
-
-    dictt={
-    'registration_last_date':eliminate(registration_last_date),
-    'registration_last_month':eliminate(registration_last_month)
-
-}
-
- 
-    return render(request,'home.html',{'dictt':dictt})
-
+    return render(request, 'candidate/home.html', {'dictt': dictt})
 
 def contact(request):
-    return render(request,'contact.html')
+    dictt = {
+        'date_over': date_over(Detail),
+        'ahead_of_time': time_ahead(Detail)
+    }
 
+    return render(request, 'candidate/contact.html', {'dictt': dictt})
 
 def register(request):
-    if request.method=="GET":
-        return render(request,'register.html')
-    
+    dictt = {
+        'date_over': date_over(Detail),
+        'ahead_of_time': time_ahead(Detail)
+    }
 
-    elif request.method=='POST':
-        fname=request.POST.get('fname')
-        lname=request.POST.get('lname')
-        gurdian=request.POST.get('gurdian')
-        year=request.POST.get('year')
-        month=request.POST.get('month')
-        date=request.POST.get('date')
-        phone=request.POST.get('phone')
-        whatsapp=request.POST.get('whatsapp')
-        email=request.POST.get('email')
-        address=request.POST.get('address')
-        status=request.POST.get('status')
-        board=request.POST.get('board')
-        entrance=request.POST.get('entrance')
-        instu=request.POST.get('inst')
-    
-        date_of_birth1=str(date)+'/'+str(month)+'/'+str(year)
-        userid=ID(fname)
-        password=PASSWORD(date,month,year)
-        smodel=Student(first_name=fname,last_name=lname,user_id=userid,date_of_birth=date_of_birth1,gurdian_name=gurdian,contact=phone,whatsapp=whatsapp,email=email,address=address,school_college_name=instu,appearing_passed_12=status,board_name=board,appeared_wbjee_jeeMain=entrance,created_at=datetime.now())
-        smodel.save()
+    if request.user.is_authenticated or date_over(Detail) or time_ahead(Detail):
+        return redirect('home')
 
-        messages.success(request,'Your Registration is completed. Check Your Email To get User ID and Password')
-        
-        
-        subject='Thank You for registration'
-        body=f'your user name is {userid} and your password is {password}'
-        send_mail(
-    subject,
-    body,
-    'utsavpokemon9000chatterjee@gmail.com',
-    [email],
-    fail_silently=False,
-)
-    
-        user = User.objects.create_user(userid, email, password)
-        user.first_name=fname
-        user.last_name=lname
-        user.save()
+    if request.method == 'POST':
+        fname = str(request.POST.get('fname')).upper()
+        lname = str(request.POST.get('lname')).upper()
+        gurdian = str(request.POST.get('gurdian')).upper()
 
-    
-    return render(request,'register.html')
+        date = request.POST.get('date')
+        year = request.POST.get('year')
+        month = request.POST.get('month')
 
-@csrf_exempt
-@login_required(login_url='login')
-def exam(request,pp):
- 
-       
+        phone = request.POST.get('phone')
+        whatsapp = request.POST.get('whatsapp')
+        email = str(request.POST.get('email')).lower()
 
-       if request.method=="GET":
-           
-            if(Student.objects.filter(user_id=request.user.username).values('exam_status')[0]['exam_status']==False):
-                user = request.user
-                userid = bytes(pp, 'UTF-8')
-                if(verified(user.username,userid)):
-                
-                    field_name = 'date'
-                    obj = DetailsExam.objects.first()
-                    field_object = DetailsExam._meta.get_field(field_name)
-                    date = getattr(obj, field_object.attname)
+        if record_is_duplicate(fname, lname, gurdian, email):
+            messages.error(request, "Some information are there which already exists in our records (may occur duplicate)")
+            return render(request, 'candidate/register.html', {'dictt': dictt})
 
-                    field_name = 'month'
-                    obj = DetailsExam.objects.first()
-                    field_object = DetailsExam._meta.get_field(field_name)
-                    month = getattr(obj, field_object.attname)
+        else:
+            instu = request.POST.get('inst')
+            board = request.POST.get('board')
+            status = request.POST.get('status')
+            entrance = request.POST.get('entrance')
+            address = str(request.POST.get('address')).upper()
 
+            userid = user_id(fname)
+            password = user_password(date, month, year)
+            date_of_birth = password[0:2] + '/' + password[2:4] + '/' + password[4:10]
 
-                    field_name = 'start_time'
-                    obj = DetailsExam.objects.first()
-                    field_object = DetailsExam._meta.get_field(field_name)
-                    time = getattr(obj, field_object.attname)
+            student = Student(first_name=fname, last_name=lname, user_id=userid,
+            date_of_birth=date_of_birth, gurdian_name=gurdian, contact=phone, whatsapp=whatsapp,
+            email=email, address=address, school_college_name=instu, appearing_passed_12=status,
+            board_name=board, appeared_wbjee_jeeMain=entrance, created_at=datetime.datetime.now())
+            student.save()
 
-                    field_name = 'exam_duration'
-                    obj = DetailsExam.objects.first()
-                    field_object = DetailsExam._meta.get_field(field_name)
-                    exam_duration = getattr(obj, field_object.attname)
+            subject = "Thank You for registration"
+            body = f"Your user name is {userid} and your password is {password}"
+            messages.success(request, 'Your Registration is completed. Check Your Email To get User ID and Password')
 
+            mail_sender = "utsavpokemon9000chatterjee"
+            send_mail(subject, body, mail_sender, [email], fail_silently=False)
 
-                    field_name = 'total_questions'
-                    obj = DetailsExam.objects.first()
-                    field_object = DetailsExam._meta.get_field(field_name)
-                    total_questions = getattr(obj, field_object.attname)
+            user = User.objects.create_user(userid, email, password)
+            user.first_name = fname
+            user.last_name = lname
+            user.email = email
+            user.save()
 
+    return render(request, 'candidate/register.html', {'dictt': dictt})
 
-                    dictt={
-                        'exam_date':eliminate( date),
-                        'exam_month':eliminate( month),
-                        'exam_start_time':eliminate (time),
-                        'exam_duration':eliminate(exam_duration),
-                        'number_of_questions':eliminate(total_questions),
-                        'is_exam':is_exam(date,month,time),
-                        'timer':updateTime()
-                        }
-                    return render(request,'exam.html',{'dictt':dictt})
-                else:
-                
-                    return render(request,'exam_cred.html')
-            else:
-                messages.warning(request,'Your Exam is over')
-                return render(request,'exam_cred.html')
-
-       elif request.method=="POST":
-            
-            
-            if ( request.headers['Content-Length']=='14' ):
-                
-               
-                body_unicode = request.body.decode('utf-8')
-                body = json.loads(body_unicode)
-                m = (body['msg'])
-                print(m)
-                Student.objects.filter(user_id=pp).update(exam_status=m)
-                total=0
-                
-                rr_obj=ChoosedOptions.objects.filter(userid=pp)
-                
-
-                qq_obj=Question.objects.all()
-                for i in rr_obj:
-                    for j in qq_obj:
-                        if(j.ques_no==int(i.questionNumber)):
-                            if(j.opt_ans==i.selectedOption):
-                                total=total+j.marks
-                                
-                            
-                yy=Result2(result=total,userid=pp)
-                yy.save()
-
-
-            elif ( request.headers['Content-Length']=='63' ):
-                
-                body_unicode = request.body.decode('utf-8')
-                body = json.loads(body_unicode)
-                times = (body['msg'])
-                
-                
-                Student.objects.filter(user_id=pp).update(last_seen=last_seen(times))
-                
-
-                
-               
-              
-                
-               
-               
-
-                
-                
-            else:
-                
-                body_unicode = request.body.decode('utf-8')
-                body = json.loads(body_unicode)
-                index1 =str( (body['index']))
-                option=(body['option'])
-                print(' index and option',index1, option)
-                
-                if(index1!='0'):
-
-                    r_object=(ChoosedOptions.objects.filter(userid=pp))
-                    if(r_object.exists()):
-                        obb=(r_object.filter(questionNumber=index1))
-                        if(obb.exists()):
-                            obb.update(selectedOption=option)
-                        
-                        else:
-                            ChoosedOptions.objects.create(author=request.user,userid=pp,questionNumber=index1,selectedOption=option)
-
-
-                    else:
-                    
-                        ChoosedOptions.objects.create(author=request.user,userid=pp,questionNumber=index1,selectedOption=option)
-                    
-
-               
-
-
-            
-            return render(request,'exam.html')
-      
-    
-    
-
-
-
-
-
-
-def loginn(request):
-   
-    if request.method=="GET":
-        return render(request,'login.html')
-   
-    elif request.method=="POST":
-        username=request.POST.get('username')
-        password=request.POST.get('password')
-        print(username,password)
-        user=authenticate(request,username=username,password=password)
-        if user is not None:
-
-            login(request,user)
-
+def login_user(request):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
             return redirect('home')
-        
-        
-    messages.warning(request,'Wrong Username or Password')   
-    return render(request,'login.html')   
 
-def logoutt(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+
+        else:
+            messages.warning(request, 'Wrong Username or Password')
+
+    return render(request, 'candidate/login.html')
+
+def logout_user(request):
     logout(request)
     return redirect('home')
 
-def Credentials(request):
-    if request.method=='GET':
-        is_exam_running(request.user.username)
-        
-        return render(request,'exam_cred.html')
-      
-       
+@csrf_exempt
+@login_required(login_url='login')
+def exam_authentication(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
 
-    elif request.method=='POST':
-        username=request.POST.get('username')
-        password=request.POST.get('password')
-        
-        user=authenticate(request,username=username,password=password)
-        if username == request.user.username and user is not None:
+        if user is not None and username == request.user.username:
             encoded_username = hashed2(username).decode('UTF-8')
-            return redirect(f'exam/{encoded_username}/')
+            return redirect(f'auth-user/exam/{encoded_username}')
         else:
-            messages.warning(request,'Wrong Username or Password')  
-            return render(request,'exam_cred.html')   
-        
+            messages.warning(request, 'Wrong Username or Password')
 
+    return render(request, 'candidate/exam_auth.html')
 
-@api_view(['POST','GET'])
-def api(request,ps):
-    dd=Student.objects.filter(user_id=ps)
-    if request.method=='POST':
-        index=str(request.data['index'])
-        print(index)
-        obb=ChoosedOptions.objects.filter(userid=ps)
-        
-       
-        if(obb.exists()):
-            selected=obb.filter(questionNumber=index).values('selectedOption')
-            r_obj=Question.objects.get(pk=int(index))
-            if(selected.exists()):
-               
+@api_view(['GET', 'POST'])
+def api(request, userid):
+    if not request.user.is_superuser:
+        return redirect('home')
 
-        
-        
-    
-        
-        
-                a={"id":index,"question":r_obj.ques,"opt1":r_obj.opt1,"opt2":r_obj.opt2,"opt3":r_obj.opt3,"opt4":r_obj.opt4,"selectedOption":selected[0]['selectedOption']}
-                data=json.dumps(a)
+    if request.method == 'POST':
+        select = "None"
+        index = str(request.data['index'])
+        ob = Choose.objects.filter(user=userid)
 
-    
-                return Response(data)
+        if ob.exists():
+            selected = ob.filter(question_number=index).values('selected_option')
+
+            if selected.exists():
+                select = selected[0]['selected_option']
+
+        ques_ob = Question.objects.get(pk=int(index))
+        question = {
+            "id": index,
+            "ques": ques_ob.ques,
+            "opt1": ques_ob.opt1,
+            "opt2": ques_ob.opt2,
+            "opt3": ques_ob.opt3,
+            "opt4": ques_ob.opt4,
+            "selected_option": select
+        }
+
+        data = json.dumps(question)
+        return Response(data)
+
+    return Response({"status": 200})
+
+def exam(request, userid):
+    user = request.user
+
+    if request.method == 'GET':
+        if is_exam_running(Detail):
+            userid = bytes(userid, 'UTF-8')
+
+            if Student.objects.filter(user_id=user).values('exam_status')[0]['exam_status'] == True:
+                messages.warning(request, f'{user.first_name} {user.last_name} You have already give your examination')
+                return render(request, 'candidate/exam_auth.html')
+
+            if verified(user.username, userid):
+                field_name = 'total_questions'
+                obj = Detail.objects.first()
+                field_object = Detail._meta.get_field(field_name)
+                total_questions = getattr(obj, field_object.attname)
+
+                date_ob = Detail.objects.first()
+                start_time = str(date_ob.exam_start_time)
+                start_date = date_ob.exam_start_date.strftime("%B %d, %Y")
+                rem_days = str((date_ob.exam_start_date - datetime.date.today()).days) + " days"
+
+                dictt = {
+                    'start_date': start_date,
+                    'start_time': start_time,
+                    'is_exam': is_exam(Detail),
+                    'remaining_days': rem_days,
+                    'exam_duration': timer(Detail),
+                    'number_of_questions': eliminate(total_questions)
+                }
+                return render(request, 'candidate/exam.html', {'dictt': dictt})
+
             else:
-                r_obj=Question.objects.get(pk=int(index))
-                a={"id":index,"question":r_obj.ques,"opt1":r_obj.opt1,"opt2":r_obj.opt2,"opt3":r_obj.opt3,"opt4":r_obj.opt4,"selectedOption":'None'}
-                data=json.dumps(a)
-                return Response(data)
+                return render(request, 'candidate/exam_auth.html')
+
+        elif Student.objects.filter(user_id=user).values('exam_status')[0]['exam_status'] == True:
+                messages.warning(request, f'{user.first_name} {user.last_name} You have already give your examination')
+                return render(request, 'candidate/exam_auth.html')
 
         else:
-            r_obj=Question.objects.get(pk=int(index))
-            a={"id":index,"question":r_obj.ques,"opt1":r_obj.opt1,"opt2":r_obj.opt2,"opt3":r_obj.opt3,"opt4":r_obj.opt4,"selectedOption":'None'}
-            data=json.dumps(a)
+            messages.warning(request, f'{user.first_name} {user.last_name} Time of your examination is over (not attended)')
+            return render(request, 'candidate/exam_auth.html')
 
-    
-            return Response(data)
+    elif request.method == 'POST':
+        if request.headers['Content-Length'] == '14':
+            body_unicode = request.body.decode('utf-8')
+            body = json.loads(body_unicode)
+            exam_stat = (body['msg'])
+            Student.objects.filter(user_id=userid).update(exam_status=exam_stat)
 
-    return Response({'status':200})
+            ques_ob = Question.objects.all()
+            ans_ob = Choose.objects.filter(user=userid)
 
+            total_marks = 0
+            for i in ans_ob:
+                for j in ques_ob:
+                    if j.ques_no == int(i.question_number):
+                        if(j.opt_ans == i.selected_option):
+                            total_marks += j.pos_marks
 
+            result_ob = Result(user=userid, author=user, total_marks=total_marks)
+            print("Result accepted")
+            result_ob.save()
 
-def greet(request,st):
-    if request.method=='GET':
-        if request.user.is_authenticated:
+        elif request.headers['Content-Length'] == '63':
+            body_unicode = request.body.decode('utf-8')
+            body = json.loads(body_unicode)
+            Student.objects.filter(user_id=userid).update(last_seen=last_seen())
 
-            return render(request,'ExamGreet.html')
-    elif request.method=='POST':
-        print(st)
-                       
+        else:
+            body_unicode = request.body.decode('utf-8')
+            body = json.loads(body_unicode)
+            index = str(body['index'])
+            option = str(body['option'])
+            print("Pair:", index, '-', option)
+
+            if index != '0':
+                opt_ob = Choose.objects.filter(user=userid)
+
+                if opt_ob.exists():
+                    ob = opt_ob.filter(question_number=index)
+
+                    if ob.exists():
+                        ob.update(selected_option=option)
+                    else:
+                        Choose.objects.create(author=request.user, user=userid, question_number=index, selected_option=option)
+
+                else:
+                    Choose.objects.create(author=request.user, user=userid, question_number=index, selected_option=option)
+
+    return render(request, 'candidate/exam.html')
+
+def exam_end(request, user):
+    if request.method == 'POST':
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
-        m = (body['option'])
-        Student.objects.filter(user_id=st).update(student_feedback=m)
-        return render(request,'home.html')
+        feedback = (body['option'])
+        Student.objects.filter(user_id=user).update(student_feedback=feedback)
+        return redirect('home')
 
+    if user != request.user.username:
+        return redirect('home')
 
+    if Student._meta.get_field('student_feedback').value_from_object(Student.objects.get(user_id=user)) is not None:
+        return redirect('home')
 
+    user_ob = Student.objects.get(user_id=user)
+    exam_status = Student._meta.get_field('exam_status').value_from_object(user_ob)
 
-#########################################################
-#Teacher################################################
+    if exam_status == False: exam_is_on = True
+    else: exam_is_on = False
 
-def students(request):
-    if request.user.is_superuser:
-        return render(request,'students.html')
+    if not exam_is_on:
+        return render(request, 'candidate/exam_end.html')
+
     else:
-        messages.warning(request,'You are not admin') 
-        return render(request,'login.html')
-
-
-
-@api_view(['GET','POST'])
-def student(request):
-    if request.method=='GET':
-        st=[]
-        t=[]
-        c=0
-        superuser=str(User.objects.filter(is_superuser=True)[0])
-        for i in User.objects.all(): 
-            if(i.username!=superuser ):     
-                st.append(i.username)
-
-        for i in st:
-            c+=1
-            obb=Student.objects.filter(user_id=i)
-            res=Result2.objects.filter(userid=i)
-            if(res.exists()):
-                results=res.values('result')
-                y={
-                "id":c,
-                "userID":i,
-                "first_name":obb.values('first_name'),
-                "last_name":obb.values('last_name'),
-                "date_of_birth":obb.values('date_of_birth'),
-                "gurdian_name":obb.values('gurdian_name'),
-                "contact":obb.values('contact'),
-                "whatsapp":obb.values('whatsapp'),
-                "email":obb.values('email'),
-                "address":obb.values('address'),
-                "institute_name":obb.values('school_college_name'),
-                "appearing_passed_12":obb.values('appearing_passed_12'),
-                "board_name":obb.values('board_name'),
-                "appeared_wbjee_jeeMain":obb.values('appeared_wbjee_jeeMain'),
-                "result":results,
-            }
-            else:
-                y={
-                "id":c,
-                "userID":i,
-                "first_name":obb.values('first_name'),
-                "last_name":obb.values('last_name'),
-                "date_of_birth":obb.values('date_of_birth'),
-                "gurdian_name":obb.values('gurdian_name'),
-                "contact":obb.values('contact'),
-                "whatsapp":obb.values('whatsapp'),
-                "email":obb.values('email'),
-                "address":obb.values('address'),
-                "institute_name":obb.values('school_college_name'),
-                "appearing_passed_12":obb.values('appearing_passed_12'),
-                "board_name":obb.values('board_name'),
-                "appeared_wbjee_jeeMain":obb.values('appeared_wbjee_jeeMain'),
-                "result":[ {
-                'result':'None'
-                }],
-            }
-    
-        
-            t.append(y)
-        
-        return Response(t)
-    elif request.method=='POST':
-
-    
-
-
-        return Response({'status':200})
-
-
-def SetExamDetails(request):
-    if request.method=='POST':
-        Edate=request.POST.get('ExamDate')
-        Emonth=request.POST.get('ExamMonth')
-        EstartTime=request.POST.get('ExamStartTime')
-        EstartMin=request.POST.get('ExamStartMin')
-        Edur=request.POST.get('ExamDurationTime')
-        TotalQues=request.POST.get('TotalQues')
-        RegLastDate=request.POST.get('RegLastDate')
-        RegLastMonth=request.POST.get('RegLastMonth')
-        DetailsExam.objects.update(date=Edate,month=Emonth,start_time=EstartTime,start_min=EstartMin,exam_duration=Edur,total_questions=TotalQues,registration_last_date=RegLastDate,registration_last_month=RegLastMonth)
-        messages.success(request,'Successfully Updated')
-    return render(request,'SetExam.html')
-
-
-def SetQuestion(request):
-    if request.method=='POST':
-        Qnum=request.POST.get('QuesNumber')
-        Qbody=request.POST.get('QuesBody')
-        opa=request.POST.get('opa')
-        opb=request.POST.get('opb')
-        opc=request.POST.get('opc')
-        opd=request.POST.get('opd')
-        currect=request.POST.get('currect')
-        marks=request.POST.get('marks')
-        y=Question(ques_no=eliminate(Qnum),ques=Qbody,opt1=opa,opt2=opb,opt3=opc,opt4=opd,opt_ans=currect.lower(),marks=eliminate(marks),neg_marks=0)
-        y.save()
-        messages.success(request,'Successfully Added')
-    dictt={
-            "total":Question.objects.count()
-        }
-    
-    return render(request,'SetQuestion.html',{'dictt': dictt})
-
-
+        return redirect('home')
