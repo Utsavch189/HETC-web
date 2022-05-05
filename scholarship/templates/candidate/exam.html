@@ -44,6 +44,7 @@
    <div class="container-fluid footer">
       <button class="btn btn-primary" onclick="prev()">Prev</button>
       <button class="btn btn-danger" onclick="mark()">Mark</button>
+      <button class="btn btn-success" onclick="unmark()">Unmark</button>
       <button class="btn btn-primary" onclick="next()">Next</button>
    </div>
 
@@ -73,10 +74,14 @@
             },
             body: JSON.stringify({ 'index': `${v}`, 'option': `${as}` }),
          })
+         let x = document.getElementById(`${v}`)
+
          if (as === 'a' || as === 'b' || as === 'c' || as === 'd') {
+            if(x.style.backgroundColor!='red'){
             let x = document.getElementById(`${v}`)
             x.style.backgroundColor = 'blue'
             x.style.color = 'white'
+            }
          }
       }
 
@@ -144,7 +149,7 @@
       function colo() {
          if (v > 0) {
             let x = document.getElementById(`${v}`)
-            if (x.style.backgroundColor != 'blue') {
+            if (x.style.backgroundColor != 'blue' && x.style.backgroundColor!='red') {
                x.style.backgroundColor = 'green'
                x.style.color = 'white'
             }
@@ -155,6 +160,7 @@
       document.addEventListener(next(), 'click');
       document.addEventListener(prev(), 'click');
       document.addEventListener(submit(), 'click');
+      document.addEventListener(unmark(), 'click');
 
       function submit() {
          let rtr = confirm("Are you sure to submit your whole exam paper?");
@@ -275,6 +281,14 @@
             x.style.color = 'white'
          }
       }
+      function unmark(){
+         let x=document.getElementById(`${v}`)
+         if(x.style.backgroundColor==='red'){
+          
+             x.style.backgroundColor='green'
+        
+         }
+     }
 
       function clock() {
          var c = {{ dictt.exam_duration }};
