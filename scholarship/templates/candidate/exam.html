@@ -58,7 +58,6 @@
       let j = 1;
       let v = 0;
       let t = 0;
-      let is_select=0
       let bt = document.getElementById('submitButton');
       bt.style.display = 'None'
       let ques = ''
@@ -145,11 +144,9 @@
                      document.getElementById('input4').innerText = ' ' + o.opt4
                      if (o.selected_option !== 'None') {
                         document.getElementById(`${o.selected_option}`).checked = true;
-                        is_select=0;
                      }
                      else {
-                        document.querySelector('input[type=radio][name=aa]:checked').checked = false
-                        is_select=1;
+                        document.querySelector('input[type=radio][name=aa]:checked').checked = false;
                      }
                   }).catch((error) => {
                      console.error('Error:', error);
@@ -197,8 +194,8 @@
       function next() {
          if (v === 0 || v > 0) {
             v += 1;
+            let x = document.getElementById(`${v}`);
 
-            let x = document.getElementById(`${v}`)
             if (x != null) {
                let mark = document.getElementById('mark')
                let unmark = document.getElementById('unmark')
@@ -213,7 +210,6 @@
                }
             }
 
-       
             if (v > i) {
                if (confirm("If you want to submit your question paper then press ok.")) {
                   fetch(`${base_url}/exam-credential/auth-user/exam/{{ request.user }}/`, {
@@ -230,6 +226,7 @@
                v = i;
                e.preventDefault();
             }
+
             if (v === i) {
                let bt = document.getElementById('submitButton')
                bt.style.display = 'block'
@@ -359,7 +356,6 @@
                      x.style.backgroundColor='green'
                   }
                })
-            
          }
       }
 
@@ -388,7 +384,7 @@
             }
 
             if (c == 0) {
-               alert("Your Exam is Over!");
+               alert("Time of your examination is over.");
                clearInterval(myTimer);
                fetch(`${base_url}/exam-credential/auth-user/exam/{{ request.user }}/`, {
                   method: 'POST',
