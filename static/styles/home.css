@@ -57,3 +57,11 @@ h1 {
     background-repeat: no-repeat;
     background-size: cover;
 }
+
+.contact {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.87)), url('../pics/hetc.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 500px;
+}

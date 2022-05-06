@@ -23,7 +23,7 @@ class Student(models.Model):
     address = models.CharField(max_length=100, blank=True, null=True)
     school_college_name = models.CharField(max_length=50, blank=True, null=True)
     appearing_passed_12 = models.CharField(max_length=50, blank=True, null=True)
-    board_name = models.CharField(max_length=10, blank=True, null=True)
+    board_name = models.CharField(max_length=50, blank=True, null=True)
     appeared_wbjee_jeeMain = models.CharField(null=True, blank=True, max_length=10)
     created_at = models.DateField()
     last_seen = models.CharField(max_length=20, blank=True, null=True)
