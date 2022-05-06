@@ -44,8 +44,8 @@
    <div class="container-fluid footer">
       <button class="btn btn-primary" onclick="prev()">Prev</button>
       <button class="btn btn-danger" id="mark" onclick="mark()">Mark</button>
-      <button class="btn btn-success" id="unmark" onclick="unmark()">Unmark</button>
-      <button class="btn btn-primary"  onclick="next()">Next</button>
+      <button class="btn btn-danger" id="unmark" onclick="unmark()">Unmark</button>
+      <button class="btn btn-primary" onclick="next()">Next</button>
    </div>
 
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
@@ -61,7 +61,6 @@
       let bt = document.getElementById('submitButton');
       bt.style.display = 'None'
       let ques = ''
-      console.log(v)
 
       document.mainform.onclick = function () {
          let as = document.mainform.aa.value;
@@ -74,13 +73,14 @@
             },
             body: JSON.stringify({ 'index': `${v}`, 'option': `${as}` }),
          })
-         let x = document.getElementById(`${v}`)
+
+         let x = document.getElementById(`${v}`);
 
          if (as === 'a' || as === 'b' || as === 'c' || as === 'd') {
-            if(x.style.backgroundColor!='red'){
-            let x = document.getElementById(`${v}`)
-            x.style.backgroundColor = 'blue'
-            x.style.color = 'white'
+            if (x.style.backgroundColor != 'red') {
+               let x = document.getElementById(`${v}`)
+               x.style.backgroundColor = 'blue'
+               x.style.color = 'white'
             }
          }
       }
@@ -112,15 +112,16 @@
                }
 
                let x = document.getElementById(`${v}`)
-               let mark=document.getElementById('mark')
-               let unmark=document.getElementById('unmark')
-               if(x.style.backgroundColor==='red'){
-                  mark.style.display='none'
-                  unmark.style.display='block'
+               let mark = document.getElementById('mark')
+               let unmark = document.getElementById('unmark')
+
+               if (x.style.backgroundColor === 'red') {
+                  mark.style.display = 'none'
+                  unmark.style.display = 'block'
                }
-               else{
-                  mark.style.display='block'
-                  unmark.style.display='none'
+               else {
+                  mark.style.display = 'block'
+                  unmark.style.display = 'none'
                }
 
                fetch(`${base_url}/api/{{ request.user }}/`, {
@@ -142,7 +143,6 @@
                      document.getElementById('input3').innerText = ' ' + o.opt3
                      document.getElementById('input4').innerText = ' ' + o.opt4
                      if (o.selected_option !== 'None') {
-                        console.log("JHII")
                         document.getElementById(`${o.selected_option}`).checked = true;
                      }
                      else {
@@ -162,7 +162,7 @@
       function colo() {
          if (v > 0) {
             let x = document.getElementById(`${v}`)
-            if (x.style.backgroundColor != 'blue' && x.style.backgroundColor!='red') {
+            if (x.style.backgroundColor != 'blue' && x.style.backgroundColor != 'red') {
                x.style.backgroundColor = 'green'
                x.style.color = 'white'
             }
@@ -173,7 +173,6 @@
       document.addEventListener(next(), 'click');
       document.addEventListener(prev(), 'click');
       document.addEventListener(submit(), 'click');
-      document.addEventListener(unmark(), 'click');
 
       function submit() {
          let rtr = confirm("Are you sure to submit your whole exam paper?");
@@ -197,15 +196,18 @@
             v += 1;
 
             let x = document.getElementById(`${v}`)
-            let mark=document.getElementById('mark')
-            let unmark=document.getElementById('unmark')
-            if(x.style.backgroundColor==='red'){
-               mark.style.display='none'
-               unmark.style.display='block'
-            }
-            else{
-               mark.style.display='block'
-               unmark.style.display='none'
+            if (x != null) {
+               let mark = document.getElementById('mark')
+               let unmark = document.getElementById('unmark')
+
+               if (x.style.backgroundColor === 'red') {
+                  mark.style.display = 'none'
+                  unmark.style.display = 'block'
+               }
+               else {
+                  mark.style.display = 'block'
+                  unmark.style.display = 'none'
+               }
             }
 
             if (v === i) {
@@ -217,8 +219,20 @@
                bt.style.display = 'None'
             }
             if (v > i) {
-               alert('No questions left, You can submit')
+               if (confirm("If you want to submit your question paper then press confirm.")) {
+                  fetch(`${base_url}/exam-credential/auth-user/exam/{{ request.user }}/`, {
+                     method: 'POST',
+                     headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                     },
+                     body: JSON.stringify({ 'msg': 'True' }),
+                  })
+                  location.replace(`${base_url}/exam-status/{{ request.user }}`);
+               }
                v = i;
+               e.preventDefault();
             }
          }
 
@@ -237,17 +251,15 @@
             .then(r => {
                let o = JSON.parse(r)
                console.log(o)
-               document.getElementById('ques').innerText = o.ques
-               document.getElementById('input1').innerText = o.opt1
-               document.getElementById('input2').innerText = o.opt2
-               document.getElementById('input3').innerText = o.opt3
-               document.getElementById('input4').innerText = o.opt4
+               document.getElementById('ques').innerText = ' ' + o.ques
+               document.getElementById('input1').innerText = ' ' + o.opt1
+               document.getElementById('input2').innerText = ' ' + o.opt2
+               document.getElementById('input3').innerText = ' ' + o.opt3
+               document.getElementById('input4').innerText = ' ' + o.opt4
                if (o.selected_option !== 'None') {
-                  console.log('u')
                   document.getElementById(`${o.selected_option}`).checked = true;
                }
                else {
-                  console.log('ut')
                   document.querySelector('input[type=radio][name=aa]:checked').checked = false
                }
             }).catch((error) => {
@@ -260,17 +272,17 @@
          if (v > 1 && v <= i) {
             v -= 1;
 
-
             let x = document.getElementById(`${v}`)
-            let mark=document.getElementById('mark')
-            let unmark=document.getElementById('unmark')
-            if(x.style.backgroundColor==='red'){
-               mark.style.display='none'
-               unmark.style.display='block'
+            let mark = document.getElementById('mark')
+            let unmark = document.getElementById('unmark')
+
+            if (x.style.backgroundColor === 'red') {
+               mark.style.display = 'none'
+               unmark.style.display = 'block'
             }
-            else{
-               mark.style.display='block'
-               unmark.style.display='none'
+            else {
+               mark.style.display = 'block'
+               unmark.style.display = 'none'
             }
 
             if (v === i) {
@@ -296,16 +308,14 @@
                let o = JSON.parse(r)
 
                document.getElementById('ques').innerText = o.ques
-               document.getElementById('input1').innerText = o.opt1
-               document.getElementById('input2').innerText = o.opt2
-               document.getElementById('input3').innerText = o.opt3
-               document.getElementById('input4').innerText = o.opt4
+               document.getElementById('input1').innerText = ' ' + o.opt1
+               document.getElementById('input2').innerText = ' ' + o.opt2
+               document.getElementById('input3').innerText = ' ' + o.opt3
+               document.getElementById('input4').innerText = ' ' + o.opt4
                if (o.selected_option !== 'None') {
-                  console.log('u')
                   document.getElementById(`${o.selected_option}`).checked = true;
                }
                else {
-                  console.log('ut')
                   document.querySelector('input[type=radio][name=aa]:checked').checked = false
                }
             }).catch((error) => {
@@ -321,14 +331,13 @@
             x.style.color = 'white'
          }
       }
-      function unmark(){
-         let x=document.getElementById(`${v}`)
-         if(x.style.backgroundColor==='red'){
-          
-             x.style.backgroundColor='green'
-        
+
+      function unmark() {
+         let x = document.getElementById(`${v}`);
+         if (x.style.backgroundColor === 'red') {
+            x.style.backgroundColor = 'green';
          }
-     }
+      }
 
       function clock() {
          var c = {{ dictt.exam_duration }};

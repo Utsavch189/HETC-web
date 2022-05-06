@@ -9,8 +9,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from scholarship.helper import eliminate, handle_upload_file
 
-# Create your views here.
-
 def set_question(request):
     if not request.user.is_superuser:
         return redirect('home')

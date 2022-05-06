@@ -135,8 +135,9 @@ def exam_authentication(request):
 
 @api_view(['GET', 'POST'])
 def api(request, userid):
-    if not request.user.is_superuser:
-        return redirect('home')
+    if request.method == 'GET':
+        if not request.user.is_superuser:
+            return redirect('home')
 
     if request.method == 'POST':
         select = "None"
