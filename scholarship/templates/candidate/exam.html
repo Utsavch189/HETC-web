@@ -43,9 +43,9 @@
 
    <div class="container-fluid footer">
       <button class="btn btn-primary" onclick="prev()">Prev</button>
-      <button class="btn btn-danger" onclick="mark()">Mark</button>
-      <button class="btn btn-success" onclick="unmark()">Unmark</button>
-      <button class="btn btn-primary" onclick="next()">Next</button>
+      <button class="btn btn-danger" id="mark" onclick="mark()">Mark</button>
+      <button class="btn btn-success" id="unmark" onclick="unmark()">Unmark</button>
+      <button class="btn btn-primary"  onclick="next()">Next</button>
    </div>
 
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
@@ -110,6 +110,19 @@
                   let bt = document.getElementById('submitButton')
                   bt.style.display = 'None'
                }
+
+               let x = document.getElementById(`${v}`)
+               let mark=document.getElementById('mark')
+               let unmark=document.getElementById('unmark')
+               if(x.style.backgroundColor==='red'){
+                  mark.style.display='none'
+                  unmark.style.display='block'
+               }
+               else{
+                  mark.style.display='block'
+                  unmark.style.display='none'
+               }
+
                fetch(`${base_url}/api/{{ request.user }}/`, {
                   method: 'POST',
                   headers: {
@@ -182,6 +195,19 @@
       function next() {
          if (v === 0 || v > 0) {
             v += 1;
+
+            let x = document.getElementById(`${v}`)
+            let mark=document.getElementById('mark')
+            let unmark=document.getElementById('unmark')
+            if(x.style.backgroundColor==='red'){
+               mark.style.display='none'
+               unmark.style.display='block'
+            }
+            else{
+               mark.style.display='block'
+               unmark.style.display='none'
+            }
+
             if (v === i) {
                let bt = document.getElementById('submitButton')
                bt.style.display = 'block'
@@ -233,6 +259,20 @@
       function prev() {
          if (v > 1 && v <= i) {
             v -= 1;
+
+
+            let x = document.getElementById(`${v}`)
+            let mark=document.getElementById('mark')
+            let unmark=document.getElementById('unmark')
+            if(x.style.backgroundColor==='red'){
+               mark.style.display='none'
+               unmark.style.display='block'
+            }
+            else{
+               mark.style.display='block'
+               unmark.style.display='none'
+            }
+
             if (v === i) {
                let bt = document.getElementById('submitButton')
                bt.style.display = 'block'
