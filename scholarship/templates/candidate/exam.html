@@ -58,6 +58,7 @@
       let j = 1;
       let v = 0;
       let t = 0;
+      let is_select=0
       let bt = document.getElementById('submitButton');
       bt.style.display = 'None'
       let ques = ''
@@ -144,9 +145,11 @@
                      document.getElementById('input4').innerText = ' ' + o.opt4
                      if (o.selected_option !== 'None') {
                         document.getElementById(`${o.selected_option}`).checked = true;
+                        is_select=0;
                      }
                      else {
                         document.querySelector('input[type=radio][name=aa]:checked').checked = false
+                        is_select=1;
                      }
                   }).catch((error) => {
                      console.error('Error:', error);
@@ -210,16 +213,9 @@
                }
             }
 
-            if (v === i) {
-               let bt = document.getElementById('submitButton')
-               bt.style.display = 'block'
-            }
-            else {
-               let bt = document.getElementById('submitButton')
-               bt.style.display = 'None'
-            }
+       
             if (v > i) {
-               if (confirm("If you want to submit your question paper then press confirm.")) {
+               if (confirm("If you want to submit your question paper then press ok.")) {
                   fetch(`${base_url}/exam-credential/auth-user/exam/{{ request.user }}/`, {
                      method: 'POST',
                      headers: {
@@ -233,6 +229,14 @@
                }
                v = i;
                e.preventDefault();
+            }
+            if (v === i) {
+               let bt = document.getElementById('submitButton')
+               bt.style.display = 'block'
+            }
+            else {
+               let bt = document.getElementById('submitButton')
+               bt.style.display = 'None'
             }
          }
 
@@ -335,7 +339,27 @@
       function unmark() {
          let x = document.getElementById(`${v}`);
          if (x.style.backgroundColor === 'red') {
-            x.style.backgroundColor = 'green';
+            fetch(`${base_url}/api/{{ request.user }}/`, {
+               method: 'POST',
+               headers: {
+                  "X-CSRFToken": '{{ csrf_token }}',
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+               },
+               body: JSON.stringify({ 'index': `${v}` }),
+            })
+               .then(r => r.json())
+               .then(r => {
+                  let o=JSON.parse(r);
+
+                  if (o.selected_option !== 'None') {
+                     x.style.backgroundColor='blue'
+                  }
+                  else {
+                     x.style.backgroundColor='green'
+                  }
+               })
+            
          }
       }
 

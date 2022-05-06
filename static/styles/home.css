@@ -1,8 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Alegreya:ital@1&family=Libre+Baskerville&family=Montserrat:ital,wght@1,300&family=Open+Sans:ital,wght@1,300&family=PT+Sans+Narrow&family=Playfair+Display:ital@0;1&family=Roboto+Condensed&family=Source+Serif+Pro:ital,wght@1,300&family=Zen+Antique+Soft&display=swap');
-
 .main {
     width: 100vw;
-    height: 100vh;
+    height: 94.19vh;
     background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.87)), url('../pics/hetc2.jpg');
     background-position: center;
     background-repeat: no-repeat;
@@ -22,7 +21,7 @@
     position: absolute;
     width: 94vw;
     height: 50vh;
-    margin-left: 50px;
+    margin-left: 33px;
     margin-top: 200px;
     color: white;
     display: flex;
@@ -40,11 +39,9 @@ h1 {
         margin-top: 190px;
         width: 80vw;
     }
-
     h1 {
         font-size: 32px;
     }
-
     h3,
     h5 {
         font-size: 18px;
