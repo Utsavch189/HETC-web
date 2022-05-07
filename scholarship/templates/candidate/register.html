@@ -25,8 +25,7 @@
         {% csrf_token %}
         <div class="mb-3">
             <label for="name" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="fname" name="fname" placeholder="First name"
-                required="required">
+            <input type="text" class="form-control" id="fname" name="fname" placeholder="First name" required="required">
         </div>
         <div class="mb-3">
             <label for="name" class="form-label">Last Name</label>
@@ -34,22 +33,21 @@
         </div>
         <div class="mb-3">
             <label for="name" class="form-label">Gurdian's Name</label>
-            <input type="text" class="form-control" id="gurdian" name="gurdian" placeholder="Gurdian's Name"
-                required="required">
+            <input type="text" class="form-control" id="gurdian" name="gurdian" placeholder="Gurdian's Name" required="required">
         </div>
         <div class="mb-3">
             <label for="name" class="form-label">Date Of Birth (DD-MM-YYYY)</label>
             <div class="row">
                 <div class="col">
-                    <input type="text" class="form-control" placeholder="Date (dd)" aria-label="Last name" id="date"
+                    <input type="number" class="form-control" placeholder="Date (dd)" aria-label="Last name" id="date"
                         name="date" required="required">
                 </div>
                 <div class="col">
-                    <input type="text" class="form-control" placeholder="Month (mm)" aria-label="Last name" id="month"
+                    <input type="number" class="form-control" placeholder="Month (mm)" aria-label="Last name" id="month"
                         name="month" required="required">
                 </div>
                 <div class="col">
-                    <input type="text" class="form-control" placeholder="Year (yyyy)" aria-label="First name" id="year"
+                    <input type="number" class="form-control" placeholder="Year (yyyy)" aria-label="First name" id="year"
                         name="year" required="required">
                 </div>
             </div>
@@ -58,13 +56,13 @@
             <label for="name" class="form-label">Phone Number</label>
             <div class="row">
                 <div class="col">
-                    <input type="text" id="phone" data-fv-numeric-message="Please enter valid phone numbers"
+                    <input type="number" id="phone" data-fv-numeric-message="Please enter valid phone numbers"
                         data-fv-phone-country11="IN" required="required"
                         data-fv-notempty-message="This field cannot be left blank." placeholder="Contact Number"
                         class="form-control" name="phone">
                 </div>
                 <div class="col">
-                    <input type="text" id="whatsapp" data-fv-numeric-message="Please enter valid phone numbers"
+                    <input type="number" id="whatsapp" data-fv-numeric-message="Please enter valid phone numbers"
                         data-fv-phone-country11="IN" required="required"
                         data-fv-notempty-message="This field cannot be left blank." placeholder="Whatsapp Number"
                         class="form-control" name="whatsapp">
@@ -96,21 +94,18 @@
             </select>
         </div>
         <div class="mb-3">
-            <div class="row">
-                <div class="col">
-                    <label for="name" class="form-label">Select Your Examination board</label>
-                    <select name="board" id="board">
-                        <option value="None">Choose</option>
-                        <option value="ISC">ISC</option>
-                        <option value="WBCHSE">WBCHSE</option>
-                        <option value="CBSE">CBSE</option>
-                    </select>
-                </div>
-                <div class="col">
-                    <label for="name" class="form-label">If Your Board Doesn't match with besides, Put here</label>
-                    <input type="text" name="board" placeholder="For Others" class="mx-2">
-                </div>
-            </div>
+			<label for="name" class="form-label">Select Your Examination Board</label>
+			<select name="board" id="board" onchange="changeFunc(value);">
+				<option value="None">Choose</option>
+				<option value="ISC">ICSE</option>
+				<option value="WBCHSE">WBCHSE</option>
+				<option value="CBSE">CBSE</option>
+				<option value="Other">Other</option>
+			</select>
+        </div>
+		<div id="hidecode" class="mb-3" style="display: none;">
+            <label for="name" class="form-label">Specify Your Examination Board</label>
+            <input type="text" class="form-control" id="board2" name="board2" placeholder="Board Name">
         </div>
         <div class="mb-3">
             <label for="name" class="form-label">Are you appearing / appeared in WBJEE / JEE MAINS</label>
@@ -126,6 +121,13 @@
 {% endif %}
 
 <script>
+	function changeFunc(value) {
+		if (value == "Other") {
+			document.getElementById("hidecode").style.display = "block";
+		} else {
+			document.getElementById("hidecode").style.display = "none";
+		}
+	}
     function checkEmail(inputText) {
         var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         if (inputText.value.match(mailformat)) {

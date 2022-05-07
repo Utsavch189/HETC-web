@@ -92,7 +92,11 @@ def time_ahead(Details):
 
 def record_is_duplicate(fname, lname, gurdian, email):
     if Student.objects.filter(gurdian_name=gurdian):
-        if Student.objects.filter(first_name=fname) and Student.objects.filter(last_name=lname):
+        student_ob = Student.objects.filter(gurdian_name=gurdian)
+        student_lname = student_ob.values('last_name').get()['last_name']
+        student_fname = student_ob.values('first_name').get()['first_name']
+
+        if student_fname == fname and student_lname == lname:
             return True
 
     if Student.objects.filter(email=email):

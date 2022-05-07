@@ -65,10 +65,13 @@ def register(request):
         else:
             instu = request.POST.get('inst')
             board = request.POST.get('board')
+            board2 = request.POST.get('board2')
             status = request.POST.get('status')
             entrance = request.POST.get('entrance')
             address = str(request.POST.get('address')).upper()
 
+            if board2 != '':
+                board = board2
             userid = user_id(fname)
             password = user_password(date, month, year)
             date_of_birth = password[0:2] + '/' + password[2:4] + '/' + password[4:10]
@@ -80,7 +83,19 @@ def register(request):
             student.save()
 
             subject = "Thank You for registration"
-            body = f"Your user name is {userid} and your password is {password}"
+            body = f'''
+            Hello!
+            You are successfully registered for HETC Scholarship Test 2022.\n
+            Here is the User ID and Password for the Examination:
+            User ID: {userid}
+            Password: {password}\n
+            Make sure you don't share this link publicly, because its unique for you!\n
+            Examination Date & Time: 29.05.2022 & 11:00pm\n
+            For more updates and information visit www.hetc.ac.in\n
+            Regards,
+            Admission Cell, HETC
+            Pipulpati, Hooghly
+            '''
             messages.success(request, 'Your Registration is completed. Check Your Email To get User ID and Password')
 
             mail_sender = "utsavpokemon9000chatterjee"
@@ -153,7 +168,7 @@ def api(request, userid):
         ques_ob = Question.objects.get(pk=int(index))
         question = {
             "id": index,
-            "ques": ques_ob.ques,
+            "ques": ques_ob.ques + f' (marks: {ques_ob.pos_marks})',
             "opt1": ques_ob.opt1,
             "opt2": ques_ob.opt2,
             "opt3": ques_ob.opt3,
