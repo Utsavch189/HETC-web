@@ -36,7 +36,7 @@ class Student(models.Model):
 
 class Question(models.Model):
     ques_no = models.IntegerField(primary_key=True)
-    ques = models.CharField(max_length=1000)
+    ques = models.TextField()
     opt1 = models.CharField(max_length=1000)
     opt2 = models.CharField(max_length=1000)
     opt3 = models.CharField(max_length=1000)

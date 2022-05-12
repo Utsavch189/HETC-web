@@ -98,7 +98,7 @@ def register(request):
             '''
             messages.success(request, 'Your Registration is completed. Check Your Email To get User ID and Password')
 
-            mail_sender = "utsavpokemon9000chatterjee"
+            mail_sender = "supratimm531@gmail.com"
             send_mail(subject, body, mail_sender, [email], fail_silently=False)
 
             user = User.objects.create_user(userid, email, password)
@@ -241,9 +241,13 @@ def exam(request, userid):
                         if(j.opt_ans == i.selected_option):
                             total_marks += j.pos_marks
 
-            result_ob = Result(user=userid, author=user, total_marks=total_marks)
-            print("Result accepted")
-            result_ob.save()
+            if Result.objects.filter(user=userid).exists():
+                Result.objects.filter(user=userid).update(total_marks=total_marks)
+
+            else:
+                result_ob = Result(user=userid, author=user, total_marks=total_marks)
+                print("Result accepted")
+                result_ob.save()
 
         elif request.headers['Content-Length'] == '63':
             body_unicode = request.body.decode('utf-8')
