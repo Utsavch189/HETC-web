@@ -140,11 +140,11 @@
                   .then(r => {
                      let o = JSON.parse(r)
                      console.log(o.selected_option)
-                     document.getElementById('ques').innerText = o.ques
-                     document.getElementById('input1').innerText = ' ' + o.opt1
-                     document.getElementById('input2').innerText = ' ' + o.opt2
-                     document.getElementById('input3').innerText = ' ' + o.opt3
-                     document.getElementById('input4').innerText = ' ' + o.opt4
+                     document.getElementById('ques').innerHTML = o.ques
+                     document.getElementById('input1').innerHTML = ' ' + o.opt1
+                     document.getElementById('input2').innerHTML = ' ' + o.opt2
+                     document.getElementById('input3').innerHTML = ' ' + o.opt3
+                     document.getElementById('input4').innerHTML = ' ' + o.opt4
                      if (o.selected_option !== 'None') {
                         document.getElementById(`${o.selected_option}`).checked = true;
                      }
@@ -257,11 +257,11 @@
             .then(r => {
                let o = JSON.parse(r)
                console.log(o)
-               document.getElementById('ques').innerText = ' ' + o.ques
-               document.getElementById('input1').innerText = ' ' + o.opt1
-               document.getElementById('input2').innerText = ' ' + o.opt2
-               document.getElementById('input3').innerText = ' ' + o.opt3
-               document.getElementById('input4').innerText = ' ' + o.opt4
+               document.getElementById('ques').innerHTML = ' ' + o.ques
+               document.getElementById('input1').innerHTML = ' ' + o.opt1
+               document.getElementById('input2').innerHTML = ' ' + o.opt2
+               document.getElementById('input3').innerHTML = ' ' + o.opt3
+               document.getElementById('input4').innerHTML = ' ' + o.opt4
                if (o.selected_option !== 'None') {
                   document.getElementById(`${o.selected_option}`).checked = true;
                }
@@ -318,11 +318,11 @@
             .then(r => {
                let o = JSON.parse(r)
 
-               document.getElementById('ques').innerText = o.ques
-               document.getElementById('input1').innerText = ' ' + o.opt1
-               document.getElementById('input2').innerText = ' ' + o.opt2
-               document.getElementById('input3').innerText = ' ' + o.opt3
-               document.getElementById('input4').innerText = ' ' + o.opt4
+               document.getElementById('ques').innerHTML = o.ques
+               document.getElementById('input1').innerHTML = ' ' + o.opt1
+               document.getElementById('input2').innerHTML = ' ' + o.opt2
+               document.getElementById('input3').innerHTML = ' ' + o.opt3
+               document.getElementById('input4').innerHTML = ' ' + o.opt4
                if (o.selected_option !== 'None') {
                   document.getElementById(`${o.selected_option}`).checked = true;
                }

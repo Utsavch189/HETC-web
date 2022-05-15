@@ -44,9 +44,12 @@ class Question(models.Model):
     opt_ans = models.CharField(max_length=10)
     neg_marks = models.IntegerField(default=0)
     pos_marks = models.PositiveIntegerField(default=0)
+    ques_type = models.CharField(null=True, blank=True, max_length=1000)
+    image_name = models.CharField(null=True, blank=True, max_length=1000)
 
     def __str__(self):
-        return f"{self.ques_no}-" + str(self.ques).replace(' ', '_')
+        if self.ques == '': return f"{self.ques_no}-" + str(self.image_name)
+        else: return f"{self.ques_no}-" + str(self.ques).replace(' ', '_')
 
 
 class Result(models.Model):

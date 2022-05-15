@@ -7,7 +7,7 @@ from django.shortcuts import redirect, render
 from rest_framework.decorators import api_view
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from scholarship.helper import eliminate, handle_upload_file
+from scholarship.helper import eliminate, handle_upload_file, handle_image_question
 
 def set_question(request):
     if not request.user.is_superuser:
@@ -24,30 +24,51 @@ def set_question(request):
         except:
             pass
 
-        ques_no = eliminate(request.POST.get('quesno'))
+        # ques_no = eliminate(request.POST.get('quesno'))
         ques = request.POST.get('ques')
         opta = request.POST.get('opta')
         optb = request.POST.get('optb')
         optc = request.POST.get('optc')
         optd = request.POST.get('optd')
-        correct = str(request.POST.get('correct')).lower()
+        true = request.POST.get('true')
+        false = request.POST.get('false')
+        questype = request.POST.get('questype')
         marks = eliminate(request.POST.get('marks'))
+        correct = str(request.POST.get('correct')).lower()
+
+        if questype == "Boolean":
+            opta = "True"
+            optb = "False"
+            if true is not None: correct = 'a'
+            else: correct = 'b'
+
+        try:
+            image = str(request.FILES['image'])
+            handle_image_question(request.FILES['image'])
+
+        except:
+            image = "Unknown"
 
         # handle exception
-        if correct != 'a' and correct != 'b' and correct != 'c' and correct != 'd':
-            dictt = { "total": Question.objects.count() }
-            messages.error(request, f'Please set correct option either a, b, c or d')
-            return render(request, 'teacher/question.html', {'dictt': dictt})
+        try:
+            if opta != '' or optb != '' or optc != '' or optd != '':
+                if correct != 'a' and correct != 'b' and correct != 'c' and correct != 'd':
+                    dictt = { "total": Question.objects.count() }
+                    messages.error(request, f'Please set correct option either a, b, c or d')
+                    return render(request, 'teacher/question.html', {'dictt': dictt})
 
-        if Question.objects.filter(ques_no=ques_no):
-            dictt = { "total": Question.objects.count() }
-            messages.error(request, f'Question number {ques_no} is already used by another question')
-            return render(request, 'teacher/question.html', {'dictt': dictt})
+            # if Question.objects.filter(ques_no=ques_no):
+            #     dictt = { "total": Question.objects.count() }
+            #     messages.error(request, f'Question number {ques_no} is already used by another question')
+            #     return render(request, 'teacher/question.html', {'dictt': dictt})
 
-        if ques_no - field_value != 1:
-            dictt = { "total": Question.objects.count() }
-            messages.error(request, f'Please add question number {field_value + 1} (last added question no. {field_value})')
-            return render(request, 'teacher/question.html', {'dictt': dictt})
+            # if ques_no - field_value != 1:
+            #     dictt = { "total": Question.objects.count() }
+            #     messages.error(request, f'Please add question number {field_value + 1} (last added question no. {field_value})')
+            #     return render(request, 'teacher/question.html', {'dictt': dictt})
+
+        except:
+            pass
 
         if Question.objects.filter(ques=ques):
             if Question.objects.filter(opt1=opta) and Question.objects.filter(opt2=optb) and Question.objects.filter(opt3=optc) and Question.objects.filter(opt4=optd):
@@ -56,8 +77,8 @@ def set_question(request):
                 return render(request, 'teacher/question.html', {'dictt': dictt})
         # handle exception
 
-        question_ob = Question(ques_no=ques_no, ques=ques, opt1=opta, opt2=optb, opt3=optc, opt4=optd,
-        opt_ans=correct, pos_marks=marks, neg_marks=(marks * -1))
+        question_ob = Question(ques_no=int(Question.objects.count()) + 1, ques=ques, opt1=opta, opt2=optb, opt3=optc, opt4=optd,
+        opt_ans=correct, pos_marks=marks, neg_marks=(marks * -1), ques_type=questype, image_name=image)
         question_ob.save()
 
         messages.success(request, 'One question successfully added')
@@ -111,6 +132,7 @@ def set_schedule(request):
 
         try:
             handle_upload_file(request.FILES['pdf'])
+
         except:
             pass
 

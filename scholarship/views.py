@@ -173,7 +173,9 @@ def api(request, userid):
             "opt2": ques_ob.opt2,
             "opt3": ques_ob.opt3,
             "opt4": ques_ob.opt4,
-            "selected_option": select
+            "selected_option": select,
+            "ques_type": ques_ob.ques_type,
+            "image_name": ques_ob.image_name
         }
 
         data = json.dumps(question)
@@ -246,7 +248,7 @@ def exam(request, userid):
 
             else:
                 result_ob = Result(user=userid, author=user, total_marks=total_marks)
-                print("Result accepted")
+                print(f"Result calculated for user {user}")
                 result_ob.save()
 
         elif request.headers['Content-Length'] == '63':

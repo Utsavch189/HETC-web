@@ -10,8 +10,10 @@ from django.contrib.auth.models import User
 def user_id(username):
     while True:
         user_id = str(username).upper() + str(random.randint(1875, 9370))
+
         if User.objects.filter(username=user_id):
             continue
+
         else:
             return user_id
 
@@ -20,6 +22,7 @@ def user_password(date, month, year):
 
     if len(dd) == 1:
         dd = '0' + dd
+
     if len(mm) == 1:
         mm = '0' + mm
 
@@ -110,11 +113,6 @@ def timer(Details):
     curr_time = datetime.datetime.combine(datetime.date(1, 1, 1), datetime.datetime.now().time())
     return (end_time - curr_time).seconds
 
-def handle_upload_file(file):
-    with open(f'./media/{file.name}', "wb+") as fPtr:
-        for chunk in file.chunks():
-            fPtr.write(chunk)
-
 def add_days(days):
     tdelta = datetime.timedelta(days=days)
     return tdelta
@@ -136,7 +134,17 @@ def init_schedule(Details):
             print("supratim531: Exam Schedule Initialized\n")
         
         else:
-            print("supratim531: Exam Schedule already exists\n")
+            print("supratim531: Exam Schedule Already Exists\n")
     
     except:
         print("supratim531: Detail model does not exist\n")
+
+def handle_upload_file(file):
+    with open(f'./media/{file.name}', "wb+") as fPtr:
+        for chunk in file.chunks():
+            fPtr.write(chunk)
+
+def handle_image_question(file):
+    with open(f'./media/images/{file.name}', "wb+") as fPtr:
+        for chunk in file.chunks():
+            fPtr.write(chunk)
