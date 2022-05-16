@@ -63,9 +63,16 @@
       bt.style.display = 'None'
       let ques = ''
      let img= document.getElementById('img');
+     let one=document.getElementById('a')
+     let two=document.getElementById('b')
+     let three=document.getElementById('c')
+     let four=document.getElementById('d')
       if(v===0){
-         
-      
+
+         one.style.display='none'
+         two.style.display='none'
+         three.style.display='none'
+         four.style.display='none'
          img.style.display='none'
       
       }
@@ -110,7 +117,8 @@
 
             btn.onclick = function () {
                v = parseInt(btn.value)
-
+               one.style.display='inline'
+               two.style.display='inline'
                if (v === i) {
                   let bt = document.getElementById('nextsubmit')
                   bt.innerText = "Submit"
@@ -151,7 +159,23 @@
                         img.style.display='block'
                         let q=document.getElementById('ques')
                         q.style.display='none'
+                        let c=document.getElementById('c')
+                        let d=document.getElementById('d')
+                        c.style.display='inline'
+                        d.style.display='inline'
+
                         img.src=`${base_url}/media/images/${o.image_name}`
+                     }
+                     else if(o.ques_type==='Boolean'){
+                        let q=document.getElementById('ques')
+                        q.style.display='block'
+                        document.getElementById('ques').innerHTML = o.ques
+                        let c=document.getElementById('c')
+                        let d=document.getElementById('d')
+                        c.style.display='none'
+                        d.style.display='none'
+                        img.style.display='none'
+ 
                      }
                      else{
                      document.getElementById('ques').innerHTML = o.ques
@@ -159,6 +183,11 @@
                      let q=document.getElementById('ques')
                      q.style.display='block'
                      img.style.display='none'
+                     let c=document.getElementById('c')
+                     let d=document.getElementById('d')
+                     c.style.display='inline'
+                     d.style.display='inline'
+
                      }
                      document.getElementById('input1').innerHTML = ' ' + o.opt1
                      document.getElementById('input2').innerHTML = ' ' + o.opt2
@@ -262,7 +291,8 @@
          }
 
          colo();
-
+         one.style.display='inline'
+         two.style.display='inline'
          fetch(`${base_url}/api/{{ request.user }}/`, {
             method: 'POST',
             headers: {
@@ -279,14 +309,35 @@
                   img.style.display='block'
                   let q=document.getElementById('ques')
                   q.style.display='none'
+                  let c=document.getElementById('c')
+                  let d=document.getElementById('d')
+                  c.style.display='inline'
+                  d.style.display='inline'
+
                   img.src=`${base_url}/media/images/${o.image_name}`
                }
-               else{
-                  document.getElementById('ques').innerHTML = o.ques
-                  img.src=''
+               else if(o.ques_type==='Boolean'){
                   let q=document.getElementById('ques')
                   q.style.display='block'
+                  document.getElementById('ques').innerHTML = o.ques
+                  let c=document.getElementById('c')
+                  let d=document.getElementById('d')
+                  c.style.display='none'
+                  d.style.display='none'
                   img.style.display='none'
+
+               }
+               else{
+               document.getElementById('ques').innerHTML = o.ques
+               img.src=''
+               let q=document.getElementById('ques')
+               q.style.display='block'
+               img.style.display='none'
+               let c=document.getElementById('c')
+               let d=document.getElementById('d')
+               c.style.display='inline'
+               d.style.display='inline'
+
                }
                document.getElementById('input1').innerHTML = ' ' + o.opt1
                document.getElementById('input2').innerHTML = ' ' + o.opt2
@@ -334,7 +385,8 @@
          }
 
          colo();
-
+         one.style.display='inline'
+         two.style.display='inline'
          fetch(`${base_url}/api/{{ request.user }}/`, {
             method: 'POST',
             headers: {
@@ -352,14 +404,35 @@
                   img.style.display='block'
                   let q=document.getElementById('ques')
                   q.style.display='none'
+                  let c=document.getElementById('c')
+                  let d=document.getElementById('d')
+                  c.style.display='inline'
+                  d.style.display='inline'
+
                   img.src=`${base_url}/media/images/${o.image_name}`
                }
-               else{
-                  document.getElementById('ques').innerHTML = o.ques
-                  img.src=''
+               else if(o.ques_type==='Boolean'){
                   let q=document.getElementById('ques')
                   q.style.display='block'
+                  document.getElementById('ques').innerHTML = o.ques
+                  let c=document.getElementById('c')
+                  let d=document.getElementById('d')
+                  c.style.display='none'
+                  d.style.display='none'
                   img.style.display='none'
+
+               }
+               else{
+               document.getElementById('ques').innerHTML = o.ques
+               img.src=''
+               let q=document.getElementById('ques')
+               q.style.display='block'
+               img.style.display='none'
+               let c=document.getElementById('c')
+               let d=document.getElementById('d')
+               c.style.display='inline'
+               d.style.display='inline'
+
                }
                document.getElementById('input1').innerHTML = ' ' + o.opt1
                document.getElementById('input2').innerHTML = ' ' + o.opt2
