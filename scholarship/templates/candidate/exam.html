@@ -32,7 +32,7 @@
       <form id="mainform" name="mainform">
          <div class="container questions my-4" id="main">
             <span id="index" class="ques"></span>
-            <img src="" class="img" id="img">
+            <img src="" class="img" id="img"><span id="marks"></span>
             <span class="ques" id="ques"></span><br><br>
             <input type="radio" name="aa" id="a" value="a"><span id="input1"></span><br>
             <input type="radio" name="aa" id="b" value="b"><span id="input2"></span><br>
@@ -67,6 +67,7 @@
      let two=document.getElementById('b')
      let three=document.getElementById('c')
      let four=document.getElementById('d')
+     let marks=document.getElementById('marks')
       if(v===0){
 
          one.style.display='none'
@@ -74,7 +75,7 @@
          three.style.display='none'
          four.style.display='none'
          img.style.display='none'
-      
+         marks.style.display='none'
       }
      
       document.mainform.onclick = function () {
@@ -163,30 +164,34 @@
                         let d=document.getElementById('d')
                         c.style.display='inline'
                         d.style.display='inline'
+                        marks.innerText=`(marks: ${o.marks})`
+                        marks.style.display='inline'
 
                         img.src=`${base_url}/media/images/${o.image_name}`
                      }
                      else if(o.ques_type==='Boolean'){
                         let q=document.getElementById('ques')
-                        q.style.display='block'
+                        q.style.display='inline'
                         document.getElementById('ques').innerHTML = o.ques
                         let c=document.getElementById('c')
                         let d=document.getElementById('d')
                         c.style.display='none'
                         d.style.display='none'
                         img.style.display='none'
+                        marks.style.display='none'
  
                      }
                      else{
                      document.getElementById('ques').innerHTML = o.ques
                      img.src=''
                      let q=document.getElementById('ques')
-                     q.style.display='block'
+                     q.style.display='inline'
                      img.style.display='none'
                      let c=document.getElementById('c')
                      let d=document.getElementById('d')
                      c.style.display='inline'
                      d.style.display='inline'
+                     marks.style.display='none'
 
                      }
                      document.getElementById('input1').innerHTML = ' ' + o.opt1
@@ -313,30 +318,33 @@
                   let d=document.getElementById('d')
                   c.style.display='inline'
                   d.style.display='inline'
-
+                  d.style.display='inline'
+                  marks.innerText=`(marks: ${o.marks})`
+                  marks.style.display='inline'
                   img.src=`${base_url}/media/images/${o.image_name}`
                }
                else if(o.ques_type==='Boolean'){
                   let q=document.getElementById('ques')
-                  q.style.display='block'
+                  q.style.display='inline'
                   document.getElementById('ques').innerHTML = o.ques
                   let c=document.getElementById('c')
                   let d=document.getElementById('d')
                   c.style.display='none'
                   d.style.display='none'
                   img.style.display='none'
-
+                  marks.style.display='none'
                }
                else{
                document.getElementById('ques').innerHTML = o.ques
                img.src=''
                let q=document.getElementById('ques')
-               q.style.display='block'
+               q.style.display='inline'
                img.style.display='none'
                let c=document.getElementById('c')
                let d=document.getElementById('d')
                c.style.display='inline'
                d.style.display='inline'
+               marks.style.display='none'
 
                }
                document.getElementById('input1').innerHTML = ' ' + o.opt1
@@ -408,31 +416,33 @@
                   let d=document.getElementById('d')
                   c.style.display='inline'
                   d.style.display='inline'
-
+                  d.style.display='inline'
+                  marks.innerText=`(marks: ${o.marks})`
+                  marks.style.display='inline'
                   img.src=`${base_url}/media/images/${o.image_name}`
                }
                else if(o.ques_type==='Boolean'){
                   let q=document.getElementById('ques')
-                  q.style.display='block'
+                  q.style.display='inline'
                   document.getElementById('ques').innerHTML = o.ques
                   let c=document.getElementById('c')
                   let d=document.getElementById('d')
                   c.style.display='none'
                   d.style.display='none'
                   img.style.display='none'
-
+                  marks.style.display='none'
                }
                else{
                document.getElementById('ques').innerHTML = o.ques
                img.src=''
                let q=document.getElementById('ques')
-               q.style.display='block'
+               q.style.display='inline'
                img.style.display='none'
                let c=document.getElementById('c')
                let d=document.getElementById('d')
                c.style.display='inline'
                d.style.display='inline'
-
+               marks.style.display='none'
                }
                document.getElementById('input1').innerHTML = ' ' + o.opt1
                document.getElementById('input2').innerHTML = ' ' + o.opt2

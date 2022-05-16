@@ -175,7 +175,8 @@ def api(request, userid):
             "opt4": ques_ob.opt4,
             "selected_option": select,
             "ques_type": ques_ob.ques_type,
-            "image_name": ques_ob.image_name
+            "image_name": ques_ob.image_name,
+            "marks":ques_ob.pos_marks
         }
 
         data = json.dumps(question)
