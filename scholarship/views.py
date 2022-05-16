@@ -211,7 +211,7 @@ def exam(request, userid):
                     'is_exam': is_exam(Detail),
                     'remaining_days': rem_days,
                     'exam_duration': timer(Detail),
-                    'number_of_questions': eliminate(total_questions)
+                    'number_of_questions': eliminate(Question.objects.count())
                 }
                 return render(request, 'candidate/exam.html', {'dictt': dictt})
 

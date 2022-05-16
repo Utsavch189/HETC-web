@@ -32,6 +32,7 @@
       <form id="mainform" name="mainform">
          <div class="container questions my-4" id="main">
             <span id="index" class="ques"></span>
+            <img src="" class="img" id="img">
             <span class="ques" id="ques"></span><br><br>
             <input type="radio" name="aa" id="a" value="a"><span id="input1"></span><br>
             <input type="radio" name="aa" id="b" value="b"><span id="input2"></span><br>
@@ -61,7 +62,14 @@
       let bt = document.getElementById('submitButton');
       bt.style.display = 'None'
       let ques = ''
-
+     let img= document.getElementById('img');
+      if(v===0){
+         
+      
+         img.style.display='none'
+      
+      }
+     
       document.mainform.onclick = function () {
          let as = document.mainform.aa.value;
          fetch(`${base_url}/exam-credential/auth-user/exam/{{ request.user }}/`, {
@@ -139,8 +147,19 @@
                   .then(r => r.json())
                   .then(r => {
                      let o = JSON.parse(r)
-                     console.log(o.selected_option)
+                     if(o.ques_type==='Image'){
+                        img.style.display='block'
+                        let q=document.getElementById('ques')
+                        q.style.display='none'
+                        img.src=`${base_url}/media/images/${o.image_name}`
+                     }
+                     else{
                      document.getElementById('ques').innerHTML = o.ques
+                     img.src=''
+                     let q=document.getElementById('ques')
+                     q.style.display='block'
+                     img.style.display='none'
+                     }
                      document.getElementById('input1').innerHTML = ' ' + o.opt1
                      document.getElementById('input2').innerHTML = ' ' + o.opt2
                      document.getElementById('input3').innerHTML = ' ' + o.opt3
@@ -256,8 +275,19 @@
             .then(r => r.json())
             .then(r => {
                let o = JSON.parse(r)
-               console.log(o)
-               document.getElementById('ques').innerHTML = ' ' + o.ques
+               if(o.ques_type==='Image'){
+                  img.style.display='block'
+                  let q=document.getElementById('ques')
+                  q.style.display='none'
+                  img.src=`${base_url}/media/images/${o.image_name}`
+               }
+               else{
+                  document.getElementById('ques').innerHTML = o.ques
+                  img.src=''
+                  let q=document.getElementById('ques')
+                  q.style.display='block'
+                  img.style.display='none'
+               }
                document.getElementById('input1').innerHTML = ' ' + o.opt1
                document.getElementById('input2').innerHTML = ' ' + o.opt2
                document.getElementById('input3').innerHTML = ' ' + o.opt3
@@ -318,7 +348,19 @@
             .then(r => {
                let o = JSON.parse(r)
 
-               document.getElementById('ques').innerHTML = o.ques
+               if(o.ques_type==='Image'){
+                  img.style.display='block'
+                  let q=document.getElementById('ques')
+                  q.style.display='none'
+                  img.src=`${base_url}/media/images/${o.image_name}`
+               }
+               else{
+                  document.getElementById('ques').innerHTML = o.ques
+                  img.src=''
+                  let q=document.getElementById('ques')
+                  q.style.display='block'
+                  img.style.display='none'
+               }
                document.getElementById('input1').innerHTML = ' ' + o.opt1
                document.getElementById('input2').innerHTML = ' ' + o.opt2
                document.getElementById('input3').innerHTML = ' ' + o.opt3
