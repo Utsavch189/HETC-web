@@ -14,72 +14,59 @@ def set_question(request):
         return redirect('home')
 
     if request.method == 'POST':
-        field_value = 0
+        total_ques = 0
+        image = "NoImage"
 
-        try:
-            obj = Question.objects.last()
-            field_object = Question._meta.get_field('ques_no')
-            field_value = field_object.value_from_object(obj)
-
-        except:
-            pass
-
-        # ques_no = eliminate(request.POST.get('quesno'))
         ques = request.POST.get('ques')
         opta = request.POST.get('opta')
         optb = request.POST.get('optb')
         optc = request.POST.get('optc')
         optd = request.POST.get('optd')
-        true = request.POST.get('true')
-        false = request.POST.get('false')
+        boolans = request.POST.get('boolans')
+        correct = request.POST.get('correct')
         questype = request.POST.get('questype')
         marks = eliminate(request.POST.get('marks'))
-        correct = str(request.POST.get('correct')).lower()
 
         if questype == "Boolean":
-            opta = "True"
-            optb = "False"
-            if true is not None: correct = 'a'
-            else: correct = 'b'
+            correct = boolans
+            opta, optb, optc, optd = ("True", "False", '', '')
 
-        try:
-            image = str(request.FILES['image'])
-            handle_image_question(request.FILES['image'])
+        elif questype == "Image" or questype == "Normal":
+            if questype == "Image": ques = ''
 
-        except:
-            image = "Unknown"
+            try:
+                image = str(request.FILES['image'])
+                handle_image_question(request.FILES['image'])
 
-        # handle exception
-        try:
-            if opta != '' or optb != '' or optc != '' or optd != '':
+            except:
+                pass
+
+            # handle normal exception
+            try:
                 if correct != 'a' and correct != 'b' and correct != 'c' and correct != 'd':
                     dictt = { "total": Question.objects.count() }
                     messages.error(request, f'Please set correct option either a, b, c or d')
                     return render(request, 'teacher/question.html', {'dictt': dictt})
 
-            # if Question.objects.filter(ques_no=ques_no):
-            #     dictt = { "total": Question.objects.count() }
-            #     messages.error(request, f'Question number {ques_no} is already used by another question')
-            #     return render(request, 'teacher/question.html', {'dictt': dictt})
+            except:
+                pass
+            # handle normal exception
 
-            # if ques_no - field_value != 1:
-            #     dictt = { "total": Question.objects.count() }
-            #     messages.error(request, f'Please add question number {field_value + 1} (last added question no. {field_value})')
-            #     return render(request, 'teacher/question.html', {'dictt': dictt})
+        # DEBUG
+        print("ques:", ques)
+        print("opta:", opta)
+        print("optb:", optb)
+        print("optc:", optc)
+        print("optd:", optd)
+        print("marks:", marks)
+        print("boolans:", boolans)
+        print("correct:", correct)
+        print("questype:", questype)
+        # DEBUG
 
-        except:
-            pass
-
-        if Question.objects.filter(ques=ques):
-            if Question.objects.filter(opt1=opta) and Question.objects.filter(opt2=optb) and Question.objects.filter(opt3=optc) and Question.objects.filter(opt4=optd):
-                dictt = { "total": Question.objects.count() }
-                messages.error(request, 'This question is already added')
-                return render(request, 'teacher/question.html', {'dictt': dictt})
-        # handle exception
-
-        question_ob = Question(ques_no=int(Question.objects.count()) + 1, ques=ques, opt1=opta, opt2=optb, opt3=optc, opt4=optd,
-        opt_ans=correct, pos_marks=marks, neg_marks=(marks * -1), ques_type=questype, image_name=image)
-        question_ob.save()
+        Question(ques_no=int(Question.objects.count()) + 1, ques=ques, opt1=opta, opt2=optb,
+        opt3=optc, opt4=optd, opt_ans=correct, pos_marks=marks, neg_marks=(marks * -1), ques_type=questype,
+        image_name=image).save()
 
         messages.success(request, 'One question successfully added')
 
@@ -87,11 +74,9 @@ def set_question(request):
         total_ques = Question.objects.count()
 
     except:
-        total_ques = 0
+        pass
 
-    dictt = {
-        "total": total_ques
-    }
+    dictt = { "total": total_ques }
 
     return render(request, 'teacher/question.html', {'dictt': dictt})
 
@@ -100,11 +85,6 @@ def set_schedule(request):
         return redirect('home')
 
     if request.method == 'POST':
-        ques_no = str(request.POST.get('quesno'))
-        if ques_no != '':
-            ques_no = int(request.POST.get('quesno'))
-            Detail.objects.update(total_questions=ques_no)
-
         exam_end = str(request.POST.get('examend'))
         if exam_end != '':
             exam_end = datetime.datetime.strptime(exam_end, '%H:%M').time()
@@ -135,32 +115,6 @@ def set_schedule(request):
 
         except:
             pass
-
-        # ques_no = int(request.POST.get('quesno'))
-        # exam_end = str(request.POST.get('examend'))
-        # exam_date = str(request.POST.get('examdate'))
-        # exam_start = str(request.POST.get('examstart'))
-        # reg_last_date = str(request.POST.get('reglastdate'))
-        # reg_start_date = str(request.POST.get('regstartdate'))
-
-        # handle_upload_file(request.FILES['pdf'])
-        # exam_end = datetime.datetime.strptime(exam_end, '%H:%M').time()
-        # exam_start = datetime.datetime.strptime(exam_start, '%H:%M').time()
-        # exam_date = datetime.datetime.strptime(exam_date, '%Y-%m-%d').date()
-        # reg_last_date = datetime.datetime.strptime(reg_last_date, '%Y-%m-%d').date()
-        # reg_start_date = datetime.datetime.strptime(reg_start_date, '%Y-%m-%d').date()
-
-        # print(ques_no, type(ques_no))
-        # print(reg_start_date, type(reg_start_date))
-        # print(reg_last_date, type(reg_last_date))
-        # print(exam_date, type(exam_date))
-        # print(exam_start, type(exam_start))
-        # print(exam_end, type(exam_end))
-        # print(request.FILES['pdf'], type(request.FILES['pdf']))
-
-        # Detail.objects.update(total_questions=ques_no, registration_start_date=reg_start_date,
-        # registration_last_date=reg_last_date, exam_start_date=exam_date, exam_start_time=exam_start,
-        # exam_end_time=exam_end)
 
         messages.success(request, 'Exam Schedule Successfully Updated')
 

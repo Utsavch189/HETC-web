@@ -174,9 +174,9 @@ def api(request, userid):
             "opt3": ques_ob.opt3,
             "opt4": ques_ob.opt4,
             "selected_option": select,
+            "marks": ques_ob.pos_marks,
             "ques_type": ques_ob.ques_type,
-            "image_name": ques_ob.image_name,
-            "marks":ques_ob.pos_marks
+            "image_name": ques_ob.image_name
         }
 
         data = json.dumps(question)
@@ -196,15 +196,15 @@ def exam(request, userid):
                 return render(request, 'candidate/exam_auth.html')
 
             if verified(user.username, userid):
-                field_name = 'total_questions'
-                obj = Detail.objects.first()
-                field_object = Detail._meta.get_field(field_name)
-                total_questions = getattr(obj, field_object.attname)
-
                 date_ob = Detail.objects.first()
                 start_time = str(date_ob.exam_start_time)
                 start_date = date_ob.exam_start_date.strftime("%B %d, %Y")
                 rem_days = str((date_ob.exam_start_date - datetime.date.today()).days) + " days"
+
+                to_day = datetime.datetime.now()
+                exam_day =  datetime.datetime.combine(date_ob.exam_start_date, date_ob.exam_start_time)
+                difference = exam_day - to_day
+                exam_timer_in_seconds = int(difference.total_seconds())
 
                 dictt = {
                     'start_date': start_date,
@@ -212,6 +212,7 @@ def exam(request, userid):
                     'is_exam': is_exam(Detail),
                     'remaining_days': rem_days,
                     'exam_duration': timer(Detail),
+                    'exam_timer': exam_timer_in_seconds,
                     'number_of_questions': eliminate(Question.objects.count())
                 }
                 return render(request, 'candidate/exam.html', {'dictt': dictt})

@@ -62,22 +62,22 @@
       let bt = document.getElementById('submitButton');
       bt.style.display = 'None'
       let ques = ''
-     let img= document.getElementById('img');
-     let one=document.getElementById('a')
-     let two=document.getElementById('b')
-     let three=document.getElementById('c')
-     let four=document.getElementById('d')
-     let marks=document.getElementById('marks')
-      if(v===0){
+      let img = document.getElementById('img')
+      let one = document.getElementById('a')
+      let two = document.getElementById('b')
+      let three = document.getElementById('c')
+      let four = document.getElementById('d')
+      let marks = document.getElementById('marks')
 
-         one.style.display='none'
-         two.style.display='none'
-         three.style.display='none'
-         four.style.display='none'
-         img.style.display='none'
-         marks.style.display='none'
+      if (v === 0) {
+         one.style.display = 'none'
+         two.style.display = 'none'
+         three.style.display = 'none'
+         four.style.display = 'none'
+         img.style.display = 'none'
+         marks.style.display = 'none'
       }
-     
+
       document.mainform.onclick = function () {
          let as = document.mainform.aa.value;
          fetch(`${base_url}/exam-credential/auth-user/exam/{{ request.user }}/`, {
@@ -118,8 +118,9 @@
 
             btn.onclick = function () {
                v = parseInt(btn.value)
-               one.style.display='inline'
-               two.style.display='inline'
+               one.style.display = 'inline'
+               two.style.display = 'inline'
+
                if (v === i) {
                   let bt = document.getElementById('nextsubmit')
                   bt.innerText = "Submit"
@@ -156,44 +157,43 @@
                   .then(r => r.json())
                   .then(r => {
                      let o = JSON.parse(r)
-                     if(o.ques_type==='Image'){
-                        img.style.display='block'
-                        let q=document.getElementById('ques')
-                        q.style.display='none'
-                        let c=document.getElementById('c')
-                        let d=document.getElementById('d')
-                        c.style.display='inline'
-                        d.style.display='inline'
-                        marks.innerText=`(marks: ${o.marks})`
-                        marks.style.display='inline'
 
-                        img.src=`${base_url}/media/images/${o.image_name}`
+                     if (o.ques_type === 'Image') {
+                        img.style.display = 'block'
+                        let q = document.getElementById('ques')
+                        q.style.display = 'none'
+                        let c = document.getElementById('c')
+                        let d = document.getElementById('d')
+                        c.style.display = 'inline'
+                        d.style.display = 'inline'
+                        marks.innerText = `(marks: ${o.marks})`
+                        marks.style.display = 'inline'
+                        img.src = `${base_url}/media/images/${o.image_name}`
                      }
-                     else if(o.ques_type==='Boolean'){
-                        let q=document.getElementById('ques')
-                        q.style.display='inline'
+                     else if (o.ques_type === 'Boolean') {
+                        let q = document.getElementById('ques')
+                        q.style.display = 'inline'
                         document.getElementById('ques').innerHTML = o.ques
-                        let c=document.getElementById('c')
-                        let d=document.getElementById('d')
-                        c.style.display='none'
-                        d.style.display='none'
-                        img.style.display='none'
-                        marks.style.display='none'
- 
+                        let c = document.getElementById('c')
+                        let d = document.getElementById('d')
+                        c.style.display = 'none'
+                        d.style.display = 'none'
+                        img.style.display = 'none'
+                        marks.style.display = 'none'
                      }
-                     else{
-                     document.getElementById('ques').innerHTML = o.ques
-                     img.src=''
-                     let q=document.getElementById('ques')
-                     q.style.display='inline'
-                     img.style.display='none'
-                     let c=document.getElementById('c')
-                     let d=document.getElementById('d')
-                     c.style.display='inline'
-                     d.style.display='inline'
-                     marks.style.display='none'
+                     else {
+                        document.getElementById('ques').innerHTML = o.ques
+                        img.src = ''
+                        let q = document.getElementById('ques')
+                        q.style.display = 'inline'
+                        img.style.display = 'none'
+                        let c = document.getElementById('c')
+                        let d = document.getElementById('d')
+                        c.style.display = 'inline'
+                        d.style.display = 'inline'
+                        marks.style.display = 'none'
+                     }
 
-                     }
                      document.getElementById('input1').innerHTML = ' ' + o.opt1
                      document.getElementById('input2').innerHTML = ' ' + o.opt2
                      document.getElementById('input3').innerHTML = ' ' + o.opt3
@@ -232,9 +232,8 @@
 
       function submit() {
          let rtr = confirm("Are you sure to submit your whole exam paper?");
-         if (rtr === false) {
-            e.preventDefault()
-         }
+         if (rtr === false) e.preventDefault()
+
          fetch(`${base_url}/exam-credential/auth-user/exam/{{ request.user }}/`, {
             method: 'POST',
             headers: {
@@ -296,8 +295,10 @@
          }
 
          colo();
-         one.style.display='inline'
-         two.style.display='inline'
+
+         one.style.display = 'inline'
+         two.style.display = 'inline'
+
          fetch(`${base_url}/api/{{ request.user }}/`, {
             method: 'POST',
             headers: {
@@ -310,43 +311,43 @@
             .then(r => r.json())
             .then(r => {
                let o = JSON.parse(r)
-               if(o.ques_type==='Image'){
-                  img.style.display='block'
-                  let q=document.getElementById('ques')
-                  q.style.display='none'
-                  let c=document.getElementById('c')
-                  let d=document.getElementById('d')
-                  c.style.display='inline'
-                  d.style.display='inline'
-                  d.style.display='inline'
-                  marks.innerText=`(marks: ${o.marks})`
-                  marks.style.display='inline'
-                  img.src=`${base_url}/media/images/${o.image_name}`
-               }
-               else if(o.ques_type==='Boolean'){
-                  let q=document.getElementById('ques')
-                  q.style.display='inline'
-                  document.getElementById('ques').innerHTML = o.ques
-                  let c=document.getElementById('c')
-                  let d=document.getElementById('d')
-                  c.style.display='none'
-                  d.style.display='none'
-                  img.style.display='none'
-                  marks.style.display='none'
-               }
-               else{
-               document.getElementById('ques').innerHTML = o.ques
-               img.src=''
-               let q=document.getElementById('ques')
-               q.style.display='inline'
-               img.style.display='none'
-               let c=document.getElementById('c')
-               let d=document.getElementById('d')
-               c.style.display='inline'
-               d.style.display='inline'
-               marks.style.display='none'
 
+               if (o.ques_type === 'Image') {
+                  img.style.display = 'block'
+                  let q = document.getElementById('ques')
+                  q.style.display = 'none'
+                  let c = document.getElementById('c')
+                  let d = document.getElementById('d')
+                  c.style.display = 'inline'
+                  d.style.display = 'inline'
+                  marks.innerText = `(marks: ${o.marks})`
+                  marks.style.display = 'inline'
+                  img.src = `${base_url}/media/images/${o.image_name}`
                }
+               else if (o.ques_type === 'Boolean') {
+                  let q = document.getElementById('ques')
+                  q.style.display = 'inline'
+                  document.getElementById('ques').innerHTML = o.ques
+                  let c = document.getElementById('c')
+                  let d = document.getElementById('d')
+                  c.style.display = 'none'
+                  d.style.display = 'none'
+                  img.style.display = 'none'
+                  marks.style.display = 'none'
+               }
+               else {
+                  document.getElementById('ques').innerHTML = o.ques
+                  img.src = ''
+                  let q = document.getElementById('ques')
+                  q.style.display = 'inline'
+                  img.style.display = 'none'
+                  let c = document.getElementById('c')
+                  let d = document.getElementById('d')
+                  c.style.display = 'inline'
+                  d.style.display = 'inline'
+                  marks.style.display = 'none'
+               }
+
                document.getElementById('input1').innerHTML = ' ' + o.opt1
                document.getElementById('input2').innerHTML = ' ' + o.opt2
                document.getElementById('input3').innerHTML = ' ' + o.opt3
@@ -393,8 +394,10 @@
          }
 
          colo();
-         one.style.display='inline'
-         two.style.display='inline'
+
+         one.style.display = 'inline'
+         two.style.display = 'inline'
+
          fetch(`${base_url}/api/{{ request.user }}/`, {
             method: 'POST',
             headers: {
@@ -408,42 +411,42 @@
             .then(r => {
                let o = JSON.parse(r)
 
-               if(o.ques_type==='Image'){
-                  img.style.display='block'
-                  let q=document.getElementById('ques')
-                  q.style.display='none'
-                  let c=document.getElementById('c')
-                  let d=document.getElementById('d')
-                  c.style.display='inline'
-                  d.style.display='inline'
-                  d.style.display='inline'
-                  marks.innerText=`(marks: ${o.marks})`
-                  marks.style.display='inline'
-                  img.src=`${base_url}/media/images/${o.image_name}`
+               if (o.ques_type === 'Image') {
+                  img.style.display = 'block'
+                  let q = document.getElementById('ques')
+                  q.style.display = 'none'
+                  let c = document.getElementById('c')
+                  let d = document.getElementById('d')
+                  c.style.display = 'inline'
+                  d.style.display = 'inline'
+                  marks.innerText = `(marks: ${o.marks})`
+                  marks.style.display = 'inline'
+                  img.src = `${base_url}/media/images/${o.image_name}`
                }
-               else if(o.ques_type==='Boolean'){
-                  let q=document.getElementById('ques')
-                  q.style.display='inline'
+               else if (o.ques_type === 'Boolean') {
+                  let q = document.getElementById('ques')
+                  q.style.display = 'inline'
                   document.getElementById('ques').innerHTML = o.ques
-                  let c=document.getElementById('c')
-                  let d=document.getElementById('d')
-                  c.style.display='none'
-                  d.style.display='none'
-                  img.style.display='none'
-                  marks.style.display='none'
+                  let c = document.getElementById('c')
+                  let d = document.getElementById('d')
+                  c.style.display = 'none'
+                  d.style.display = 'none'
+                  img.style.display = 'none'
+                  marks.style.display = 'none'
                }
-               else{
-               document.getElementById('ques').innerHTML = o.ques
-               img.src=''
-               let q=document.getElementById('ques')
-               q.style.display='inline'
-               img.style.display='none'
-               let c=document.getElementById('c')
-               let d=document.getElementById('d')
-               c.style.display='inline'
-               d.style.display='inline'
-               marks.style.display='none'
+               else {
+                  document.getElementById('ques').innerHTML = o.ques
+                  img.src = ''
+                  let q = document.getElementById('ques')
+                  q.style.display = 'inline'
+                  img.style.display = 'none'
+                  let c = document.getElementById('c')
+                  let d = document.getElementById('d')
+                  c.style.display = 'inline'
+                  d.style.display = 'inline'
+                  marks.style.display = 'none'
                }
+
                document.getElementById('input1').innerHTML = ' ' + o.opt1
                document.getElementById('input2').innerHTML = ' ' + o.opt2
                document.getElementById('input3').innerHTML = ' ' + o.opt3
@@ -546,12 +549,13 @@
    </script>
    {% else %}
    <div class="container my-4">
-      <div class="jumbotron">
-         <h1 class="display-4">Remaining Time Is: {{ dictt.remaining_days }}</h1>
+      <div class="jumbotron py-4">
+         <h1 class="display-4">Exam starts in {{ dictt.remaining_days }}</h1>
          <p class="lead">We are here to show the time remaining for your exam. So be ready and prepare.</p>
          <hr class="my-4">
          <h5>Your Exam will start at {{ dictt.start_time }} on {{ dictt.start_date }}</h5>
          <p>Take preparation for your exam and Best Of Luck for your exam.</p>
+         <h4 id="timer2" class="display-7 time" style="font-family: cascadia code; font-style: italic;"></h4>
       </div>
       <a class="btn btn-warning" href="/" role="button">Go To Home</a>
    </div>
@@ -595,5 +599,40 @@
    </script>
    {% endif %}
 </body>
+
+<script>
+   clock2();
+   function clock2() {
+      var c = {{ dictt.exam_timer }};
+      let myTimer = setInterval(myClock2, 1000);
+
+      function myClock2() {
+         --c;
+         var seconds = c % 60;
+         var secondsInMinutes = (c - seconds) / 60;
+         var minutes = secondsInMinutes % 60;
+         var hours = (secondsInMinutes - minutes) / 60;
+
+         timer2.innerHTML = `Remaining time is ${hours}<sup>hr</sup>:${minutes}<sup>min</sup>:${seconds}<sup>sec</sup>`
+         if (seconds === 55) {
+            fetch(`${base_url}/exam-credential/auth-user/exam/{{ request.user }}/`, {
+               method: 'POST',
+               headers: {
+                  'X-CSRFToken': '{{ csrf_token }}',
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+               },
+               body: JSON.stringify({ 'msg': 'True', 'type': 'time', 'status': 'online', 'user': 'student' }),
+            })
+         }
+
+         if (c == 0) {
+            alert("Exam starts! Press OK to reload the page (Good Luck!)");
+            clearInterval(myTimer);
+            document.location.reload(true);
+         }
+      }
+   }
+</script>
 
 </html>
