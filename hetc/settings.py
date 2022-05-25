@@ -140,8 +140,8 @@ else:
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_PASSWORD = 'iafsdsutervuujfo'
-EMAIL_HOST_USER = 'supratimm531@gmail.com'
+EMAIL_HOST_PASSWORD = 'sjmvrafybidzrwix'
+EMAIL_HOST_USER = 'scholarshiptest@hetc.ac.in'
 EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
 
 # Activate Django-Heroku.

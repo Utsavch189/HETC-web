@@ -42,8 +42,8 @@
       </form>
    </div>
 
-   <div class="container-fluid footer">
-      <button class="btn btn-primary" onclick="prev()">Prev</button>
+   <div id="allbuttons" class="container-fluid footer">
+      <button class="btn btn-primary" id="prevques" onclick="prev()">Prev</button>
       <button class="btn btn-danger" id="mark" onclick="mark()">Mark</button>
       <button class="btn btn-danger" id="unmark" onclick="unmark()">Unmark</button>
       <button class="btn btn-primary" id="nextsubmit" onclick="next()">Next</button>
@@ -77,6 +77,9 @@
          img.style.display = 'none'
          marks.style.display = 'none'
       }
+
+      if (document.getElementById('a').style.display == 'none')
+         document.getElementById('allbuttons').style.display = 'none'
 
       document.mainform.onclick = function () {
          let as = document.mainform.aa.value;
@@ -117,6 +120,7 @@
             btn.className = 'bttn';
 
             btn.onclick = function () {
+               document.getElementById('allbuttons').style.display = ''
                v = parseInt(btn.value)
                one.style.display = 'inline'
                two.style.display = 'inline'

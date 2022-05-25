@@ -90,7 +90,7 @@ def register(request):
             User ID: {userid}
             Password: {password}\n
             Make sure you don't share this link publicly, because its unique for you!\n
-            Examination Date & Time: 29.05.2022 & 11:00pm\n
+            Examination Date & Time: 28.05.2022 & 11:00pm\n
             For more updates and information visit www.hetc.ac.in\n
             Regards,
             Admission Cell, HETC
@@ -98,7 +98,7 @@ def register(request):
             '''
             messages.success(request, 'Your Registration is completed. Check Your Email To get User ID and Password')
 
-            mail_sender = "supratimm531@gmail.com"
+            mail_sender = "scholarshiptest@hetc.ac.in"
             send_mail(subject, body, mail_sender, [email], fail_silently=False)
 
             user = User.objects.create_user(userid, email, password)
@@ -115,8 +115,8 @@ def login_user(request):
             return redirect('home')
 
     if request.method == 'POST':
-        username = request.POST.get('username')
         password = request.POST.get('password')
+        username = str(request.POST.get('username')).strip()
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
@@ -136,8 +136,8 @@ def logout_user(request):
 @login_required(login_url='login')
 def exam_authentication(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
         password = request.POST.get('password')
+        username = str(request.POST.get('username')).strip()
         user = authenticate(request, username=username, password=password)
 
         if user is not None and username == request.user.username:
