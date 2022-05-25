@@ -147,9 +147,6 @@ span {
    }
 }
 
-
-
-
 .cont {
    display: flex;
    flex-direction: column;
@@ -160,7 +157,7 @@ span {
    top: 50%;
    transform: translate(-50%, -50%);
    height: auto;
-   margin-top:70px;
+   margin-top: 70px;
 }
 
 .col1 {
@@ -188,7 +185,6 @@ span {
    width: auto;
    margin-top: 25px;
    display: flex;
-
    justify-content: flex-start;
    align-items: center;
 }
@@ -199,7 +195,6 @@ span {
    margin-top: 25px;
    display: flex;
    justify-content: flex-start;
-   
    align-items: center;
 }
 
@@ -209,7 +204,6 @@ span {
    margin-top: 25px;
    display: flex;
    justify-content: flex-start;
-   
    align-items: center;
 }
 
@@ -227,6 +221,6 @@ span {
    margin-left: 10px;
 }
 
-.dt{
-   margin-top:60px;
+.dt {
+   margin-top: 60px;
 }

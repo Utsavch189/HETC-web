@@ -27,7 +27,7 @@
       </div>
    </div>
 
-
+   <!-- Starter Information -->
    <div class="container cont" id="colourCodes">
       <h4 class="text-center dtt">Follow the colour codes carefully</h4>
       <div class="one">
@@ -44,7 +44,7 @@
       </div>
       <h3 class="text-center  dt">All the Best. Please select top-right buttons to access questions.</h3>
   </div>
-
+  <!-- Starter Information -->
 
    <div class="container-fluid body my-2">
       <button class="btn btn-success submit" onclick="submit()" id="submitButton">Submit</button>
@@ -87,7 +87,7 @@
       let three = document.getElementById('c')
       let four = document.getElementById('d')
       let marks = document.getElementById('marks')
-      let front_show=document.getElementById('colourCodes')
+      let front_show = document.getElementById('colourCodes')
 
       if (v === 0) {
          one.style.display = 'none'
@@ -96,7 +96,7 @@
          four.style.display = 'none'
          img.style.display = 'none'
          marks.style.display = 'none'
-         front_show.style.display='inline'
+         front_show.style.display = 'inline'
       }
 
       if (document.getElementById('a').style.display == 'none')
@@ -142,7 +142,7 @@
 
             btn.onclick = function () {
                document.getElementById('allbuttons').style.display = ''
-               front_show.style.display='none'
+               front_show.style.display = 'none'
                v = parseInt(btn.value)
                one.style.display = 'inline'
                two.style.display = 'inline'
@@ -324,7 +324,7 @@
 
          one.style.display = 'inline'
          two.style.display = 'inline'
-         front_show.style.display='none'
+         front_show.style.display = 'none'
 
          fetch(`${base_url}/api/{{ request.user }}/`, {
             method: 'POST',
@@ -424,7 +424,7 @@
 
          one.style.display = 'inline'
          two.style.display = 'inline'
-         front_show.style.display='none'
+         front_show.style.display = 'none'
 
          fetch(`${base_url}/api/{{ request.user }}/`, {
             method: 'POST',
