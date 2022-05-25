@@ -27,6 +27,25 @@
       </div>
    </div>
 
+
+   <div class="container cont" id="colourCodes">
+      <h4 class="text-center dtt">Follow the colour codes carefully</h4>
+      <div class="one">
+          <div class="col1"></div>
+          <h6 class="word">When You will mark any question</h6>
+      </div>
+      <div class="two">
+          <div class="col2"></div>
+          <h6 class="word1">When you will only visit to any queston</h6>
+      </div>
+      <div class="three">
+          <div class="col3"></div>
+          <h6 class="word2">When You will visit and answer any question</h6>
+      </div>
+      <h3 class="text-center  dt">All the Best. Please select top-right buttons to access questions.</h3>
+  </div>
+
+
    <div class="container-fluid body my-2">
       <button class="btn btn-success submit" onclick="submit()" id="submitButton">Submit</button>
       <form id="mainform" name="mainform">
@@ -68,6 +87,7 @@
       let three = document.getElementById('c')
       let four = document.getElementById('d')
       let marks = document.getElementById('marks')
+      let front_show=document.getElementById('colourCodes')
 
       if (v === 0) {
          one.style.display = 'none'
@@ -76,6 +96,7 @@
          four.style.display = 'none'
          img.style.display = 'none'
          marks.style.display = 'none'
+         front_show.style.display='inline'
       }
 
       if (document.getElementById('a').style.display == 'none')
@@ -121,6 +142,7 @@
 
             btn.onclick = function () {
                document.getElementById('allbuttons').style.display = ''
+               front_show.style.display='none'
                v = parseInt(btn.value)
                one.style.display = 'inline'
                two.style.display = 'inline'
@@ -302,6 +324,7 @@
 
          one.style.display = 'inline'
          two.style.display = 'inline'
+         front_show.style.display='none'
 
          fetch(`${base_url}/api/{{ request.user }}/`, {
             method: 'POST',
@@ -401,6 +424,7 @@
 
          one.style.display = 'inline'
          two.style.display = 'inline'
+         front_show.style.display='none'
 
          fetch(`${base_url}/api/{{ request.user }}/`, {
             method: 'POST',
