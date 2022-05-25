@@ -1,6 +1,7 @@
 import json
 import datetime
 
+from django.urls import reverse
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
@@ -11,7 +12,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate
 
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from django.contrib.sites.shortcuts import get_current_site
+
 from .models import *
+from .utils import token_generator
 from .helper import timer, is_exam, user_id, hashed2, verified, eliminate, last_seen, date_over, time_ahead, user_password, is_exam_running, record_is_duplicate
 
 def home(request):
@@ -70,8 +76,8 @@ def register(request):
             entrance = request.POST.get('entrance')
             address = str(request.POST.get('address')).upper()
 
-            if board2 != '':
-                board = board2
+            if board2 != '': board = board2
+
             userid = user_id(fname)
             password = user_password(date, month, year)
             date_of_birth = password[0:2] + '/' + password[2:4] + '/' + password[4:10]
@@ -82,6 +88,24 @@ def register(request):
             board_name=board, appeared_wbjee_jeeMain=entrance, created_at=datetime.datetime.now())
             student.save()
 
+            user = User.objects.create_user(userid, email, password)
+            user.first_name = fname
+            user.last_name = lname
+            user.email = email
+            user.save()
+
+            # activate through mail
+            # - getting domain name
+            # - relative url to verification
+            # - encoded username
+            # - token
+
+            uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+            domain = get_current_site(request).domain
+            link = reverse('activate', kwargs={'uidb64': uidb64, 'token': token_generator.make_token(user),
+            'details': f'{password}-{userid}'})
+            activate_url = f'http://{domain}{link}'
+
             subject = "Thank You for registration"
             body = f'''
             Hello!
@@ -89,6 +113,8 @@ def register(request):
             Here is the User ID and Password for the Examination:
             User ID: {userid}
             Password: {password}\n
+            Please use this link to verify your account
+            {activate_url}\n
             Make sure you don't share this link publicly, because its unique for you!\n
             Examination Date & Time: 28.05.2022 & 11:00pm\n
             For more updates and information visit www.hetc.ac.in\n
@@ -96,18 +122,26 @@ def register(request):
             Admission Cell, HETC
             Pipulpati, Hooghly
             '''
-            messages.success(request, 'Your Registration is completed. Check Your Email To get User ID and Password')
 
             mail_sender = "scholarshiptest@hetc.ac.in"
             send_mail(subject, body, mail_sender, [email], fail_silently=False)
-
-            user = User.objects.create_user(userid, email, password)
-            user.first_name = fname
-            user.last_name = lname
-            user.email = email
-            user.save()
+            messages.success(request, 'Your Registration is completed. Check Your Email To get User ID and Password')
 
     return render(request, 'candidate/register.html', {'dictt': dictt})
+
+def user_verification(request, uidb64, token, details):
+    partition = details.index('-')
+    password = details[0 : partition]
+    username = details[partition + 1 : int(1e18)]
+    user = authenticate(request, username=username, password=password)
+
+    if user is not None:
+        login(request, user)
+        return redirect('home')
+
+    else:
+        messages.warning(request, 'Wrong Username or Password. Try to login manually')
+        return render(request, 'candidate/login.html')
 
 def login_user(request):
     if request.method == 'GET':

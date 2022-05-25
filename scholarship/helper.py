@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 
 def user_id(username):
     while True:
-        user_id = str(username).upper().strip() + str(random.randint(1875, 9370))
+        user_id = str(username).upper().strip().replace(' ', '') + str(random.randint(1875, 9370))
 
         if User.objects.filter(username=user_id):
             continue

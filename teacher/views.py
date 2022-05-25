@@ -9,6 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from scholarship.helper import eliminate, handle_upload_file, handle_image_question
 
+SAFETY_CALCULATION = True
+
 def set_question(request):
     if not request.user.is_superuser:
         return redirect('home')
@@ -135,6 +137,32 @@ def fetch_student_records(request):
     if request.method == 'GET':
         if not request.user.is_superuser:
             return redirect('home')
+
+        global SAFETY_CALCULATION
+        ob = Detail.objects.first()
+
+        if datetime.date.today() == ob.exam_start_date and datetime.datetime.now().time() > ob.exam_end_time and SAFETY_CALCULATION:
+            SAFETY_CALCULATION = False
+            print("\nResult Calculate")
+
+            for user in User.objects.all():
+                if Choose.objects.filter(user=user.username).exists() and not user.is_superuser:
+                    if not Result.objects.filter(user=user.username).exists():
+                        Student.objects.filter(user_id=user.username).update(exam_status=True)
+
+                        ques_ob = Question.objects.all()
+                        ans_ob = Choose.objects.filter(user=user.username)
+
+                        total_marks = 0
+                        for i in ans_ob:
+                            for j in ques_ob:
+                                if j.ques_no == int(i.question_number):
+                                    if(j.opt_ans == i.selected_option):
+                                        total_marks += j.pos_marks
+
+                        result_ob = Result(user=user.username, author=user, total_marks=total_marks)
+                        print(f"Result calculated for user {user}\n")
+                        result_ob.save()
 
         dataset = []
         usernames = []

@@ -10,5 +10,6 @@ urlpatterns = [
     path('register/', register, name='register'),
     path('exam-status/<str:user>/', exam_end, name='exam_end'),
     path('exam-credential/', exam_authentication, name='exam_auth'),
-    path('exam-credential/auth-user/exam/<str:userid>/', exam, name='exam')
+    path('exam-credential/auth-user/exam/<str:userid>/', exam, name='exam'),
+    path('activate/<uidb64>/<token>/<details>/', user_verification, name='activate')
 ]
