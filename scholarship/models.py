@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -12,26 +13,29 @@ class Detail(models.Model):
 
 
 class Student(models.Model):
-    first_name = models.CharField(max_length=100, blank=True, null=True)
-    last_name = models.CharField(max_length=100, blank=True, null=True)
+    author = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
     user_id = models.CharField(max_length=100, blank=True, null=True)
-    date_of_birth = models.CharField(max_length=50, blank=True, null=True)
+    full_name = models.CharField(max_length=200, blank=True, null=True)
     gurdian_name = models.CharField(max_length=100, blank=True, null=True)
+    date_of_birth = models.CharField(max_length=50, blank=True, null=True)
     contact = models.CharField(max_length=11, blank=True, null=True)
     whatsapp = models.CharField(max_length=11, blank=True, null=True)
     email = models.CharField(max_length=100, blank=True, null=True)
     address = models.CharField(max_length=100, blank=True, null=True)
     school_college_name = models.CharField(max_length=50, blank=True, null=True)
-    appearing_passed_12 = models.CharField(max_length=50, blank=True, null=True)
+    passing_year_12 = models.CharField(max_length=50, blank=True, null=True)
+    gender = models.CharField(max_length=10, blank=True, null=True)
+    pure_science_combo = models.CharField(max_length=10, blank=True, null=True)
     board_name = models.CharField(max_length=50, blank=True, null=True)
     appeared_wbjee_jeeMain = models.CharField(null=True, blank=True, max_length=10)
-    created_at = models.DateField()
-    last_seen = models.CharField(max_length=20, blank=True, null=True)
+    preferred_stream = models.CharField(max_length=200, null=True, blank=True)
+    created_at = models.DateTimeField(default=datetime.datetime.now())
+    last_seen = models.CharField(max_length=10, blank=True, null=True, default='00:00')
     exam_status = models.BooleanField(default=False)
     student_feedback = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
-        return str(self.first_name) + '-' + str(self.last_name) + '-' + str(self.user_id)
+        return str(self.full_name).replace(' ', '-') + '-' + str(self.user_id)
 
 
 class Question(models.Model):

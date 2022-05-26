@@ -178,22 +178,16 @@ def fetch_student_records(request):
                 total_marks = result_ob.values('total_marks')
 
             else:
-                total_marks = [{'total_marks': "None"}]
+                total_marks = [{'total_marks': "Not Attended"}]
 
             data = {
                 "user_id": username,
-                "first_name": student.values('first_name'),
-                "last_name": student.values('last_name'),
+                "full_name": student.values('full_name'),
                 "date_of_birth": student.values('date_of_birth'),
-                "gurdian_name": student.values('gurdian_name'),
                 "contact": student.values('contact'),
-                "whatsapp": student.values('whatsapp'),
                 "email": student.values('email'),
-                "address": student.values('address'),
                 "institute_name": student.values('school_college_name'),
-                "appearing_passed_12": student.values('appearing_passed_12'),
-                "board_name": student.values('board_name'),
-                "appeared_wbjee_jeeMain": student.values('appeared_wbjee_jeeMain'),
+                "last_seen": student.values('last_seen'),
                 "total_marks": total_marks
             }
 

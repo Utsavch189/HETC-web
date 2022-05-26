@@ -52,9 +52,11 @@ def register(request):
         return redirect('home')
 
     if request.method == 'POST':
-        fname = str(request.POST.get('fname')).upper()
-        lname = str(request.POST.get('lname')).upper()
-        gurdian = str(request.POST.get('gurdian')).upper()
+        fullname = str(request.POST.get('fname')).upper().strip()
+        gurdian = str(request.POST.get('gurdian')).upper().strip()
+
+        fname = fullname.split()[0]
+        lname = fullname.split()[-1]
 
         date = request.POST.get('date')
         year = request.POST.get('year')
@@ -64,35 +66,39 @@ def register(request):
         whatsapp = request.POST.get('whatsapp')
         email = str(request.POST.get('email')).lower()
 
-        if record_is_duplicate(fname, lname, gurdian, email):
+        if record_is_duplicate(fullname, gurdian, email):
             messages.error(request, "Some information are there which already exists in our records (may occur duplicate)")
             return render(request, 'candidate/register.html', {'dictt': dictt})
 
         else:
-            instu = request.POST.get('inst')
-            board = request.POST.get('board')
-            board2 = request.POST.get('board2')
-            status = request.POST.get('status')
+            address = str(request.POST.get('address')).upper().strip()
+            stream = str(request.POST.get('stream')).upper().strip()
+            instu = str(request.POST.get('inst')).upper().strip()
+            passyear = request.POST.get('passyear')
             entrance = request.POST.get('entrance')
-            address = str(request.POST.get('address')).upper()
+            gender = request.POST.get('gender')
+            combo = request.POST.get('combo')
+            board = request.POST.get('board')
 
-            if board2 != '': board = board2
+            otherboard = request.POST.get('otherboard')
+            if otherboard != '':
+                board = otherboard
 
             userid = user_id(fname)
             password = user_password(date, month, year)
             date_of_birth = password[0:2] + '/' + password[2:4] + '/' + password[4:10]
-
-            student = Student(first_name=fname, last_name=lname, user_id=userid,
-            date_of_birth=date_of_birth, gurdian_name=gurdian, contact=phone, whatsapp=whatsapp,
-            email=email, address=address, school_college_name=instu, appearing_passed_12=status,
-            board_name=board, appeared_wbjee_jeeMain=entrance, created_at=datetime.datetime.now())
-            student.save()
 
             user = User.objects.create_user(userid, email, password)
             user.first_name = fname
             user.last_name = lname
             user.email = email
             user.save()
+
+            student = Student(author=user, user_id=userid, full_name=fullname, gurdian_name=gurdian,
+            date_of_birth=date_of_birth, contact=phone, whatsapp=whatsapp, email=email, address=address,
+            school_college_name=instu, passing_year_12=passyear, gender=gender, pure_science_combo=combo,
+            board_name=board, appeared_wbjee_jeeMain=entrance, preferred_stream=stream)
+            student.save()
 
             # activate through mail
             # - getting domain name
@@ -114,7 +120,7 @@ def register(request):
             User ID: {userid}
             Password: {password}\n
             Please use this link to verify your account
-            {activate_url}\n
+            {activate_url}
             Make sure you don't share this link publicly, because its unique for you!\n
             Examination Date & Time: 28.05.2022 & 11:00pm\n
             For more updates and information visit www.hetc.ac.in\n
@@ -123,7 +129,7 @@ def register(request):
             Pipulpati, Hooghly
             '''
 
-            mail_sender = "scholarshiptest@hetc.ac.in"
+            mail_sender = 'utsavpokemon9000chatterjee@gmail.com'
             send_mail(subject, body, mail_sender, [email], fail_silently=False)
             messages.success(request, 'Your Registration is completed. Check Your Email To get User ID and Password')
 

@@ -24,36 +24,32 @@
     <form method="POST" action="/register/" name="form1">
         {% csrf_token %}
         <div class="mb-3">
-            <label for="name" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="fname" name="fname" placeholder="First name" required="required">
+            <label for="fname" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="fname" name="fname" placeholder="Full Name" required="required">
         </div>
         <div class="mb-3">
-            <label for="name" class="form-label">Last Name</label>
-            <input type="text" class="form-control" id="lname" name="lname" placeholder="Last name" required="required">
-        </div>
-        <div class="mb-3">
-            <label for="name" class="form-label">Gurdian's Name</label>
+            <label for="gurdian" class="form-label">Gurdian's Name</label>
             <input type="text" class="form-control" id="gurdian" name="gurdian" placeholder="Gurdian's Name" required="required">
         </div>
         <div class="mb-3">
-            <label for="name" class="form-label">Date Of Birth (DD-MM-YYYY)</label>
+            <label for="" class="form-label">Date Of Birth (DD-MM-YYYY)</label>
             <div class="row">
                 <div class="col">
-                    <input type="number" class="form-control" placeholder="Date (dd)" aria-label="Last name" id="date"
+                    <input type="number" class="form-control" placeholder="Date (dd)" aria-label="date" id="date"
                         name="date" required="required">
                 </div>
                 <div class="col">
-                    <input type="number" class="form-control" placeholder="Month (mm)" aria-label="Last name" id="month"
+                    <input type="number" class="form-control" placeholder="Month (mm)" aria-label="month" id="month"
                         name="month" required="required">
                 </div>
                 <div class="col">
-                    <input type="number" class="form-control" placeholder="Year (yyyy)" aria-label="First name" id="year"
+                    <input type="number" class="form-control" placeholder="Year (yyyy)" aria-label="year" id="year"
                         name="year" required="required">
                 </div>
             </div>
         </div>
         <div class="mb-3">
-            <label for="name" class="form-label">Phone Number</label>
+            <label for="" class="form-label">Phone Number</label>
             <div class="row">
                 <div class="col">
                     <input type="number" id="phone" data-fv-numeric-message="Please enter valid phone numbers"
@@ -76,46 +72,64 @@
             <small class="form-text text-muted">We'll never share your email with anyone else</small>
         </div>
         <div class="mb-3">
-            <label for="name" class="form-label">Residential Address</label>
+            <label for="address" class="form-label">Residential Address</label>
             <input type="text" class="form-control" id="address" name="address"
                 placeholder="Enter Your Permanent Address" required="required">
         </div>
         <div class="mb-3">
-            <label for="name" class="form-label">Name of the Institution</label>
-            <input type="text" class="form-control" id="inst" name="inst" placeholder="School / College Name"
+            <label for="inst" class="form-label">Name of the Institution</label>
+            <input type="text" class="form-control" id="inst" name="inst" placeholder="Name of the School / College"
                 required="required">
         </div>
         <div class="mb-3">
-            <label for="name" class="form-label">Status of Higher Secondery Education</label>
-            <select name="status" id="status" required="required">
+            <label for="passyear" class="form-label">Year of Passing (10 + 2)</label>
+            <input type="number" class="form-control" id="passyear" name="passyear" placeholder="Year of Passing" required>
+        </div>
+        <div class="mb-3">
+            <label for="gender" class="form-label">Select Your Gender</label>
+            <select name="gender" id="gender" required>
                 <option value="None">Choose</option>
-                <option value="Appearing">Appearing</option>
-                <option value="Passed">Passed</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
             </select>
         </div>
         <div class="mb-3">
-			<label for="name" class="form-label">Select Your Examination Board</label>
+            <label for="combo" class="form-label">Subject combination (Physics + Chemistry + Mathematics)</label>
+            <select name="combo" id="combo" required="required">
+                <option value="None">Choose</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+        <div class="mb-3">
+			<label for="board" class="form-label">Select Your Examination Board</label>
 			<select name="board" id="board" onchange="changeFunc(value);">
 				<option value="None">Choose</option>
-				<option value="ISC">ICSE</option>
-				<option value="WBCHSE">WBCHSE</option>
 				<option value="CBSE">CBSE</option>
+				<option value="ISC">ISC</option>
+				<option value="WBBSE">WBBSE</option>
+				<option value="WBCHSE">WBCHSE</option>
 				<option value="Other">Other</option>
 			</select>
         </div>
 		<div id="hidecode" class="mb-3" style="display: none;">
-            <label for="name" class="form-label">Specify Your Examination Board</label>
-            <input type="text" class="form-control" id="board2" name="board2" placeholder="Board Name">
+            <label for="otherboard" class="form-label">Specify Your Examination Board</label>
+            <input type="text" class="form-control" id="otherboard" name="otherboard" placeholder="Board Name">
         </div>
         <div class="mb-3">
-            <label for="name" class="form-label">Are you appearing / appeared in WBJEE / JEE MAINS</label>
+            <label for="entrance" class="form-label">Are you appearing / appeared in WBJEE / JEE MAINS</label>
             <select name="entrance" id="entrance" required="required">
                 <option value="None">Choose</option>
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
             </select>
         </div>
-        <button type="submit" class="btn btn-primary" value="register" onclick="checkEmail(document.form1.email)">Submit</button>
+        <div class="mb-3">
+            <label for="stream" class="form-label">Name Your Preferred Stream</label>
+            <input type="text" class="form-control" id="stream" name="stream" placeholder="Your Preferred Stream" required>
+        </div>
+        <button type="submit" class="btn btn-primary" value="register">Submit</button>
     </form>
 </div>
 {% endif %}
@@ -124,21 +138,11 @@
 	function changeFunc(value) {
 		if (value == "Other") {
 			document.getElementById("hidecode").style.display = "block";
-		} else {
+		}
+        else {
 			document.getElementById("hidecode").style.display = "none";
 		}
 	}
-    function checkEmail(inputText) {
-        var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        if (inputText.value.match(mailformat)) {
-            document.form1.email.focus();
-            return true;
-        } else {
-            alert("You have entered an invalid email address!");
-            document.form1.email.focus();
-            return false;
-        }
-    }
 </script>
 
 {% endblock body %}

@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 
 def user_id(username):
     while True:
-        user_id = str(username).upper().strip().replace(' ', '') + str(random.randint(1875, 9370))
+        user_id = str(username) + str(random.randint(1875, 9370))
 
         if User.objects.filter(username=user_id):
             continue
@@ -61,7 +61,8 @@ def verified(string, hashed_string):
 def last_seen():
     c_hour = datetime.datetime.now().strftime("%H")
     c_minute = datetime.datetime.now().strftime("%M")
-    return str(c_hour) + ':' + str(c_minute)
+    last_seen_in_exam = str(c_hour) + ':' + str(c_minute)
+    return last_seen_in_exam
 
 def is_exam_running(Details):
     ob = Details.objects.first()
@@ -93,13 +94,12 @@ def time_ahead(Details):
     else:
         return False
 
-def record_is_duplicate(fname, lname, gurdian, email):
+def record_is_duplicate(fullname, gurdian, email):
     if Student.objects.filter(gurdian_name=gurdian):
         student_ob = Student.objects.filter(gurdian_name=gurdian)
-        student_lname = student_ob.values('last_name').get()['last_name']
-        student_fname = student_ob.values('first_name').get()['first_name']
+        student_fullname = student_ob.values('full_name').get()['full_name']
 
-        if student_fname == fname and student_lname == lname:
+        if student_fullname == fullname:
             return True
 
     if Student.objects.filter(email=email):
