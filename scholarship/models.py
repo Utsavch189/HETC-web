@@ -21,7 +21,7 @@ class Student(models.Model):
     contact = models.CharField(max_length=11, blank=True, null=True)
     whatsapp = models.CharField(max_length=11, blank=True, null=True)
     email = models.CharField(max_length=100, blank=True, null=True)
-    address = models.CharField(max_length=100, blank=True, null=True)
+    address = models.CharField(max_length=1000, blank=True, null=True)
     school_college_name = models.CharField(max_length=50, blank=True, null=True)
     passing_year_12 = models.CharField(max_length=50, blank=True, null=True)
     gender = models.CharField(max_length=10, blank=True, null=True)
